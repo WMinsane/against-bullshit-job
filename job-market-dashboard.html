@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>転職市場調査ダッシュボード 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --accent: #38bdf8;
+    --accent2: #a78bfa;
+    --accent3: #34d399;
+    --accent4: #fb923c;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #334155;
+    --tag-sier: #38bdf8;
+    --tag-shanai: #34d399;
+    --tag-ai: #a78bfa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  .header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+  }
+  .header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .header p { color: var(--muted); font-size: 0.95rem; }
+
+  .profile-bar {
+    display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+    padding: 1.2rem 2rem;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  .profile-chip {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.4rem 1rem; border-radius: 999px;
+    background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.3);
+    font-size: 0.85rem; color: var(--accent);
+  }
+  .profile-chip.warn { background: rgba(251,146,60,0.1); border-color: rgba(251,146,60,0.3); color: var(--accent4); }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem;
+  }
+  .card h2 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+  .card h3 { font-size: 0.95rem; color: var(--text); margin: 1rem 0 0.5rem; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  @media (max-width: 700px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem; text-align: center;
+  }
+  .stat .value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .stat .label { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
+
+  .company-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .company-table th {
+    text-align: left; padding: 0.7rem; border-bottom: 2px solid var(--border);
+    color: var(--muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .company-table td { padding: 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .company-table tr:hover { background: rgba(56,189,248,0.05); }
+
+  .tag {
+    display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 600; margin-right: 0.3rem;
+  }
+  .tag-sier { background: rgba(56,189,248,0.15); color: var(--tag-sier); }
+  .tag-shanai { background: rgba(52,211,153,0.15); color: var(--tag-shanai); }
+  .tag-ai { background: rgba(167,139,250,0.15); color: var(--tag-ai); }
+
+  .fit-score {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.2rem; height: 2.2rem; border-radius: 50%; font-weight: 700; font-size: 0.85rem;
+  }
+  .fit-s { background: rgba(52,211,153,0.2); color: #34d399; border: 2px solid #34d399; }
+  .fit-a { background: rgba(56,189,248,0.2); color: #38bdf8; border: 2px solid #38bdf8; }
+  .fit-b { background: rgba(251,146,60,0.2); color: #fb923c; border: 2px solid #fb923c; }
+
+  .chart-container { position: relative; height: 280px; }
+  .chart-container-wide { position: relative; height: 320px; }
+
+  .insight-list { list-style: none; }
+  .insight-list li { padding: 0.6rem 0; border-bottom: 1px solid var(--border); display: flex; gap: 0.5rem; }
+  .insight-list li:last-child { border-bottom: none; }
+  .insight-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+  .action-item {
+    background: rgba(56,189,248,0.08); border-left: 3px solid var(--accent);
+    padding: 0.8rem 1rem; border-radius: 0 8px 8px 0; margin-bottom: 0.5rem; font-size: 0.9rem;
+  }
+  .action-item .priority { font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; margin-right: 0.5rem; }
+  .priority-high { background: rgba(239,68,68,0.2); color: #ef4444; }
+  .priority-mid { background: rgba(251,146,60,0.2); color: #fb923c; }
+  .priority-low { background: rgba(52,211,153,0.2); color: #34d399; }
+
+  .tab-bar { display: flex; gap: 0; margin-bottom: 1rem; border-bottom: 2px solid var(--border); }
+  .tab-btn {
+    padding: 0.6rem 1.2rem; background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 0.85rem; font-weight: 600; position: relative;
+    transition: color 0.2s;
+  }
+  .tab-btn.active { color: var(--accent); }
+  .tab-btn.active::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: var(--accent);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; }
+  .source-link { color: var(--accent); text-decoration: none; }
+  .source-link:hover { text-decoration: underline; }
+
+  /* Chat FAB & Panel */
+  .chat-fab {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;
+    width: 60px; height: 60px; border-radius: 50%; border: none;
+    background: linear-gradient(135deg, #a78bfa, #38bdf8);
+    color: #fff; font-size: 1.6rem; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(56,189,248,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .chat-fab:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(56,189,248,0.6); }
+  .chat-fab.active { background: linear-gradient(135deg, #ef4444, #fb923c); }
+
+  .chat-panel {
+    position: fixed; bottom: 0; right: 0; z-index: 999;
+    width: 440px; height: 100vh;
+    background: var(--bg); border-left: 1px solid var(--border);
+    transform: translateX(100%); transition: transform 0.3s ease;
+    display: flex; flex-direction: column;
+  }
+  .chat-panel.open { transform: translateX(0); }
+  @media (max-width: 500px) { .chat-panel { width: 100vw; } }
+
+  .chat-header {
+    padding: 1rem 1.2rem; background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .chat-header h3 { font-size: 0.95rem; color: var(--accent2); }
+  .chat-header-sub { font-size: 0.7rem; color: var(--muted); }
+
+  .chat-toolbar {
+    display: flex; gap: 0.5rem; padding: 0.6rem 1rem;
+    background: var(--card); border-bottom: 1px solid var(--border);
+    overflow-x: auto; flex-shrink: 0;
+  }
+  .cbt-quick-btn {
+    padding: 0.3rem 0.7rem; border-radius: 999px; border: 1px solid var(--border);
+    background: none; color: var(--muted); font-size: 0.7rem; cursor: pointer;
+    white-space: nowrap; transition: all 0.2s;
+  }
+  .cbt-quick-btn:hover { border-color: var(--accent2); color: var(--accent2); background: rgba(167,139,250,0.1); }
+
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 1rem;
+    display: flex; flex-direction: column; gap: 0.8rem;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg {
+    max-width: 85%; padding: 0.8rem 1rem; border-radius: 12px;
+    font-size: 0.85rem; line-height: 1.5; word-break: break-word;
+  }
+  .msg-ai {
+    align-self: flex-start; background: var(--card); border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+  }
+  .msg-user {
+    align-self: flex-end; background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3);
+    border-bottom-right-radius: 4px;
+  }
+  .msg-system {
+    align-self: center; background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2);
+    border-radius: 8px; font-size: 0.75rem; color: var(--accent2); text-align: center;
+    padding: 0.5rem 1rem;
+  }
+  .msg .label { font-size: 0.65rem; color: var(--muted); margin-bottom: 0.3rem; }
+  .msg strong { color: var(--accent3); }
+  .msg em { color: var(--accent4); font-style: normal; }
+
+  .typing-indicator { display: flex; gap: 4px; padding: 0.5rem; align-self: flex-start; }
+  .typing-indicator span {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--muted);
+    animation: typing 1.4s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing { 0%,60%,100% { opacity:0.3; transform:translateY(0); } 30% { opacity:1; transform:translateY(-4px); } }
+
+  .chat-input-area {
+    padding: 0.8rem; background: var(--card); border-top: 1px solid var(--border);
+    display: flex; gap: 0.5rem; align-items: flex-end;
+  }
+  .chat-input {
+    flex: 1; resize: none; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg); color: var(--text); padding: 0.6rem 0.8rem;
+    font-size: 0.85rem; font-family: inherit; line-height: 1.4;
+    min-height: 40px; max-height: 120px;
+  }
+  .chat-input:focus { outline: none; border-color: var(--accent2); }
+  .chat-input::placeholder { color: var(--muted); }
+  .chat-send {
+    width: 40px; height: 40px; border-radius: 8px; border: none;
+    background: var(--accent2); color: #fff; font-size: 1.1rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .chat-send:hover { background: #8b5cf6; }
+  .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .api-key-bar {
+    padding: 0.6rem 1rem; background: rgba(251,146,60,0.08);
+    border-bottom: 1px solid var(--border); display: flex; gap: 0.5rem; align-items: center;
+  }
+  .api-key-input {
+    flex: 1; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg); color: var(--text); padding: 0.4rem 0.6rem;
+    font-size: 0.75rem; font-family: monospace;
+  }
+  .api-key-input:focus { outline: none; border-color: var(--accent4); }
+  .api-key-save {
+    padding: 0.4rem 0.8rem; border-radius: 6px; border: none;
+    background: var(--accent4); color: #fff; font-size: 0.75rem; cursor: pointer;
+  }
+  .api-key-status { font-size: 0.7rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>転職市場調査ダッシュボード</h1>
+  <p>2026年4月時点 | 中堅SIer / 技術寄り社内SE / AI活用企業</p>
+</div>
+
+<div class="profile-bar">
+  <span class="profile-chip">33歳</span>
+  <span class="profile-chip">SE歴 8年</span>
+  <span class="profile-chip">Java 3年</span>
+  <span class="profile-chip">TypeScript 1年</span>
+  <span class="profile-chip">PL経験 10ヶ月</span>
+  <span class="profile-chip warn">詳細経歴: 共有待ち</span>
+</div>
+
+<div class="container">
+
+  <!-- KPI Stats -->
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="value">533<span style="font-size:0.9rem">万</span></div>
+      <div class="label">30代前半 SE 平均年収</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--accent3)">698<span style="font-size:0.9rem">万</span></div>
+      <div class="label">TypeScript 提示年収</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--accent2)">56.9<span style="font-size:0.9rem">%</span></div>
+      <div class="label">AI導入に前向きな企業</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--accent4)">9,534</div>
+      <div class="label">社内SE 求人数 (2026/4)</div>
+    </div>
+  </div>
+
+  <!-- Market Overview Charts -->
+  <div class="grid-2">
+    <div class="card">
+      <h2>年収レンジ比較（言語別 / 万円）</h2>
+      <div class="chart-container">
+        <canvas id="salaryChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h2>年齢別 SE 平均年収推移</h2>
+      <div class="chart-container">
+        <canvas id="ageChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Company Pickup -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <h2>企業ピックアップ一覧</h2>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('sier')">中堅SIer</button>
+      <button class="tab-btn" onclick="switchTab('shanai')">社内SE（技術寄り）</button>
+      <button class="tab-btn" onclick="switchTab('ai')">AI活用企業</button>
+    </div>
+
+    <!-- SIer Tab -->
+    <div id="tab-sier" class="tab-content active">
+      <table class="company-table">
+        <thead>
+          <tr>
+            <th>適合</th><th>企業名</th><th>平均年収</th><th>従業員</th><th>特徴 / 強み</th><th>注目ポイント</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="fit-score fit-s">S</span></td>
+            <td><strong>DTS</strong><br><span class="tag tag-sier">独立系</span></td>
+            <td>601万</td>
+            <td>5,703</td>
+            <td>金融・医療福祉まで幅広い業種対応。創業50年の安定基盤</td>
+            <td>上流工程比率高。Java案件豊富。中途比率高め</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-s">S</span></td>
+            <td><strong>富士ソフト</strong><br><span class="tag tag-sier">独立系</span></td>
+            <td>620万</td>
+            <td>9,570</td>
+            <td>組込み〜クラウドまでカバー。独立系最大手級</td>
+            <td>中途採用に積極的。技術研修充実。Java/TypeScript案件多数</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>TIS</strong><br><span class="tag tag-sier">独立系</span></td>
+            <td>717万</td>
+            <td>5,834</td>
+            <td>決済・金融に強み。TISインテックグループ中核</td>
+            <td>PLM制度あり。上流・マネジメント志向に好適</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>BIPROGY（旧日本ユニシス）</strong><br><span class="tag tag-sier">ユーザー系</span></td>
+            <td>810万</td>
+            <td>4,451</td>
+            <td>社会基盤系（電力・交通等）のDX推進</td>
+            <td>中途採用率高。年収水準が高い。AI/DX注力</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>テラスカイ</strong><br><span class="tag tag-sier">クラウド特化</span></td>
+            <td>622万</td>
+            <td>488</td>
+            <td>Salesforce/AWS中心のクラウドインテグレーション</td>
+            <td>クラウドスキル習得に最適。成長企業。中途中心</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-b">B</span></td>
+            <td><strong>日本ビジネスシステムズ（JBS）</strong><br><span class="tag tag-sier">MS特化</span></td>
+            <td>605万</td>
+            <td>2,379</td>
+            <td>Microsoft製品に特化したクラウドインテグレーション</td>
+            <td>Azure/M365案件中心。Java経験の活用度はやや限定的</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-b">B</span></td>
+            <td><strong>鈴与シンワート</strong><br><span class="tag tag-sier">グループ系</span></td>
+            <td>644万</td>
+            <td>751</td>
+            <td>物流IT特化。鈴与グループ唯一の上場企業</td>
+            <td>ニッチ領域で安定。物流DXに興味があれば好適</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Shanai SE Tab -->
+    <div id="tab-shanai" class="tab-content">
+      <table class="company-table">
+        <thead>
+          <tr>
+            <th>適合</th><th>企業名</th><th>業界</th><th>年収帯</th><th>特徴</th><th>注目ポイント</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="fit-score fit-s">S</span></td>
+            <td><strong>デンソー</strong></td>
+            <td><span class="tag tag-shanai">製造</span></td>
+            <td>700〜850万</td>
+            <td>自動車部品メーカー。内製開発チーム拡大中</td>
+            <td>Java使用実績あり。DX/AI投資積極的。技術志向の社風</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-s">S</span></td>
+            <td><strong>リクルート</strong></td>
+            <td><span class="tag tag-shanai">IT/メディア</span></td>
+            <td>650〜900万</td>
+            <td>自社プロダクト多数。エンジニア文化が成熟</td>
+            <td>TypeScript活用多。内製開発中心。技術ブログ活発</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>三井物産</strong></td>
+            <td><span class="tag tag-shanai">商社</span></td>
+            <td>800〜1200万</td>
+            <td>DXカンパニー設立。内製化を加速</td>
+            <td>年収最高水準。ただし商社カルチャーへの適応が必要</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>東京エレクトロン</strong></td>
+            <td><span class="tag tag-shanai">半導体</span></td>
+            <td>750〜1000万</td>
+            <td>半導体製造装置世界トップ。IT内製化推進</td>
+            <td>高年収。技術力を重視する文化。安定成長</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>NTTデータ（情シス枠）</strong></td>
+            <td><span class="tag tag-shanai">IT</span></td>
+            <td>600〜800万</td>
+            <td>社内システム企画・運営。大規模インフラ管理</td>
+            <td>安定性抜群。PL経験活かせる。Java基盤多い</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-b">B</span></td>
+            <td><strong>キーエンス</strong></td>
+            <td><span class="tag tag-shanai">製造</span></td>
+            <td>1000〜1500万</td>
+            <td>高収益メーカー。社内IT強化中</td>
+            <td>年収突出。ただし激務・成果主義のカルチャー</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- AI Tab -->
+    <div id="tab-ai" class="tab-content">
+      <table class="company-table">
+        <thead>
+          <tr>
+            <th>適合</th><th>企業名</th><th>規模</th><th>事業内容</th><th>注目ポイント</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="fit-score fit-s">S</span></td>
+            <td><strong>ブレインパッド</strong><br><span class="tag tag-ai">上場</span></td>
+            <td>500名+</td>
+            <td>ビッグデータ活用支援・マーケ分析</td>
+            <td>データ活用リーディングカンパニー。Java/Python活用。中途比率高</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-s">S</span></td>
+            <td><strong>PKSHA Technology</strong><br><span class="tag tag-ai">上場</span></td>
+            <td>300名+</td>
+            <td>AI研究・企業課題解決ソリューション</td>
+            <td>自然言語処理に強み。プロダクト開発ポジションあり</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>AI inside</strong><br><span class="tag tag-ai">上場</span></td>
+            <td>200名+</td>
+            <td>ノーコードAI/DX支援・バックオフィス自動化</td>
+            <td>自社プロダクト開発。TypeScript活用の可能性大</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>ABEJA</strong><br><span class="tag tag-ai">上場</span></td>
+            <td>150名+</td>
+            <td>Deep Learning実装・AI導入支援</td>
+            <td>業種別AI活用実績豊富。エンジニアリング力重視</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-a">A</span></td>
+            <td><strong>HEROZ</strong><br><span class="tag tag-ai">上場</span></td>
+            <td>80名+</td>
+            <td>将棋AI・建設/金融向けAIソリューション</td>
+            <td>技術志向が強い。少数精鋭でAI実装に携われる</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-b">B</span></td>
+            <td><strong>AVILEN</strong><br><span class="tag tag-ai">非上場</span></td>
+            <td>100名+</td>
+            <td>AI活用コンサル・人材育成</td>
+            <td>約800社の支援実績。AIスキルアップ環境</td>
+          </tr>
+          <tr>
+            <td><span class="fit-score fit-b">B</span></td>
+            <td><strong>ELYZA</strong><br><span class="tag tag-ai">非上場</span></td>
+            <td>100名+</td>
+            <td>大規模言語モデル開発</td>
+            <td>LLM開発最前線。ただしML/NLP経験が求められる可能性</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Detailed Analysis -->
+  <div class="grid-2">
+    <div class="card">
+      <h2>市場トレンド分析</h2>
+      <div class="chart-container">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h2>あなたの強み・ポジショニング</h2>
+      <div class="chart-container">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>市場インサイト</h2>
+      <ul class="insight-list">
+        <li><span class="insight-icon">1.</span>DX/AI投資が「実装フェーズ」に突入。経験者需要が一段と加熱</li>
+        <li><span class="insight-icon">2.</span>30代SEの年収は二極化傾向。上流工程・PL経験が600万超の分水嶺</li>
+        <li><span class="insight-icon">3.</span>TypeScript提示年収は698万と高水準。Java+TS両刀使いは市場価値大</li>
+        <li><span class="insight-icon">4.</span>生成AIの普及でSaaS業界に構造変化。コーディング力だけでなくAI活用力が差別化要因に</li>
+        <li><span class="insight-icon">5.</span>スキルベース採用が進展。学歴・職歴よりも「今何ができるか」で評価される傾向</li>
+        <li><span class="insight-icon">6.</span>採用は「縮小ではなく選別へ」。量より質の採用が主流に</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>推奨アクション</h2>
+      <div class="action-item">
+        <span class="priority priority-high">HIGH</span>
+        PL経験10ヶ月を具体的成果で言語化（QCD改善、チーム規模、課題解決）
+      </div>
+      <div class="action-item">
+        <span class="priority priority-high">HIGH</span>
+        Java + TypeScript の両方を活かせるフルスタック案件の実績を整理
+      </div>
+      <div class="action-item">
+        <span class="priority priority-mid">MID</span>
+        AI/LLM活用の実務経験（プロンプトエンジニアリング、API連携等）をアピール材料に
+      </div>
+      <div class="action-item">
+        <span class="priority priority-mid">MID</span>
+        上流工程（要件定義・基本設計）の経験範囲を明確化。年収600万超の鍵
+      </div>
+      <div class="action-item">
+        <span class="priority priority-low">LOW</span>
+        AWS/Azure等のクラウド資格取得で、テラスカイ・JBS等クラウド特化企業への適合度UP
+      </div>
+    </div>
+  </div>
+
+  <!-- Salary Simulation -->
+  <div class="card" style="margin-bottom:1.5rem;">
+    <h2>年収レンジシミュレーション（あなたのスペック基準）</h2>
+    <div class="chart-container-wide">
+      <canvas id="salaryRangeChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>データソース（2026年4月時点）</p>
+  <p style="margin-top:0.5rem">
+    <a class="source-link" href="https://coeteco.jp/articles/11047" target="_blank">コエテコ年収ガイド</a> |
+    <a class="source-link" href="https://fallabs.com/list-of-medium-sier" target="_blank">中堅SIer一覧</a> |
+    <a class="source-link" href="https://type.jp/et/feature/29295/" target="_blank">エンジニアtype市場予測</a> |
+    <a class="source-link" href="https://www.jac-recruitment.jp/market/articles/marketInsights/" target="_blank">JAC転職動向</a> |
+    <a class="source-link" href="https://www.geekly.co.jp/column/cat-position/in-house_se_company_ranking/" target="_blank">Geekly社内SEランキング</a> |
+    <a class="source-link" href="https://www.geekly.co.jp/column/cat-technology/ai_venturecompany_introduce/" target="_blank">GeeklyAI企業一覧</a>
+  </p>
+  <p style="margin-top:0.5rem; font-size:0.7rem; color: #64748b;">
+    ※ 適合度(S/A/B)はスペック情報に基づく概算。詳細経歴共有後に精度向上予定。
+  </p>
+</div>
+
+<!-- Chat FAB -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" title="CBTカウンセリング">&#x1f9e0;</button>
+
+<!-- Chat Panel -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div>
+      <h3>CBT転職カウンセリング</h3>
+      <div class="chat-header-sub">認知行動療法ベース / Powered by Claude</div>
+    </div>
+    <button onclick="toggleChat()" style="background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;">&#x2715;</button>
+  </div>
+
+  <div class="api-key-bar" id="apiKeyBar">
+    <span style="font-size:0.7rem;color:var(--accent4);white-space:nowrap;">API Key:</span>
+    <input type="password" class="api-key-input" id="apiKeyInput" placeholder="sk-ant-..." />
+    <button class="api-key-save" onclick="saveApiKey()">保存</button>
+    <span class="api-key-status" id="apiKeyStatus"></span>
+  </div>
+
+  <div class="chat-toolbar">
+    <button class="cbt-quick-btn" onclick="quickPrompt('thought-record')">思考記録</button>
+    <button class="cbt-quick-btn" onclick="quickPrompt('distortion')">認知の歪みチェック</button>
+    <button class="cbt-quick-btn" onclick="quickPrompt('reframe')">リフレーミング</button>
+    <button class="cbt-quick-btn" onclick="quickPrompt('stress')">ストレス整理</button>
+    <button class="cbt-quick-btn" onclick="quickPrompt('action')">行動実験</button>
+    <button class="cbt-quick-btn" onclick="quickPrompt('strength')">強み再発見</button>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg msg-system">
+      認知行動療法(CBT)の手法で転職ストレスを一緒に整理します。<br>
+      まずAnthropicのAPIキーを入力してください。<br>
+      APIキーなしでもクイックボタンのテンプレートは使えます。
+    </div>
+    <div class="msg msg-ai">
+      <div class="label">CBTカウンセラー</div>
+      こんにちは。転職活動、お疲れさまです。<br><br>
+      何かモヤモヤしていること、不安に思っていることはありますか？<br>
+      自由に話してもらえれば、一緒に考えを整理していきましょう。<br><br>
+      上のボタンから定型のワークを始めることもできます。
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="chatInput" placeholder="今の気持ちを自由に書いてください..." rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+    <button class="chat-send" id="chatSend" onclick="sendMessage()">&#x27A4;</button>
+  </div>
+</div>
+
+<script>
+// ==================== Chat System ====================
+const CBT_SYSTEM_PROMPT = `あなたは認知行動療法（CBT）の手法を用いた転職カウンセラーです。
+
+# あなたの役割
+- 転職活動中のストレス、不安、自己否定感を認知行動療法の技法で一緒に整理する
+- 相談者は33歳、SE歴8年、Java3年、TypeScript1年、PL10ヶ月のITエンジニア
+- 転職先として中堅SIer、技術寄り社内SE、AI活用企業を検討中
+
+# CBTの技法を適宜活用
+1. **思考記録（コラム法）**: 状況→自動思考→感情→根拠→反証→適応的思考
+2. **認知の歪み検出**: 全か無か思考、過度の一般化、心のフィルター、マイナス化思考、結論の飛躍、拡大解釈/過小評価、感情的決めつけ、すべき思考、レッテル貼り、個人化
+3. **リフレーミング**: ネガティブな捉え方を別の視点から見直す
+4. **行動実験**: 恐れていることを小さなステップで検証する計画を立てる
+5. **ストレスコーピング**: ストレス要因を整理し対処法を一緒に考える
+
+# 応答ルール
+- 共感を示してから技法を提案する（いきなりアドバイスしない）
+- 1回の応答は200字程度に抑え、対話的に進める
+- 「〜すべき」「〜しなければ」は使わない（相談者のすべき思考を強化しないため）
+- 具体的なワークに入る時は、ステップを1つずつ進める
+- 深刻な精神的苦痛が見られる場合は、専門家（メンタルクリニック等）への相談を提案する
+- 日本語で応答する`;
+
+const QUICK_PROMPTS = {
+  'thought-record': '思考記録（コラム法）のワークをやりたいです。最近の転職活動で気になった出来事から始めたいです。',
+  'distortion': '最近の自分の考え方に認知の歪みがないかチェックしたいです。転職活動で感じていることを話すので、どんな歪みがあるか教えてください。',
+  'reframe': '転職活動でネガティブに捉えてしまっていることがあります。リフレーミングを手伝ってください。',
+  'stress': '転職活動のストレスを整理したいです。何がストレスになっているか一緒に洗い出してもらえますか？',
+  'action': '転職活動で不安に思っていることについて、小さな行動実験を計画したいです。',
+  'strength': '転職活動で自信を失いかけています。自分の強みを一緒に再発見するワークをしたいです。SE歴8年、Java3年、TypeScript1年、PL10ヶ月の経験があります。',
+};
+
+let chatHistory = [];
+let apiKey = localStorage.getItem('anthropic_api_key') || '';
+let isStreaming = false;
+
+function toggleChat() {
+  const panel = document.getElementById('chatPanel');
+  const fab = document.getElementById('chatFab');
+  panel.classList.toggle('open');
+  fab.classList.toggle('active');
+  fab.innerHTML = panel.classList.contains('open') ? '&#x2715;' : '&#x1f9e0;';
+  if (panel.classList.contains('open')) {
+    document.getElementById('chatInput').focus();
+    if (apiKey) {
+      document.getElementById('apiKeyInput').value = '****' + apiKey.slice(-8);
+      document.getElementById('apiKeyStatus').textContent = '接続済';
+      document.getElementById('apiKeyStatus').style.color = '#34d399';
+    }
+  }
+}
+
+function saveApiKey() {
+  const input = document.getElementById('apiKeyInput').value.trim();
+  if (input && input.startsWith('sk-ant-')) {
+    apiKey = input;
+    localStorage.setItem('anthropic_api_key', apiKey);
+    document.getElementById('apiKeyStatus').textContent = '保存しました';
+    document.getElementById('apiKeyStatus').style.color = '#34d399';
+    document.getElementById('apiKeyInput').value = '****' + apiKey.slice(-8);
+  } else {
+    document.getElementById('apiKeyStatus').textContent = 'sk-ant-で始まるキーを入力';
+    document.getElementById('apiKeyStatus').style.color = '#ef4444';
+  }
+}
+
+function addMessage(role, content) {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + (role === 'user' ? 'msg-user' : 'msg-ai');
+  const label = role === 'user' ? 'あなた' : 'CBTカウンセラー';
+  div.innerHTML = '<div class="label">' + label + '</div>' + content.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+
+function showTyping() {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'typing-indicator';
+  div.id = 'typingIndicator';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function quickPrompt(key) {
+  const text = QUICK_PROMPTS[key];
+  if (text) {
+    document.getElementById('chatInput').value = text;
+    sendMessage();
+  }
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || isStreaming) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  addMessage('user', text);
+  chatHistory.push({ role: 'user', content: text });
+
+  if (!apiKey) {
+    addOfflineResponse(text);
+    return;
+  }
+
+  isStreaming = true;
+  document.getElementById('chatSend').disabled = true;
+  showTyping();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: CBT_SYSTEM_PROMPT,
+        messages: chatHistory.slice(-20),
+      }),
+    });
+
+    hideTyping();
+
+    if (!response.ok) {
+      const err = await response.json();
+      addMessage('assistant', 'API接続エラー: ' + (err.error?.message || response.status) + '<br>APIキーを確認してください。');
+      isStreaming = false;
+      document.getElementById('chatSend').disabled = false;
+      return;
+    }
+
+    const data = await response.json();
+    const reply = data.content[0].text;
+    chatHistory.push({ role: 'assistant', content: reply });
+    addMessage('assistant', reply);
+  } catch (e) {
+    hideTyping();
+    addMessage('assistant', '通信エラーが発生しました。ネットワーク接続を確認してください。<br><small>' + e.message + '</small>');
+  }
+
+  isStreaming = false;
+  document.getElementById('chatSend').disabled = false;
+}
+
+function addOfflineResponse(userText) {
+  const lower = userText.toLowerCase();
+  let reply = '';
+
+  if (lower.includes('思考記録') || lower.includes('コラム')) {
+    reply = '思考記録を始めましょう。まず、最近の転職活動で<strong>気になった具体的な場面</strong>を1つ教えてください。\n\n例: 「求人を見ていたら、自分には無理だと感じた」\n「面接の準備をしていて不安になった」\n\nどんな些細なことでも大丈夫です。';
+  } else if (lower.includes('認知') || lower.includes('歪み')) {
+    reply = '認知の歪みチェックですね。\n\n転職活動について、最近<strong>繰り返し頭に浮かぶ考え</strong>はありますか？\n\n例えば：\n- 「どこも受からないかもしれない」\n- 「自分のスキルでは足りない」\n- 「年齢的にもう遅い」\n\n浮かんでいる考えを教えてください。';
+  } else if (lower.includes('リフレーミング') || lower.includes('reframe')) {
+    reply = 'リフレーミングのワークを始めましょう。\n\n今、転職活動で<strong>ネガティブに感じていること</strong>を1つ挙げてみてください。\n\nそれを別の角度から一緒に見直していきます。';
+  } else if (lower.includes('ストレス') || lower.includes('stress')) {
+    reply = 'ストレスの整理ですね。まず書き出してみましょう。\n\n転職活動に関して、今ストレスに感じていることを<strong>思いつくままに</strong>挙げてみてください。\n\n整理や分析は後からやるので、まずは吐き出すことが大事です。';
+  } else if (lower.includes('行動') || lower.includes('実験')) {
+    reply = '行動実験を計画しましょう。\n\n転職活動で<strong>怖いと思っていること、避けていること</strong>はありますか？\n\n例: 「応募するのが怖い」「面接で技術質問されるのが不安」\n\n小さなステップに分解して、試せる計画を立てます。';
+  } else if (lower.includes('強み') || lower.includes('自信')) {
+    reply = 'SE歴8年、Java3年、TypeScript1年、PL10ヶ月。これは立派なキャリアです。\n\n<strong>「当たり前」だと思っていることが実は強み</strong>であることが多いです。\n\nまず、日々の仕事で「自分がやると周りが助かっている」と思うことはありますか？';
+  } else {
+    reply = 'ありがとうございます。\n\n<em>（APIキー未設定のため、フル会話はご利用いただけません。上部からAnthropicのAPIキーを設定すると、Claudeとの対話型カウンセリングが可能になります。）</em>\n\nクイックボタンからCBTワークのテンプレートをお試しいただけます。';
+  }
+
+  chatHistory.push({ role: 'assistant', content: reply });
+  setTimeout(() => addMessage('assistant', reply), 500);
+}
+
+// Auto-resize textarea
+document.getElementById('chatInput').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+
+// Init API key display
+if (apiKey) {
+  document.getElementById('apiKeyStatus').textContent = '接続済';
+  document.getElementById('apiKeyStatus').style.color = '#34d399';
+}
+
+// Tab switching
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Chart defaults
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#334155';
+Chart.defaults.font.family = "'Segoe UI', 'Hiragino Sans', sans-serif";
+
+// Salary by Language Chart
+new Chart(document.getElementById('salaryChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Go', 'TypeScript', 'Python', 'Kotlin', 'Java', 'PHP', 'Ruby'],
+    datasets: [{
+      label: '提示年収（万円）',
+      data: [711, 698, 664, 650, 580, 545, 560],
+      backgroundColor: [
+        'rgba(52,211,153,0.7)',
+        'rgba(56,189,248,0.9)',
+        'rgba(167,139,250,0.7)',
+        'rgba(251,146,60,0.7)',
+        'rgba(56,189,248,0.5)',
+        'rgba(148,163,184,0.5)',
+        'rgba(239,68,68,0.5)',
+      ],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: false, min: 400, ticks: { callback: v => v + '万' } }
+    }
+  }
+});
+
+// Age-Salary Chart
+new Chart(document.getElementById('ageChart'), {
+  type: 'line',
+  data: {
+    labels: ['20代前半', '20代後半', '30代前半', '30代後半', '40代前半', '40代後半', '50代前半'],
+    datasets: [
+      {
+        label: 'SE平均',
+        data: [350, 445, 533, 573, 620, 650, 670],
+        borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.1)',
+        fill: true, tension: 0.4,
+      },
+      {
+        label: 'PL/PM経験者',
+        data: [350, 470, 600, 700, 780, 820, 850],
+        borderColor: '#34d399', backgroundColor: 'rgba(52,211,153,0.1)',
+        fill: true, tension: 0.4, borderDash: [5, 5],
+      },
+      {
+        label: 'あなたの現在地',
+        data: [null, null, 533, null, null, null, null],
+        borderColor: '#fb923c',
+        backgroundColor: '#fb923c',
+        pointRadius: 8, pointHoverRadius: 10,
+        showLine: false,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      annotation: {},
+    },
+    scales: {
+      y: { beginAtZero: false, min: 300, ticks: { callback: v => v + '万' } }
+    }
+  }
+});
+
+// Market Trend Chart
+new Chart(document.getElementById('trendChart'), {
+  type: 'radar',
+  data: {
+    labels: ['中堅SIer\n求人数', 'AI企業\n採用意欲', '社内SE\n需要', 'Java\n需要', 'TypeScript\n需要', 'PL/PM\n需要'],
+    datasets: [
+      {
+        label: '2025年',
+        data: [70, 75, 65, 72, 78, 70],
+        borderColor: 'rgba(148,163,184,0.6)',
+        backgroundColor: 'rgba(148,163,184,0.1)',
+      },
+      {
+        label: '2026年',
+        data: [72, 90, 78, 68, 88, 82],
+        borderColor: 'rgba(56,189,248,0.8)',
+        backgroundColor: 'rgba(56,189,248,0.15)',
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      r: {
+        beginAtZero: true, max: 100,
+        grid: { color: '#334155' },
+        angleLines: { color: '#334155' },
+        pointLabels: { font: { size: 11 } },
+      }
+    }
+  }
+});
+
+// Your Positioning Radar
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Java力', 'フロントエンド', 'マネジメント', 'AI/ML', '上流工程', 'クラウド'],
+    datasets: [
+      {
+        label: 'あなた（推定）',
+        data: [75, 45, 50, 30, 55, 35],
+        borderColor: '#38bdf8',
+        backgroundColor: 'rgba(56,189,248,0.2)',
+      },
+      {
+        label: '中堅SIer理想像',
+        data: [70, 50, 65, 40, 70, 50],
+        borderColor: 'rgba(52,211,153,0.6)',
+        backgroundColor: 'rgba(52,211,153,0.1)',
+        borderDash: [5, 5],
+      },
+      {
+        label: 'AI企業理想像',
+        data: [50, 60, 45, 80, 50, 65],
+        borderColor: 'rgba(167,139,250,0.6)',
+        backgroundColor: 'rgba(167,139,250,0.1)',
+        borderDash: [5, 5],
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      r: {
+        beginAtZero: true, max: 100,
+        grid: { color: '#334155' },
+        angleLines: { color: '#334155' },
+        pointLabels: { font: { size: 11 } },
+      }
+    }
+  }
+});
+
+// Salary Range Chart
+new Chart(document.getElementById('salaryRangeChart'), {
+  type: 'bar',
+  data: {
+    labels: [
+      'DTS', '富士ソフト', 'TIS', 'BIPROGY',
+      'テラスカイ', 'デンソー(社内SE)', 'リクルート(社内SE)',
+      'ブレインパッド', 'PKSHA', 'AI inside'
+    ],
+    datasets: [
+      {
+        label: '下限年収',
+        data: [480, 480, 550, 600, 480, 550, 550, 450, 450, 420],
+        backgroundColor: 'rgba(56,189,248,0.3)',
+        borderRadius: 4,
+      },
+      {
+        label: '上乗せ幅',
+        data: [170, 200, 230, 310, 200, 300, 400, 250, 300, 230],
+        backgroundColor: 'rgba(56,189,248,0.7)',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.datasetIndex === 0) return '下限: ' + ctx.raw + '万';
+            const base = ctx.chart.data.datasets[0].data[ctx.dataIndex];
+            return '上限: ' + (base + ctx.raw) + '万';
+          }
+        }
+      },
+      legend: { display: false },
+    },
+    scales: {
+      x: {
+        stacked: true,
+        ticks: { callback: v => v + '万' },
+        min: 0,
+      },
+      y: { stacked: true }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

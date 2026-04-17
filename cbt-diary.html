@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT転職日記 - 認知行動療法ジャーナル</title>
+<style>
+  :root {
+    --bg: #faf5f0;
+    --card: #ffffff;
+    --surface: #f3ebe3;
+    --accent: #b48ec5;
+    --accent2: #7bb5c4;
+    --accent3: #8dbd8d;
+    --accent4: #e0a87c;
+    --danger: #d97070;
+    --text: #4a3f3a;
+    --muted: #9b8e85;
+    --border: #e4d9cf;
+    --glow: rgba(180, 142, 197, 0.15);
+    --warm-white: #fdfbf8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: linear-gradient(135deg, #faf5f0 0%, #f0e6f6 50%, #e8f0f0 100%);
+    color: var(--text); line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Layout */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+  .sidebar {
+    width: 300px; min-width: 300px; background: var(--warm-white);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 2px 0 16px rgba(180,142,197,0.06);
+  }
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .counsel-panel {
+    width: 420px; min-width: 420px; background: linear-gradient(180deg, #fdfbf8 0%, #f5eef8 100%);
+    border-left: 1px solid var(--border);
+    display: flex; flex-direction: column; overflow: hidden;
+    transition: width 0.4s ease;
+    box-shadow: -2px 0 16px rgba(180,142,197,0.06);
+  }
+  .counsel-panel.collapsed { width: 0; min-width: 0; overflow: hidden; }
+
+  @media (max-width: 1100px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; min-width: auto; height: auto; max-height: 200px; }
+    .counsel-panel { width: 100%; min-width: auto; height: 50vh; }
+    .counsel-panel.collapsed { height: 0; min-height: 0; }
+  }
+
+  /* Sidebar */
+  .sidebar-header {
+    padding: 1.2rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .sidebar-header h2 { font-size: 1rem; color: var(--accent); }
+  .btn-new {
+    padding: 0.4rem 0.8rem; border-radius: 20px; border: 1px solid var(--accent);
+    background: linear-gradient(135deg, rgba(180,142,197,0.12), rgba(123,181,196,0.12));
+    color: var(--accent); font-size: 0.75rem; cursor: pointer; transition: all 0.3s ease;
+  }
+  .btn-new:hover { background: linear-gradient(135deg, rgba(180,142,197,0.3), rgba(123,181,196,0.3)); transform: translateY(-1px); box-shadow: 0 3px 12px var(--glow); }
+
+  .sidebar-search {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-search input {
+    width: 100%; padding: 0.4rem 0.7rem; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    font-size: 0.8rem;
+  }
+  .sidebar-search input:focus { outline: none; border-color: var(--accent); }
+  .sidebar-search input::placeholder { color: var(--muted); }
+
+  .entry-list { flex: 1; overflow-y: auto; }
+  .entry-list::-webkit-scrollbar { width: 4px; }
+  .entry-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .entry-item {
+    padding: 0.8rem 1rem; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: all 0.25s ease;
+  }
+  .entry-item:hover { background: var(--surface); transform: translateX(3px); }
+  .entry-item.active { background: linear-gradient(90deg, rgba(180,142,197,0.12), transparent); border-left: 3px solid var(--accent); }
+  .entry-item .date { font-size: 0.7rem; color: var(--muted); }
+  .entry-item .title { font-size: 0.85rem; margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .entry-item .mood-badge {
+    display: inline-block; font-size: 0.65rem; padding: 0.1rem 0.4rem;
+    border-radius: 999px; margin-top: 0.3rem;
+  }
+  .mood-1 { background: rgba(217,112,112,0.15); color: #c56060; }
+  .mood-2 { background: rgba(224,168,124,0.2); color: #c08050; }
+  .mood-3 { background: rgba(200,185,120,0.2); color: #a09040; }
+  .mood-4 { background: rgba(123,181,196,0.2); color: #5a9aaa; }
+  .mood-5 { background: rgba(141,189,141,0.2); color: #5a9a5a; }
+
+  .sidebar-stats {
+    padding: 0.8rem 1rem; border-top: 1px solid var(--border);
+    font-size: 0.7rem; color: var(--muted);
+    display: flex; justify-content: space-between;
+  }
+
+  /* Main - Form */
+  .main-header {
+    padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--warm-white); flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .main-header h1 { font-size: 1.1rem; }
+  .header-actions { display: flex; gap: 0.5rem; }
+  .btn {
+    padding: 0.45rem 1rem; border-radius: 6px; border: none;
+    font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 0.3rem;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), #9a7ab8); color: #fff; border-radius: 20px; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px var(--glow); }
+  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 20px; }
+  .btn-secondary:hover { background: var(--border); }
+  .btn-danger { background: rgba(217,112,112,0.1); color: var(--danger); border: 1px solid rgba(217,112,112,0.25); border-radius: 20px; }
+  .btn-danger:hover { background: rgba(217,112,112,0.2); }
+  .btn-counsel { background: linear-gradient(135deg, rgba(180,142,197,0.15), rgba(123,181,196,0.15)); color: var(--accent); border: 1px solid rgba(180,142,197,0.3); border-radius: 20px; }
+  .btn-counsel:hover { background: linear-gradient(135deg, rgba(180,142,197,0.3), rgba(123,181,196,0.3)); transform: translateY(-1px); box-shadow: 0 3px 12px var(--glow); }
+
+  .form-scroll { flex: 1; overflow-y: auto; padding: 1.5rem; }
+  .form-scroll::-webkit-scrollbar { width: 6px; }
+  .form-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .form-section {
+    margin-bottom: 1.5rem; background: var(--warm-white);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 1.2rem; position: relative;
+    box-shadow: 0 2px 12px rgba(180,142,197,0.06);
+    animation: fadeSlideUp 0.4s ease both;
+  }
+  .form-section:nth-child(2) { animation-delay: 0.05s; }
+  .form-section:nth-child(3) { animation-delay: 0.1s; }
+  .form-section:nth-child(4) { animation-delay: 0.15s; }
+  .form-section:nth-child(5) { animation-delay: 0.2s; }
+  .form-section:nth-child(6) { animation-delay: 0.25s; }
+  .form-section:nth-child(7) { animation-delay: 0.3s; }
+  .form-section:nth-child(8) { animation-delay: 0.35s; }
+  .form-section .section-label {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(180,142,197,0.25), rgba(123,181,196,0.2));
+    font-size: 0.7rem; color: var(--accent); font-weight: 700;
+  }
+  .form-section .help-text {
+    font-size: 0.75rem; color: var(--muted); margin-bottom: 0.6rem;
+    padding: 0.5rem 0.7rem; background: linear-gradient(90deg, rgba(180,142,197,0.07), rgba(123,181,196,0.05));
+    border-radius: 8px; border-left: 3px solid rgba(180,142,197,0.35);
+  }
+
+  .form-row { display: flex; gap: 1rem; margin-bottom: 0.8rem; }
+  .form-row > * { flex: 1; }
+
+  label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
+  input[type="text"], input[type="date"], input[type="time"], select {
+    width: 100%; padding: 0.5rem 0.7rem; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--warm-white); color: var(--text);
+    font-size: 0.85rem; font-family: inherit; transition: all 0.25s ease;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow); }
+  textarea {
+    width: 100%; padding: 0.6rem 0.8rem; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--warm-white); color: var(--text);
+    font-size: 0.85rem; font-family: inherit; line-height: 1.6;
+    resize: vertical; min-height: 80px; transition: all 0.25s ease;
+  }
+  textarea::placeholder { color: var(--muted); }
+
+  .mood-selector { display: flex; gap: 0.5rem; margin-top: 0.3rem; }
+  .mood-btn {
+    flex: 1; padding: 0.5rem; border-radius: 12px; border: 2px solid var(--border);
+    background: var(--warm-white); color: var(--text); cursor: pointer; text-align: center;
+    font-size: 0.75rem; transition: all 0.3s ease;
+  }
+  .mood-btn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px var(--glow); }
+  .mood-btn.selected { border-color: var(--accent); background: linear-gradient(135deg, rgba(180,142,197,0.18), rgba(123,181,196,0.12)); transform: translateY(-2px); box-shadow: 0 4px 12px var(--glow); }
+  .mood-btn .emoji { font-size: 1.3rem; display: block; margin-bottom: 0.2rem; }
+
+  .distortion-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.3rem; }
+  .distortion-tag {
+    padding: 0.3rem 0.6rem; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--warm-white); color: var(--muted); font-size: 0.7rem; cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .distortion-tag:hover { border-color: var(--accent4); color: var(--accent4); transform: scale(1.05); }
+  .distortion-tag.selected { border-color: var(--accent4); color: #fff; background: linear-gradient(135deg, var(--accent4), #d4956a); transform: scale(1.05); box-shadow: 0 2px 8px rgba(224,168,124,0.3); }
+
+  /* Counsel Panel */
+  .counsel-header {
+    padding: 1rem 1.2rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .counsel-header h3 { font-size: 0.95rem; color: var(--accent); }
+
+  .counsel-api {
+    padding: 0.5rem 1rem; background: linear-gradient(90deg, rgba(224,168,124,0.06), rgba(180,142,197,0.04));
+    border-bottom: 1px solid var(--border); display: flex; gap: 0.4rem; align-items: center;
+  }
+  .counsel-api input {
+    flex: 1; padding: 0.35rem 0.5rem; border-radius: 5px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    font-size: 0.7rem; font-family: monospace;
+  }
+  .counsel-api button {
+    padding: 0.35rem 0.6rem; border-radius: 5px; border: none;
+    background: var(--accent4); color: #fff; font-size: 0.7rem; cursor: pointer;
+  }
+  .counsel-api .status { font-size: 0.65rem; }
+
+  /* Reference Library Modal */
+  .ref-overlay {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(74,63,58,0.4); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center;
+  }
+  .ref-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+  .ref-modal {
+    background: linear-gradient(135deg, #fdfbf8, #f8f0fc); border: 1px solid var(--border);
+    border-radius: 18px; width: 90%; max-width: 800px; max-height: 85vh;
+    overflow-y: auto; padding: 2rem;
+    box-shadow: 0 20px 60px rgba(180,142,197,0.15);
+    animation: fadeSlideUp 0.4s ease;
+  }
+  .ref-modal::-webkit-scrollbar { width: 6px; }
+  .ref-modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .ref-modal h2 { font-size: 1.2rem; color: var(--accent); margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+  .ref-modal h3 { font-size: 0.95rem; color: var(--accent2); margin: 1.5rem 0 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  .ref-modal h4 { font-size: 0.85rem; color: var(--accent3); margin: 1rem 0 0.4rem; }
+  .ref-close { background: none; border: none; color: var(--muted); font-size: 1.3rem; cursor: pointer; }
+
+  .ref-card {
+    background: var(--warm-white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem; margin-bottom: 0.8rem;
+    transition: all 0.25s ease;
+  }
+  .ref-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(180,142,197,0.1); }
+  .ref-card .ref-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.3rem; }
+  .ref-card .ref-author { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.4rem; }
+  .ref-card .ref-desc { font-size: 0.8rem; color: var(--text); line-height: 1.5; }
+  .ref-card a { color: var(--accent2); text-decoration: none; font-size: 0.75rem; }
+  .ref-card a:hover { text-decoration: underline; }
+  .ref-tag {
+    display: inline-block; padding: 0.15rem 0.4rem; border-radius: 4px;
+    font-size: 0.65rem; font-weight: 600; margin-right: 0.3rem; margin-top: 0.3rem;
+  }
+  .ref-tag-book { background: rgba(180,142,197,0.15); color: var(--accent); }
+  .ref-tag-pdf { background: rgba(217,112,112,0.12); color: var(--danger); }
+  .ref-tag-web { background: rgba(123,181,196,0.15); color: var(--accent2); }
+  .ref-tag-paper { background: rgba(141,189,141,0.15); color: var(--accent3); }
+  .ref-tag-en { background: rgba(224,168,124,0.15); color: var(--accent4); }
+  .ref-tag-technique { background: linear-gradient(135deg, rgba(180,142,197,0.15), rgba(123,181,196,0.15)); color: var(--accent); font-weight: 700; }
+
+  .ref-concept {
+    background: linear-gradient(90deg, rgba(180,142,197,0.06), transparent);
+    border-left: 3px solid var(--accent);
+    padding: 0.8rem 1rem; border-radius: 0 10px 10px 0; margin-bottom: 0.6rem;
+    font-size: 0.82rem; line-height: 1.6; transition: all 0.25s ease;
+  }
+  .ref-concept:hover { background: linear-gradient(90deg, rgba(180,142,197,0.12), transparent); }
+  .ref-concept strong { color: var(--accent4); }
+
+  .btn-ref {
+    width: 100%; padding: 0.6rem; border-radius: 6px;
+    border: 1px solid var(--accent); background: rgba(167,139,250,0.08);
+    color: var(--accent); font-size: 0.75rem; cursor: pointer;
+    transition: all 0.2s; margin-top: 0.3rem;
+  }
+  .btn-ref:hover { background: rgba(167,139,250,0.2); }
+
+  .counsel-messages {
+    flex: 1; overflow-y: auto; padding: 1rem;
+    display: flex; flex-direction: column; gap: 0.7rem;
+  }
+  .counsel-messages::-webkit-scrollbar { width: 4px; }
+  .counsel-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .c-msg {
+    max-width: 90%; padding: 0.7rem 0.9rem; border-radius: 10px;
+    font-size: 0.82rem; line-height: 1.6; word-break: break-word;
+  }
+  .c-msg-ai { align-self: flex-start; background: linear-gradient(135deg, #f8f0fc, #f0f4f8); border: 1px solid rgba(180,142,197,0.2); border-bottom-left-radius: 3px; animation: fadeSlideUp 0.3s ease; }
+  .c-msg-user { align-self: flex-end; background: linear-gradient(135deg, rgba(123,181,196,0.12), rgba(141,189,141,0.1)); border: 1px solid rgba(123,181,196,0.25); border-bottom-right-radius: 3px; animation: fadeSlideUp 0.3s ease; }
+  .c-msg-system { align-self: center; font-size: 0.72rem; color: var(--accent); background: linear-gradient(135deg, rgba(180,142,197,0.08), rgba(123,181,196,0.06)); border: 1px solid rgba(180,142,197,0.2); border-radius: 12px; text-align: center; padding: 0.5rem 0.8rem; }
+  .c-msg .c-label { font-size: 0.6rem; color: var(--muted); margin-bottom: 0.2rem; }
+
+  .typing-dots { display: flex; gap: 4px; padding: 0.4rem; align-self: flex-start; }
+  .typing-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.4s infinite; }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%,60%,100%{opacity:.3;transform:translateY(0)} 30%{opacity:1;transform:translateY(-3px)} }
+
+  .counsel-input-area {
+    padding: 0.7rem; background: var(--card); border-top: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .counsel-quick-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .cq-btn {
+    padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid var(--border);
+    background: var(--warm-white); color: var(--muted); font-size: 0.65rem; cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .cq-btn:hover { border-color: var(--accent); color: var(--accent); background: linear-gradient(135deg, rgba(180,142,197,0.1), rgba(123,181,196,0.08)); transform: translateY(-1px); }
+  .counsel-input-row { display: flex; gap: 0.4rem; }
+  .counsel-input {
+    flex: 1; resize: none; border: 1px solid var(--border); border-radius: 7px;
+    background: var(--bg); color: var(--text); padding: 0.5rem 0.7rem;
+    font-size: 0.82rem; font-family: inherit; min-height: 38px; max-height: 100px;
+  }
+  .counsel-input::placeholder { color: var(--muted); }
+  .counsel-send {
+    width: 38px; height: 38px; border-radius: 50%; border: none;
+    background: linear-gradient(135deg, var(--accent), #9a7ab8); color: #fff; font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s ease;
+  }
+  .counsel-send:hover:not(:disabled) { transform: scale(1.08); box-shadow: 0 3px 12px var(--glow); }
+  .counsel-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Empty state */
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 100%; color: var(--muted); text-align: center;
+    padding: 2rem;
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+  .empty-state p { font-size: 0.9rem; margin-bottom: 0.5rem; }
+  .empty-state small { font-size: 0.75rem; }
+
+  /* View mode */
+  .view-mode .form-section textarea,
+  .view-mode .form-section input,
+  .view-mode .form-section select {
+    border-color: transparent; background: transparent; pointer-events: none;
+  }
+  .view-mode .mood-btn { pointer-events: none; }
+  .view-mode .distortion-tag { pointer-events: none; }
+
+  /* Animations */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* Breathing exercise widget */
+  .breath-widget {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1rem; margin: 0.5rem 1rem; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(180,142,197,0.08), rgba(123,181,196,0.06));
+    border: 1px solid var(--border); cursor: pointer; transition: all 0.3s ease;
+  }
+  .breath-widget:hover { background: linear-gradient(135deg, rgba(180,142,197,0.14), rgba(123,181,196,0.1)); }
+  .breath-circle {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    opacity: 0.6; margin-bottom: 0.5rem;
+  }
+  .breath-circle.active { animation: breathe 12s ease-in-out infinite; }
+  .breath-label { font-size: 0.7rem; color: var(--muted); }
+  .breath-phase { font-size: 0.75rem; color: var(--accent); font-weight: 600; min-height: 1.2em; }
+
+  /* Technique cards in sidebar */
+  .technique-panel { padding: 0.5rem; overflow-y: auto; max-height: 300px; }
+  .technique-card {
+    padding: 0.6rem 0.8rem; margin: 0.3rem 0.5rem; border-radius: 10px;
+    background: var(--warm-white); border: 1px solid var(--border);
+    font-size: 0.72rem; cursor: pointer; transition: all 0.25s ease;
+  }
+  .technique-card:hover { transform: translateX(3px); border-color: var(--accent); box-shadow: 0 2px 8px var(--glow); }
+  .technique-card .tc-title { font-weight: 700; color: var(--accent); margin-bottom: 0.2rem; }
+  .technique-card .tc-desc { color: var(--muted); line-height: 1.4; }
+  .technique-card .tc-evidence { font-size: 0.65rem; color: var(--accent3); margin-top: 0.2rem; }
+
+  /* Sidebar tabs */
+  .sidebar-tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+  }
+  .sidebar-tab {
+    flex: 1; padding: 0.5rem; text-align: center; font-size: 0.7rem;
+    color: var(--muted); cursor: pointer; border: none; background: none;
+    border-bottom: 2px solid transparent; transition: all 0.25s ease;
+  }
+  .sidebar-tab:hover { color: var(--accent); }
+  .sidebar-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  .sidebar-tab-content { display: none; flex: 1; overflow-y: auto; }
+  .sidebar-tab-content.active { display: flex; flex-direction: column; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Sidebar: Entry List -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>CBT転職日記</h2>
+      <button class="btn-new" onclick="newEntry()">+ 新しい日記</button>
+    </div>
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" onclick="switchSidebarTab('entries')">日記一覧</button>
+      <button class="sidebar-tab" onclick="switchSidebarTab('techniques')">技法ツールキット</button>
+    </div>
+
+    <div class="sidebar-tab-content active" id="tabEntries">
+      <div class="sidebar-search">
+        <input type="text" id="searchInput" placeholder="日記を検索..." oninput="renderEntryList()">
+      </div>
+      <div class="entry-list" id="entryList"></div>
+      <div class="sidebar-stats" id="sidebarStats"></div>
+    </div>
+
+    <div class="sidebar-tab-content" id="tabTechniques">
+      <div class="technique-panel">
+        <div class="technique-card" onclick="counselQuick('behavioral_exp')">
+          <div class="tc-title">行動実験</div>
+          <div class="tc-desc">不安な予測を「仮説」として検証する。思考記録より効果が高い</div>
+          <div class="tc-evidence">Clark & Wells モデル / 最重要技法</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('safety_behavior')">
+          <div class="tc-title">安全行動の除去</div>
+          <div class="tc-desc">目を合わせない、スマホを握る等 — 不安を維持する隠れた行動を特定・除去</div>
+          <div class="tc-evidence">安全行動がある限りエクスポージャー効果は大幅減</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('attention_training')">
+          <div class="tc-title">注意訓練 (ATT)</div>
+          <div class="tc-desc">自己注目を外部に切り替える訓練。1日2回×12分</div>
+          <div class="tc-evidence">Wells (2009) メタ認知療法</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('video_feedback')">
+          <div class="tc-title">ビデオフィードバック</div>
+          <div class="tc-desc">自分の予測 vs 実際の録画映像のギャップで自己イメージを修正</div>
+          <div class="tc-evidence">歪んだ自己イメージを直接修正できる唯一の方法</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('self_compassion')">
+          <div class="tc-title">セルフコンパッション (CFT)</div>
+          <div class="tc-desc">自己批判→思いやり。恥の感情に直接アプローチ</div>
+          <div class="tc-evidence">Gilbert (2014) / CBTで頭では分かるが心が追いつかない場合に</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('act_defusion')">
+          <div class="tc-title">脱フュージョン (ACT)</div>
+          <div class="tc-desc">不安な考えを変えるのではなく、持ったまま行動する</div>
+          <div class="tc-evidence">Craske et al. (2014) CBTと同等の効果</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('exposure_inhibitory')">
+          <div class="tc-title">仮説検証型エクスポージャー</div>
+          <div class="tc-desc">「耐える」ではなく「予測が外れる」体験。抑制学習モデル</div>
+          <div class="tc-evidence">Craske et al. (2014) 抑制学習モデル</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('interoceptive')">
+          <div class="tc-title">内受容エクスポージャー</div>
+          <div class="tc-desc">赤面・震え・発汗をわざと誘発し「壊滅的結果は起きない」と学ぶ</div>
+          <div class="tc-evidence">身体症状への恐怖がSADの中核的維持因子</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('rumination_control')">
+          <div class="tc-title">事後反芻の制御</div>
+          <div class="tc-desc">「あの時ああ言えば…」の反芻ループを認識して断ち切る</div>
+          <div class="tc-evidence">SADの維持因子として極めて重要 / MCT</div>
+        </div>
+        <div class="technique-card" onclick="counselQuick('common_mistakes')">
+          <div class="tc-title">セルフ治療のよくある間違い</div>
+          <div class="tc-desc">安全行動の維持、思考記録だけ、耐えるだけのエクスポージャー等</div>
+          <div class="tc-evidence">8つの典型的な落とし穴をチェック</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:0.5rem 1rem; border-top:1px solid var(--border);">
+      <div class="breath-widget" onclick="toggleBreathing()" id="breathWidget">
+        <div class="breath-circle" id="breathCircle"></div>
+        <div class="breath-phase" id="breathPhase">タップして呼吸エクササイズ</div>
+        <div class="breath-label">4-7-8 呼吸法（副交感神経活性化）</div>
+      </div>
+      <button class="btn-ref" onclick="openRefLibrary()" style="margin-top:0.4rem;">参考資料ライブラリ</button>
+    </div>
+  </div>
+
+  <!-- Main: Diary Form -->
+  <div class="main">
+    <div class="main-header">
+      <h1 id="formTitle">新しい日記</h1>
+      <div class="header-actions">
+        <button class="btn btn-counsel" onclick="toggleCounsel()">Claudeに相談</button>
+        <button class="btn btn-primary" onclick="saveEntry()">保存</button>
+        <button class="btn btn-danger" id="deleteBtn" onclick="deleteEntry()" style="display:none;">削除</button>
+      </div>
+    </div>
+
+    <div class="form-scroll" id="formArea">
+      <div id="emptyState" class="empty-state">
+        <div class="icon">&#x1F4D3;</div>
+        <p>左の「+ 新しい日記」から始めましょう</p>
+        <small>認知行動療法のフレームワークで<br>転職活動の不安やストレスを整理できます</small>
+      </div>
+
+      <div id="diaryForm" style="display:none;">
+        <!-- 1. 基本情報 -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">1</span> 基本情報</div>
+          <div class="form-row">
+            <div>
+              <label>日付</label>
+              <input type="date" id="entryDate">
+            </div>
+            <div>
+              <label>時刻</label>
+              <input type="time" id="entryTime">
+            </div>
+          </div>
+          <div>
+            <label>今の気分 (1〜5)</label>
+            <div class="mood-selector" id="moodSelector">
+              <button class="mood-btn" data-mood="1" onclick="selectMood(1)"><span class="emoji">&#x1F629;</span>つらい</button>
+              <button class="mood-btn" data-mood="2" onclick="selectMood(2)"><span class="emoji">&#x1F61F;</span>不安</button>
+              <button class="mood-btn" data-mood="3" onclick="selectMood(3)"><span class="emoji">&#x1F610;</span>普通</button>
+              <button class="mood-btn" data-mood="4" onclick="selectMood(4)"><span class="emoji">&#x1F60A;</span>まあまあ</button>
+              <button class="mood-btn" data-mood="5" onclick="selectMood(5)"><span class="emoji">&#x1F60E;</span>良い</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 状況 -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">2</span> 状況</div>
+          <div class="help-text">どんな出来事があったか、客観的な事実を書いてください</div>
+          <textarea id="situation" placeholder="例: 求人サイトで気になる企業の応募要項を見ていた。「AWS実務経験3年以上」が必須条件だった。" rows="3"></textarea>
+        </div>
+
+        <!-- 3. 不安の予測（自動思考） -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">3</span> 不安の予測（自動思考）</div>
+          <div class="help-text">その時、頭に浮かんだ考えは？最悪のシナリオは？</div>
+          <textarea id="anxietyPrediction" placeholder="例: 「自分にはクラウド経験が足りない。どこにも受からないんじゃないか。33歳でこのスキルセットでは市場価値が低いのでは...」" rows="4"></textarea>
+          <div style="margin-top:0.8rem">
+            <label>不安の強さ (0〜100%)</label>
+            <input type="text" id="anxietyLevel" placeholder="例: 75%">
+          </div>
+        </div>
+
+        <!-- 4. 認知の歪み -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">4</span> 認知の歪みチェック</div>
+          <div class="help-text">上の「不安の予測」に含まれる歪みを選んでみましょう</div>
+          <div class="distortion-grid" id="distortionGrid">
+            <button class="distortion-tag" data-d="all-or-nothing" onclick="toggleDistortion(this)">全か無か思考</button>
+            <button class="distortion-tag" data-d="overgeneralization" onclick="toggleDistortion(this)">過度の一般化</button>
+            <button class="distortion-tag" data-d="mental-filter" onclick="toggleDistortion(this)">心のフィルター</button>
+            <button class="distortion-tag" data-d="disqualifying" onclick="toggleDistortion(this)">マイナス化思考</button>
+            <button class="distortion-tag" data-d="jumping-conclusions" onclick="toggleDistortion(this)">結論の飛躍</button>
+            <button class="distortion-tag" data-d="magnification" onclick="toggleDistortion(this)">拡大解釈/過小評価</button>
+            <button class="distortion-tag" data-d="emotional-reasoning" onclick="toggleDistortion(this)">感情的決めつけ</button>
+            <button class="distortion-tag" data-d="should-statements" onclick="toggleDistortion(this)">すべき思考</button>
+            <button class="distortion-tag" data-d="labeling" onclick="toggleDistortion(this)">レッテル貼り</button>
+            <button class="distortion-tag" data-d="personalization" onclick="toggleDistortion(this)">個人化</button>
+          </div>
+        </div>
+
+        <!-- 5. 代わる見方（適応的思考） -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">5</span> それに代わる見方</div>
+          <div class="help-text">別の角度から見たら？親友が同じ悩みを抱えていたら何と言う？</div>
+          <textarea id="alternativeView" placeholder="例: 「クラウド経験がなくても、Java8年+PL経験がある。むしろオンプレからクラウドへの移行プロジェクトを経験したい意欲を伝えられるのでは。33歳ならまだキャリアチェンジの余地は十分ある。」" rows="4"></textarea>
+        </div>
+
+        <!-- 6. 最終結論 -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">6</span> 最終結論</div>
+          <div class="help-text">「不安の予測」と「代わる見方」を踏まえて、バランスの取れた結論は？</div>
+          <textarea id="conclusion" placeholder="例: 「すべての条件を満たす必要はない。自分の強みを活かせる部分をアピールし、足りない部分は学ぶ意欲を見せよう。まずは1社応募してみる。」" rows="3"></textarea>
+          <div style="margin-top:0.8rem">
+            <label>結論を出した後の不安の強さ (0〜100%)</label>
+            <input type="text" id="anxietyAfter" placeholder="例: 40%">
+          </div>
+        </div>
+
+        <!-- 7. 生きるためのルール -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">7</span> 生きるためのルール</div>
+          <div class="help-text">この経験から導き出す、自分を守るためのルールや気づき</div>
+          <textarea id="lifeRule" placeholder="例: 「求人の必須条件は理想像であって足切りラインではない。70%合致していれば挑戦する価値がある。」" rows="3"></textarea>
+        </div>
+
+        <!-- 8. 行動実験 -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">8</span> 行動実験（Behavioral Experiment）</div>
+          <div class="help-text">不安の予測を「仮説」として検証する。思考記録の10倍重要（Clark & Wells）</div>
+          <textarea id="behavioralExpPrediction" placeholder="仮説：「会議で発言したら変なことを言って笑われる」（確信度: 80%）" rows="2"></textarea>
+          <div style="margin-top:0.6rem;">
+            <label>実験の設計（安全行動なしで何をするか）</label>
+            <textarea id="behavioralExpDesign" placeholder="例: メモなしで会議で1回発言する。聴衆の反応を観察する" rows="2"></textarea>
+          </div>
+          <div style="margin-top:0.6rem;">
+            <label>結果（実際に何が起きたか）</label>
+            <textarea id="behavioralExpResult" placeholder="例: 0人が笑った。予測は外れた。むしろ頷いている人がいた" rows="2"></textarea>
+          </div>
+        </div>
+
+        <!-- 9. 安全行動チェック -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">9</span> 安全行動チェック</div>
+          <div class="help-text">不安を避けるための隠れた行動。これがある限りエクスポージャーの効果は大幅に減少する</div>
+          <div class="distortion-grid" id="safetyBehaviorGrid">
+            <button class="distortion-tag" data-sb="avoid-eye" onclick="toggleSafety(this)">目を合わせない</button>
+            <button class="distortion-tag" data-sb="fast-talk" onclick="toggleSafety(this)">早口で終わらせる</button>
+            <button class="distortion-tag" data-sb="phone-shield" onclick="toggleSafety(this)">スマホを盾にする</button>
+            <button class="distortion-tag" data-sb="rehearse" onclick="toggleSafety(this)">過度なリハーサル</button>
+            <button class="distortion-tag" data-sb="sit-edge" onclick="toggleSafety(this)">端/後ろに座る</button>
+            <button class="distortion-tag" data-sb="avoid-question" onclick="toggleSafety(this)">質問しない</button>
+            <button class="distortion-tag" data-sb="leave-early" onclick="toggleSafety(this)">早く帰る</button>
+            <button class="distortion-tag" data-sb="deflect-topic" onclick="toggleSafety(this)">話題を逸らす</button>
+            <button class="distortion-tag" data-sb="over-apologize" onclick="toggleSafety(this)">過度な謝罪</button>
+            <button class="distortion-tag" data-sb="arms-crossed" onclick="toggleSafety(this)">腕を組む/手を隠す</button>
+            <button class="distortion-tag" data-sb="monitor-self" onclick="toggleSafety(this)">自分の見え方を監視</button>
+            <button class="distortion-tag" data-sb="alcohol" onclick="toggleSafety(this)">飲酒して参加</button>
+          </div>
+          <div style="margin-top:0.6rem;">
+            <label>今日手放す安全行動（1つでOK）</label>
+            <textarea id="safetyDropTarget" placeholder="例: 会議中にスマホをカバンにしまう" rows="2"></textarea>
+          </div>
+        </div>
+
+        <!-- 10. 自由メモ -->
+        <div class="form-section">
+          <div class="section-label"><span class="section-num">10</span> 自由メモ</div>
+          <textarea id="freeNote" placeholder="その他、気づいたこと、やりたいこと、明日の目標など..." rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Counsel Panel -->
+  <div class="counsel-panel collapsed" id="counselPanel">
+    <div class="counsel-header">
+      <h3>Claude CBTカウンセラー</h3>
+      <button onclick="toggleCounsel()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;">&#x2715;</button>
+    </div>
+    <div class="counsel-api" id="counselApiBar">
+      <span style="font-size:0.65rem;color:var(--accent4);white-space:nowrap;">API Key:</span>
+      <input type="password" id="counselApiKey" placeholder="sk-ant-...">
+      <button onclick="saveCounselApiKey()">保存</button>
+      <span class="status" id="counselApiStatus"></span>
+    </div>
+    <div class="counsel-messages" id="counselMessages">
+      <div class="c-msg c-msg-system">
+        日記の内容をClaudeに送信してCBT観点のフィードバックを受けられます
+      </div>
+    </div>
+    <div class="counsel-input-area">
+      <div class="counsel-quick-btns">
+        <button class="cq-btn" onclick="counselQuick('analyze')">日記を分析</button>
+        <button class="cq-btn" onclick="counselQuick('behavioral_exp')">行動実験を設計</button>
+        <button class="cq-btn" onclick="counselQuick('safety_behavior')">安全行動を分析</button>
+        <button class="cq-btn" onclick="counselQuick('reframe')">リフレーミング</button>
+        <button class="cq-btn" onclick="counselQuick('self_compassion')">セルフコンパッション</button>
+        <button class="cq-btn" onclick="counselQuick('pattern')">パターン分析</button>
+        <button class="cq-btn" onclick="counselQuick('common_mistakes')">間違いチェック</button>
+        <button class="cq-btn" onclick="counselQuick('progress')">成長の振り返り</button>
+      </div>
+      <div class="counsel-input-row">
+        <textarea class="counsel-input" id="counselInput" placeholder="質問や追加の相談..." rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendCounsel();}"></textarea>
+        <button class="counsel-send" id="counselSend" onclick="sendCounsel()">&#x27A4;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reference Library Modal -->
+<div class="ref-overlay" id="refOverlay" onclick="if(event.target===this)closeRefLibrary()">
+  <div class="ref-modal">
+    <h2>
+      CBT/SAD 参考資料ライブラリ
+      <button class="ref-close" onclick="closeRefLibrary()">&#x2715;</button>
+    </h2>
+
+    <!-- CBT Core Concepts -->
+    <h3>CBTの核心概念（セルフケアで使うもの）</h3>
+
+    <div class="ref-concept">
+      <strong>認知モデル（Beck, 1976）</strong><br>
+      出来事そのものではなく、出来事に対する「解釈（自動思考）」が感情と行動を決める。日記のStep3→5はこのモデルそのもの。
+    </div>
+    <div class="ref-concept">
+      <strong>不安の予測（Anticipatory Processing）</strong><br>
+      SAD特有の「事前に最悪のシナリオを繰り返しシミュレーション」する傾向。予測の精度を検証する「行動実験」が対抗手段。
+    </div>
+    <div class="ref-concept">
+      <strong>事後反芻（Post-Event Processing）</strong><br>
+      社交場面の後に「あの発言はまずかった」と繰り返し反芻する。日記で事実と解釈を分離する訓練が有効。
+    </div>
+    <div class="ref-concept">
+      <strong>安全行動（Safety Behaviours）</strong><br>
+      不安を避けるための行動（目を合わせない、話さない等）が逆に不安を維持する。認識して段階的に手放すことが目標。
+    </div>
+    <div class="ref-concept">
+      <strong>自己注目（Self-Focused Attention）</strong><br>
+      SADでは注意が自分の内面（緊張、震え、顔の火照り）に向く。注意を外部に向け直す訓練がClarkモデルの柱。
+    </div>
+    <div class="ref-concept">
+      <strong>生きるためのルール（Rules for Living / Core Beliefs）</strong><br>
+      「失敗したら見捨てられる」等の条件付き信念。日記のStep7で言語化し、柔軟な信念に書き換えていく。
+    </div>
+
+    <!-- Japanese Books -->
+    <h3>書籍（日本語）</h3>
+
+    <div class="ref-card">
+      <div class="ref-title">自分で治す「社交不安症」</div>
+      <div class="ref-author">清水栄司 著 / 法研</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <span class="ref-tag ref-tag-book">セルフヘルプ</span>
+      <div class="ref-desc">千葉大学SADチーム監修。先生と患者のやりとり形式で実際の治療ステップを再現。セルフモニタリングシート付き。独力でCBTを進めたい人にとって最も実践的な1冊。</div>
+      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">💰 ¥737〜 / Kindle版あり ｜ ⭐ 4.1（96件）</div>
+      <a href="https://www.amazon.co.jp/dp/4865130802" target="_blank">Amazonで見る &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">自分でできる認知行動療法 — うつ・パニック症・強迫症のやさしい治し方</div>
+      <div class="ref-author">浅岡雅子 著 / 清水栄司 監修 / 星和書店</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <div class="ref-desc">CBTの基本技法（思考記録、行動実験、エクスポージャー）をイラストと図解で解説。社交不安にも章を割いている。入門として最適。</div>
+      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">💰 ¥2,090前後</div>
+      <a href="https://www.amazon.co.jp/dp/4798152404" target="_blank">Amazonで見る &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">はじめての認知療法</div>
+      <div class="ref-author">大野裕 著 / 講談社現代新書</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <div class="ref-desc">日本のCBT第一人者。コラム法（7つのコラム）を平易に解説。この日記のStep3〜6はコラム法がベースになっている。</div>
+      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">💰 ¥1,056 / Kindle ¥385 ｜ ⭐ 3.9（132件）</div>
+      <a href="https://www.amazon.co.jp/dp/4062881055" target="_blank">Amazonで見る &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">こころが晴れるノート — 自分で学ぶ「認知療法・認知行動療法」</div>
+      <div class="ref-author">大野裕 著 / 創元社</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <span class="ref-tag ref-tag-book">ワークブック</span>
+      <div class="ref-desc">書き込み式のCBTワークブック。思考記録、認知の歪みチェック、行動計画を紙ベースで実践。この日記のデジタル版元ネタ的存在。</div>
+      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">💰 ¥1,320</div>
+      <a href="https://www.amazon.co.jp/dp/442211283X" target="_blank">Amazonで見る &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">10代のための人見知りと社交不安のワークブック</div>
+      <div class="ref-author">星和書店</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <span class="ref-tag ref-tag-book">ワークブック</span>
+      <div class="ref-desc">CBT + ACT（アクセプタンス&コミットメント・セラピー）の技法。10代向けだが、エクスポージャーの段階的設計は大人にも有用。</div>
+      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">💰 ¥1,320</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">社交不安障害 — 理と臨床</div>
+      <div class="ref-author">金剛出版</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <span class="ref-tag ref-tag-paper">専門書</span>
+      <div class="ref-desc">SADに特化した専門書。Clark & Wellsモデル、Rapeeモデルの日本語解説。自己注目・安全行動・事後反芻の理論的背景を深く理解したい場合に。</div>
+      <a href="https://www.amazon.co.jp/s?k=%E7%A4%BE%E4%BA%A4%E4%B8%8D%E5%AE%89%E9%9A%9C%E5%AE%B3+%E9%87%91%E5%89%9B%E5%87%BA%E7%89%88" target="_blank">Amazonで検索 &rarr;</a>
+    </div>
+
+    <!-- English Books -->
+    <h3>書籍（英語 / 国際的定番）</h3>
+
+    <div class="ref-card">
+      <div class="ref-title">Overcoming Social Anxiety and Shyness: A Self-Help Guide Using CBT</div>
+      <div class="ref-author">Gillian Butler / Robinson出版</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <span class="ref-tag ref-tag-en">英語</span>
+      <div class="ref-desc">英国NHSが推薦するSADセルフヘルプの定番。Clark & Wellsモデルに基づく実践ワーク満載。</div>
+      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">⭐ 4.6（295件）</div>
+      <a href="https://www.amazon.co.jp/dp/0465005454" target="_blank">Amazonで見る &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">CBT for Social Anxiety</div>
+      <div class="ref-author">Stefan G. Hofmann, PhD / New Harbinger</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <span class="ref-tag ref-tag-en">英語</span>
+      <div class="ref-desc">SAD研究の世界的権威による最新ワークブック。エビデンスベースの実践プログラム。</div>
+      <a href="https://www.amazon.co.jp/dp/B0B6P2R54Z" target="_blank">Amazon Kindleで見る &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">Managing Social Anxiety: A Cognitive-Behavioral Therapy Approach (Workbook)</div>
+      <div class="ref-author">Hope, Heimberg, Turk / Oxford University Press</div>
+      <span class="ref-tag ref-tag-book">書籍</span>
+      <span class="ref-tag ref-tag-en">英語</span>
+      <div class="ref-desc">臨床試験で効果が実証されたプログラムのクライアント用ワークブック。ワークシートがOxford Academicから無料DL可能。</div>
+      <a href="https://www.amazon.com/dp/0190247630" target="_blank">Amazonで見る &rarr;</a>
+      <a href="https://academic.oup.com/book/28747/chapter/234412205" target="_blank">ワークシートDLページ &rarr;</a>
+    </div>
+
+    <!-- Official / Academic Resources -->
+    <h3>公的資料・論文・ガイドライン</h3>
+
+    <div class="ref-card">
+      <div class="ref-title">社交不安障害（社交不安症）の認知行動療法マニュアル（治療者用）</div>
+      <div class="ref-author">吉永尚紀 執筆・編集 / 清水栄司 監修 / 厚生労働省</div>
+      <span class="ref-tag ref-tag-pdf">PDF</span>
+      <span class="ref-tag ref-tag-paper">公式マニュアル</span>
+      <div class="ref-desc">厚労省が公開している治療者用CBTマニュアル。Clark & Wellsモデルに基づく14回セッションの全プロトコル。セルフケアの設計時に治療者が何を意図しているか理解するのに有用。</div>
+      <a href="https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000113841.pdf" target="_blank">PDFを開く &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">社交不安症の診療ガイドライン</div>
+      <div class="ref-author">日本不安症学会 / 日本神経精神薬理学会（2021年第1版）</div>
+      <span class="ref-tag ref-tag-pdf">PDF</span>
+      <span class="ref-tag ref-tag-paper">ガイドライン</span>
+      <div class="ref-desc">薬物療法・心理療法の両面からSADの標準治療を定義。CBTの推奨度、エビデンスレベルが記載されている。</div>
+      <a href="http://www.jsnp-org.jp/csrinfo/img/sad_guideline.pdf" target="_blank">PDFを開く &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">社交不安症の認知行動療法の展開</div>
+      <div class="ref-author">武蔵野大学リポジトリ</div>
+      <span class="ref-tag ref-tag-pdf">PDF</span>
+      <span class="ref-tag ref-tag-paper">論文</span>
+      <div class="ref-desc">SADに対するCBTの効果研究とモデルの展開をレビュー。Clarkモデルの日本語での詳細解説。</div>
+      <a href="https://mu.repo.nii.ac.jp/record/1236/files/cbtinst_05.pdf" target="_blank">PDFを開く &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">不安障害の認知療法・認知行動療法 治療マニュアル</div>
+      <div class="ref-author">厚生労働科学研究費補助金研究</div>
+      <span class="ref-tag ref-tag-pdf">PDF</span>
+      <span class="ref-tag ref-tag-paper">研究報告書</span>
+      <div class="ref-desc">社交不安を含む不安障害全般のCBTプロトコル。エクスポージャー階層表の作り方が詳しい。</div>
+      <a href="https://mhlw-grants.niph.go.jp/system/files/2015/153091/201516018B/201516018B0004.pdf" target="_blank">PDFを開く &rarr;</a>
+    </div>
+
+    <!-- Web Resources -->
+    <h3>Webリソース・無料ツール</h3>
+
+    <div class="ref-card">
+      <div class="ref-title">Free Online CBT Workbook</div>
+      <div class="ref-author">CogBTherapy.com</div>
+      <span class="ref-tag ref-tag-web">Web</span>
+      <span class="ref-tag ref-tag-en">英語</span>
+      <div class="ref-desc">無料のオンラインCBTワークブック。思考記録、認知の歪み、行動活性化のワークシートがブラウザ上で利用可能。</div>
+      <a href="https://cogbtherapy.com/free-online-cbt-workbook" target="_blank">サイトを開く &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">emolカウンセリング — 社交不安症（SAD）</div>
+      <div class="ref-author">emol Inc.</div>
+      <span class="ref-tag ref-tag-web">Web</span>
+      <div class="ref-desc">CBT専門オンラインカウンセリング。SADの疾患解説とセルフチェックが利用可能。</div>
+      <a href="https://emol.jp/counseling/disease/sad" target="_blank">サイトを開く &rarr;</a>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">National Social Anxiety Center — Books</div>
+      <div class="ref-author">NSAC (米国)</div>
+      <span class="ref-tag ref-tag-web">Web</span>
+      <span class="ref-tag ref-tag-en">英語</span>
+      <div class="ref-desc">米国社交不安センターが推薦する書籍リスト。エビデンスベースの選書。</div>
+      <a href="https://nationalsocialanxietycenter.com/books/" target="_blank">サイトを開く &rarr;</a>
+    </div>
+
+    <!-- Practical Tips -->
+    <h3>この日記の使い方ガイド（SAD向け）</h3>
+
+    <div class="ref-concept">
+      <strong>Step 1: まず書く習慣をつける</strong><br>
+      完璧に埋める必要はない。「状況」と「不安の予測」だけでも十分。認知のキャッチ（自動思考に気づく）が最初の目標。
+    </div>
+    <div class="ref-concept">
+      <strong>Step 2: 認知の歪みにラベルを貼る</strong><br>
+      不安の予測を書いた後、歪みタグをチェック。「名前をつける」だけで思考と距離が取れる（脱フュージョン効果）。
+    </div>
+    <div class="ref-concept">
+      <strong>Step 3: 「代わる見方」は反論ではない</strong><br>
+      ポジティブ思考を強制するのではなく、「同じ状況を別の人が見たらどう解釈するか」を探る。親友アドバイス法が有効。
+    </div>
+    <div class="ref-concept">
+      <strong>Step 4: 不安の数値を記録し続ける</strong><br>
+      Before/Afterの不安スコアの変化を蓄積。「書く前より書いた後の方が下がる」パターンが見えると、日記を書くモチベーションになる。
+    </div>
+    <div class="ref-concept">
+      <strong>Step 5: 「生きるためのルール」を育てる</strong><br>
+      最初は荒削りでいい。複数の日記を経て同じルールが繰り返し出てきたら、それがあなたのコアビリーフ。Claudeに「パターン分析」を頼むと可視化できる。
+    </div>
+    <div class="ref-concept">
+      <strong>Step 6: Claudeを壁打ち相手に使う</strong><br>
+      「この日記を分析」ボタンで認知の歪みの見落としチェック。「リフレーミング提案」で代替思考のバリエーションを広げる。ただし最終判断は常に自分。
+    </div>
+
+  </div>
+</div>
+
+<script>
+function openRefLibrary() { document.getElementById('refOverlay').classList.add('open'); }
+function closeRefLibrary() { document.getElementById('refOverlay').classList.remove('open'); }
+
+function switchSidebarTab(tab) {
+  document.querySelectorAll('.sidebar-tab').forEach((t, i) => {
+    t.classList.toggle('active', (tab === 'entries' && i === 0) || (tab === 'techniques' && i === 1));
+  });
+  document.getElementById('tabEntries').classList.toggle('active', tab === 'entries');
+  document.getElementById('tabTechniques').classList.toggle('active', tab === 'techniques');
+}
+
+let breathingActive = false;
+let breathInterval = null;
+function toggleBreathing() {
+  const circle = document.getElementById('breathCircle');
+  const phase = document.getElementById('breathPhase');
+  if (breathingActive) {
+    breathingActive = false;
+    circle.classList.remove('active');
+    clearInterval(breathInterval);
+    phase.textContent = 'タップして呼吸エクササイズ';
+    return;
+  }
+  breathingActive = true;
+  circle.classList.add('active');
+  const phases = [
+    { text: '吸う… (4秒)', dur: 4000 },
+    { text: '止める… (7秒)', dur: 7000 },
+    { text: 'ゆっくり吐く… (8秒)', dur: 8000 },
+  ];
+  let idx = 0;
+  function next() {
+    phase.textContent = phases[idx].text;
+    breathInterval = setTimeout(() => { idx = (idx + 1) % 3; if (breathingActive) next(); }, phases[idx].dur);
+  }
+  next();
+}
+
+function toggleSafety(btn) { btn.classList.toggle('selected'); }
+</script>
+
+<script>
+// ==================== Data Layer ====================
+const STORAGE_KEY = 'cbt_diary_entries';
+const API_KEY_STORAGE = 'anthropic_api_key';
+
+let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+let currentEntryId = null;
+let counselHistory = [];
+let isSending = false;
+
+function generateId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+function getEntries() { return entries.sort((a, b) => b.createdAt - a.createdAt); }
+
+function saveEntries() { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
+
+// ==================== Entry CRUD ====================
+function newEntry() {
+  currentEntryId = null;
+  clearForm();
+  const now = new Date();
+  document.getElementById('entryDate').value = now.toISOString().slice(0, 10);
+  document.getElementById('entryTime').value = now.toTimeString().slice(0, 5);
+  document.getElementById('diaryForm').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('deleteBtn').style.display = 'none';
+  document.getElementById('formTitle').textContent = '新しい日記';
+  document.getElementById('formArea').classList.remove('view-mode');
+  renderEntryList();
+}
+
+function clearForm() {
+  ['situation', 'anxietyPrediction', 'anxietyLevel', 'alternativeView', 'conclusion', 'anxietyAfter', 'lifeRule', 'freeNote', 'behavioralExpPrediction', 'behavioralExpDesign', 'behavioralExpResult', 'safetyDropTarget'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.distortion-tag').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#safetyBehaviorGrid .distortion-tag').forEach(b => b.classList.remove('selected'));
+}
+
+function loadEntry(id) {
+  const entry = entries.find(e => e.id === id);
+  if (!entry) return;
+  currentEntryId = id;
+  document.getElementById('diaryForm').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('deleteBtn').style.display = 'inline-flex';
+  document.getElementById('formTitle').textContent = entry.date + ' の日記';
+  document.getElementById('formArea').classList.remove('view-mode');
+
+  document.getElementById('entryDate').value = entry.date || '';
+  document.getElementById('entryTime').value = entry.time || '';
+  document.getElementById('situation').value = entry.situation || '';
+  document.getElementById('anxietyPrediction').value = entry.anxietyPrediction || '';
+  document.getElementById('anxietyLevel').value = entry.anxietyLevel || '';
+  document.getElementById('alternativeView').value = entry.alternativeView || '';
+  document.getElementById('conclusion').value = entry.conclusion || '';
+  document.getElementById('anxietyAfter').value = entry.anxietyAfter || '';
+  document.getElementById('lifeRule').value = entry.lifeRule || '';
+  document.getElementById('behavioralExpPrediction').value = entry.behavioralExpPrediction || '';
+  document.getElementById('behavioralExpDesign').value = entry.behavioralExpDesign || '';
+  document.getElementById('behavioralExpResult').value = entry.behavioralExpResult || '';
+  document.getElementById('safetyDropTarget').value = entry.safetyDropTarget || '';
+  document.getElementById('freeNote').value = entry.freeNote || '';
+
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('selected', parseInt(b.dataset.mood) === entry.mood);
+  });
+  document.querySelectorAll('#distortionGrid .distortion-tag').forEach(b => {
+    b.classList.toggle('selected', (entry.distortions || []).includes(b.dataset.d));
+  });
+  document.querySelectorAll('#safetyBehaviorGrid .distortion-tag').forEach(b => {
+    b.classList.toggle('selected', (entry.safetyBehaviors || []).includes(b.dataset.sb));
+  });
+
+  renderEntryList();
+}
+
+function collectFormData() {
+  const selectedMood = document.querySelector('.mood-btn.selected');
+  const distortions = Array.from(document.querySelectorAll('#distortionGrid .distortion-tag.selected')).map(b => b.dataset.d);
+  const safetyBehaviors = Array.from(document.querySelectorAll('#safetyBehaviorGrid .distortion-tag.selected')).map(b => b.dataset.sb);
+  return {
+    date: document.getElementById('entryDate').value,
+    time: document.getElementById('entryTime').value,
+    mood: selectedMood ? parseInt(selectedMood.dataset.mood) : null,
+    situation: document.getElementById('situation').value.trim(),
+    anxietyPrediction: document.getElementById('anxietyPrediction').value.trim(),
+    anxietyLevel: document.getElementById('anxietyLevel').value.trim(),
+    distortions,
+    alternativeView: document.getElementById('alternativeView').value.trim(),
+    conclusion: document.getElementById('conclusion').value.trim(),
+    anxietyAfter: document.getElementById('anxietyAfter').value.trim(),
+    lifeRule: document.getElementById('lifeRule').value.trim(),
+    behavioralExpPrediction: document.getElementById('behavioralExpPrediction').value.trim(),
+    behavioralExpDesign: document.getElementById('behavioralExpDesign').value.trim(),
+    behavioralExpResult: document.getElementById('behavioralExpResult').value.trim(),
+    safetyBehaviors,
+    safetyDropTarget: document.getElementById('safetyDropTarget').value.trim(),
+    freeNote: document.getElementById('freeNote').value.trim(),
+  };
+}
+
+function saveEntry() {
+  const data = collectFormData();
+  if (!data.date) { alert('日付を入力してください'); return; }
+
+  if (currentEntryId) {
+    const idx = entries.findIndex(e => e.id === currentEntryId);
+    if (idx >= 0) { entries[idx] = { ...entries[idx], ...data, updatedAt: Date.now() }; }
+  } else {
+    const entry = { id: generateId(), ...data, createdAt: Date.now(), updatedAt: Date.now() };
+    entries.push(entry);
+    currentEntryId = entry.id;
+  }
+  saveEntries();
+  renderEntryList();
+  document.getElementById('deleteBtn').style.display = 'inline-flex';
+  document.getElementById('formTitle').textContent = data.date + ' の日記（保存済）';
+}
+
+function deleteEntry() {
+  if (!currentEntryId) return;
+  if (!confirm('この日記を削除しますか？')) return;
+  entries = entries.filter(e => e.id !== currentEntryId);
+  saveEntries();
+  currentEntryId = null;
+  document.getElementById('diaryForm').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'flex';
+  renderEntryList();
+}
+
+// ==================== Sidebar Rendering ====================
+const MOOD_LABELS = { 1: 'つらい', 2: '不安', 3: '普通', 4: 'まあまあ', 5: '良い' };
+const DISTORTION_LABELS = {
+  'all-or-nothing': '全か無か思考', 'overgeneralization': '過度の一般化',
+  'mental-filter': '心のフィルター', 'disqualifying': 'マイナス化思考',
+  'jumping-conclusions': '結論の飛躍', 'magnification': '拡大解釈/過小評価',
+  'emotional-reasoning': '感情的決めつけ', 'should-statements': 'すべき思考',
+  'labeling': 'レッテル貼り', 'personalization': '個人化',
+};
+
+function renderEntryList() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const list = document.getElementById('entryList');
+  const sorted = getEntries();
+  const filtered = query
+    ? sorted.filter(e => (e.situation + e.anxietyPrediction + e.alternativeView + e.conclusion + e.lifeRule + e.freeNote).toLowerCase().includes(query))
+    : sorted;
+
+  list.innerHTML = filtered.map(e => {
+    const moodClass = e.mood ? 'mood-' + e.mood : '';
+    const moodLabel = e.mood ? MOOD_LABELS[e.mood] : '';
+    const preview = e.situation || e.anxietyPrediction || '(未記入)';
+    return '<div class="entry-item ' + (e.id === currentEntryId ? 'active' : '') + '" onclick="loadEntry(\'' + e.id + '\')">'
+      + '<div class="date">' + (e.date || '') + ' ' + (e.time || '') + '</div>'
+      + '<div class="title">' + escapeHtml(preview.slice(0, 60)) + '</div>'
+      + (moodLabel ? '<span class="mood-badge ' + moodClass + '">' + moodLabel + '</span>' : '')
+      + '</div>';
+  }).join('');
+
+  const stats = document.getElementById('sidebarStats');
+  const total = entries.length;
+  const avgMood = entries.filter(e => e.mood).reduce((s, e, _, a) => s + e.mood / a.length, 0);
+  stats.innerHTML = '<span>' + total + '件の日記</span><span>平均気分: ' + (avgMood ? avgMood.toFixed(1) : '-') + '/5</span>';
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// ==================== UI Interactions ====================
+function selectMood(val) {
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('selected', parseInt(b.dataset.mood) === val);
+  });
+}
+
+function toggleDistortion(btn) { btn.classList.toggle('selected'); }
+
+function toggleCounsel() {
+  const panel = document.getElementById('counselPanel');
+  panel.classList.toggle('collapsed');
+  if (!panel.classList.contains('collapsed')) {
+    const key = localStorage.getItem(API_KEY_STORAGE) || '';
+    if (key) {
+      document.getElementById('counselApiKey').value = '****' + key.slice(-8);
+      document.getElementById('counselApiStatus').textContent = '接続済';
+      document.getElementById('counselApiStatus').style.color = '#34d399';
+    }
+  }
+}
+
+function saveCounselApiKey() {
+  const val = document.getElementById('counselApiKey').value.trim();
+  if (val && val.startsWith('sk-ant-')) {
+    localStorage.setItem(API_KEY_STORAGE, val);
+    document.getElementById('counselApiStatus').textContent = '保存しました';
+    document.getElementById('counselApiStatus').style.color = '#34d399';
+    document.getElementById('counselApiKey').value = '****' + val.slice(-8);
+  } else {
+    document.getElementById('counselApiStatus').textContent = 'sk-ant-で始まるキーを入力';
+    document.getElementById('counselApiStatus').style.color = '#ef4444';
+  }
+}
+
+// ==================== Counsel Chat ====================
+const CBT_SYSTEM = `あなたはSAD（社交不安障害）の認知行動療法に精通した転職カウンセラーです。
+
+# 相談者プロフィール
+- 33歳、SE歴8年、Java3年、TypeScript1年、PL経験10ヶ月
+- 転職先: 中堅SIer、技術寄り社内SE、AI活用企業を検討中
+- SADの自己治療に取り組んでいる。専門家ではないため、エビデンスに基づく助言を重視
+
+# 治療モデルの知識（応答に活用すること）
+- **Clark & Wells (1995) モデル**: 自己注目、安全行動、事後反芻がSADを維持する3因子
+- **行動実験**: 思考記録より効果が高い。予測を仮説として検証する
+- **抑制学習モデル (Craske 2014)**: 「慣れ」ではなく「期待違反の最大化」がエクスポージャーの鍵
+- **ACT (Acceptance & Commitment Therapy)**: 不安を変えるのではなく持ったまま価値に基づいて行動
+- **CFT (Compassion-Focused Therapy)**: 自己批判と恥に直接アプローチ。CBTで頭では分かるが心が追いつかない場合に有効
+- **メタ認知療法 (Wells 2009)**: 反芻・心配は「有害な対処戦略」。心配の先送り技法
+- **注意訓練 (ATT)**: 自己注目→外部注意への切り替え訓練
+- **ビデオフィードバック**: 歪んだ自己イメージを実際の映像で修正
+- **内受容エクスポージャー**: 身体症状(赤面・震え)をわざと誘発し壊滅的結果が起きないと学ぶ
+
+# セルフ治療でよくある間違い（検出したら指摘）
+1. 安全行動を維持したままのエクスポージャー
+2. 思考記録だけで行動実験をしない
+3. 「耐える」だけのエクスポージャー（仮説検証になっていない）
+4. 事後反芻を放置
+5. 微細な回避行動を認識しない
+6. 段階的すぎて進まない（70%の準備で実行を推奨）
+7. 自己批判をモチベーションにしている
+8. 般化の失敗（1つの場面でしか練習しない）
+
+# 日記フォームの構造
+Step1: 基本情報, Step2: 状況, Step3: 不安の予測(自動思考),
+Step4: 認知の歪みチェック, Step5: 代わる見方, Step6: 最終結論,
+Step7: 生きるためのルール, Step8: 行動実験, Step9: 安全行動チェック, Step10: 自由メモ
+
+# 応答ルール
+- 共感→分析→提案の順で構成
+- 1回300字程度、対話的に
+- 「〜すべき」は使わない（すべき思考の強化を避ける）
+- 行動実験と安全行動の除去を積極的に提案する
+- 思考記録だけに留まっている場合は行動実験への移行を促す
+- 深刻な苦痛には専門家への相談を提案
+- 日本語で応答`;
+
+function buildDiaryContext() {
+  const data = collectFormData();
+  const distLabels = (data.distortions || []).map(d => DISTORTION_LABELS[d] || d).join(', ');
+  let ctx = '【現在の日記エントリ】\n';
+  ctx += '日付: ' + (data.date || '未入力') + '\n';
+  ctx += '気分: ' + (data.mood ? MOOD_LABELS[data.mood] + '(' + data.mood + '/5)' : '未選択') + '\n';
+  ctx += '状況: ' + (data.situation || '未記入') + '\n';
+  ctx += '不安の予測: ' + (data.anxietyPrediction || '未記入') + '\n';
+  ctx += '不安の強さ: ' + (data.anxietyLevel || '未記入') + '\n';
+  ctx += '認知の歪み(自己チェック): ' + (distLabels || 'なし') + '\n';
+  ctx += '代わる見方: ' + (data.alternativeView || '未記入') + '\n';
+  ctx += '最終結論: ' + (data.conclusion || '未記入') + '\n';
+  ctx += '結論後の不安: ' + (data.anxietyAfter || '未記入') + '\n';
+  ctx += '生きるためのルール: ' + (data.lifeRule || '未記入') + '\n';
+  ctx += '行動実験の仮説: ' + (data.behavioralExpPrediction || '未記入') + '\n';
+  ctx += '実験の設計: ' + (data.behavioralExpDesign || '未記入') + '\n';
+  ctx += '実験の結果: ' + (data.behavioralExpResult || '未記入') + '\n';
+  const sbLabels = (data.safetyBehaviors || []).join(', ');
+  ctx += '安全行動: ' + (sbLabels || 'なし') + '\n';
+  ctx += '今日手放す安全行動: ' + (data.safetyDropTarget || '未記入') + '\n';
+  ctx += '自由メモ: ' + (data.freeNote || '未記入') + '\n';
+  return ctx;
+}
+
+function buildAllEntriesContext() {
+  const sorted = getEntries().slice(0, 10);
+  if (sorted.length === 0) return '';
+  let ctx = '\n\n【過去の日記(直近10件)】\n';
+  sorted.forEach((e, i) => {
+    ctx += '--- ' + (e.date || '?') + ' ---\n';
+    ctx += '気分: ' + (e.mood || '?') + '/5\n';
+    ctx += '不安の予測: ' + (e.anxietyPrediction || '-').slice(0, 100) + '\n';
+    ctx += '代わる見方: ' + (e.alternativeView || '-').slice(0, 100) + '\n';
+    ctx += '結論: ' + (e.conclusion || '-').slice(0, 100) + '\n';
+    ctx += 'ルール: ' + (e.lifeRule || '-').slice(0, 100) + '\n\n';
+  });
+  return ctx;
+}
+
+const COUNSEL_QUICK = {
+  'analyze': 'この日記エントリを分析してください。認知の歪みの見落としがないか、「代わる見方」が十分かをチェックしてください。',
+  'pattern': '過去の日記も含めて、繰り返し出てくる思考パターンを分析してください。',
+  'reframe': '「不安の予測」に対して、もっと効果的なリフレーミングがあれば提案してください。',
+  'rule': '「生きるためのルール」をより実践的で具体的なものにブラッシュアップする手伝いをしてください。',
+  'progress': '過去の日記と比較して、思考パターンの変化や成長した点を教えてください。',
+  'behavioral_exp': '今日の「不安の予測」を元に、行動実験を一緒に設計してください。Clark & Wellsモデルに基づいて、(1)具体的で検証可能な仮説、(2)安全行動なしの実験計画、(3)注意を外に向けるポイントを提案してください。',
+  'safety_behavior': '私の安全行動パターンを分析してください。どの安全行動が不安を最も維持しているか、今日1つ手放すとしたらどれが最も効果的かを提案してください。',
+  'attention_training': '注意訓練技法（ATT）の具体的なやり方を教えてください。今日の状況に合わせて、自己注目から外部注意に切り替える練習を設計してください。',
+  'video_feedback': 'ビデオフィードバック法の実施手順を教えてください。今日の状況で、自分がどう見えていたと予測するか書いてから、実際の録画と比較する方法を案内してください。',
+  'self_compassion': 'CFT（コンパッション・フォーカスト・セラピー）の視点で、今の自分に思いやりのある手紙を書く手伝いをしてください。自己批判ではなく、共通の人間性、マインドフルネス、自己への優しさの3要素で。',
+  'act_defusion': 'ACTの脱フュージョン技法を使って、今の不安な考えと距離を取る練習をしましょう。「〜という考えを持っている」フォーマット、考えに名前をつける、ミルクミルクエクササイズなどから適切なものを提案してください。',
+  'exposure_inhibitory': '抑制学習モデル（Craske 2014）に基づいたエクスポージャー計画を立ててください。期待違反の最大化、変動性、安全行動の完全除去を組み込んだ計画を。',
+  'interoceptive': '内受容エクスポージャーの計画を立ててください。赤面・震え・発汗・心拍上昇など、恐れている身体症状をわざと誘発する実験を提案してください。',
+  'rumination_control': '事後反芻（Post-Event Processing）を制御する方法を教えてください。今日の場面について反芻が始まったときに使えるメタ認知的な対処法を提案してください。',
+  'common_mistakes': '私のセルフ治療アプローチを点検してください。セルフガイドCBTでよくある8つの間違い（安全行動の維持、思考記録だけ、耐えるだけのエクスポージャー等）に該当していないかチェックしてください。',
+};
+
+function counselQuick(key) {
+  document.getElementById('counselInput').value = COUNSEL_QUICK[key];
+  sendCounsel();
+}
+
+function addCounselMsg(role, text) {
+  const container = document.getElementById('counselMessages');
+  const div = document.createElement('div');
+  div.className = 'c-msg ' + (role === 'user' ? 'c-msg-user' : 'c-msg-ai');
+  const label = role === 'user' ? 'あなた' : 'CBTカウンセラー';
+  div.innerHTML = '<div class="c-label">' + label + '</div>' + text.replace(/\n/g, '<br>');
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function showCounselTyping() {
+  const container = document.getElementById('counselMessages');
+  const div = document.createElement('div');
+  div.className = 'typing-dots'; div.id = 'counselTyping';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+function hideCounselTyping() { const el = document.getElementById('counselTyping'); if (el) el.remove(); }
+
+async function sendCounsel() {
+  const input = document.getElementById('counselInput');
+  const text = input.value.trim();
+  if (!text || isSending) return;
+
+  const apiKey = localStorage.getItem(API_KEY_STORAGE);
+  if (!apiKey) {
+    addCounselMsg('assistant', 'APIキーを設定してください。上部のAPI Key欄にAnthropicのAPIキーを入力してください。');
+    return;
+  }
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  const diaryCtx = buildDiaryContext();
+  const allCtx = buildAllEntriesContext();
+  const userMsg = diaryCtx + allCtx + '\n\n【相談内容】\n' + text;
+
+  addCounselMsg('user', text);
+  counselHistory.push({ role: 'user', content: userMsg });
+
+  isSending = true;
+  document.getElementById('counselSend').disabled = true;
+  showCounselTyping();
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: CBT_SYSTEM,
+        messages: counselHistory.slice(-16),
+      }),
+    });
+
+    hideCounselTyping();
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      addCounselMsg('assistant', 'APIエラー: ' + (err.error?.message || resp.status));
+      isSending = false;
+      document.getElementById('counselSend').disabled = false;
+      return;
+    }
+
+    const data = await resp.json();
+    const reply = data.content[0].text;
+    counselHistory.push({ role: 'assistant', content: reply });
+    addCounselMsg('assistant', reply);
+  } catch (e) {
+    hideCounselTyping();
+    addCounselMsg('assistant', '通信エラー: ' + e.message);
+  }
+
+  isSending = false;
+  document.getElementById('counselSend').disabled = false;
+}
+
+// Auto-resize counsel textarea
+document.getElementById('counselInput').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+
+// ==================== Init ====================
+renderEntryList();
+</script>
+
+</body>
+</html>
