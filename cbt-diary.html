@@ -409,8 +409,8 @@
   }
   .sidebar-tab:hover { color: var(--accent); }
   .sidebar-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-  .sidebar-tab-content { display: none; flex: 1; overflow-y: auto; }
-  .sidebar-tab-content.active { display: flex; flex-direction: column; }
+  .sidebar-tab-content { display: none; flex: 1; overflow-y: auto; min-height: 0; }
+  .sidebar-tab-content.active { display: block; }
 </style>
 </head>
 <body>
@@ -490,7 +490,7 @@
       </div>
     </div>
 
-    <div style="padding:0.5rem 1rem; border-top:1px solid var(--border);">
+    <div style="padding:0.5rem 1rem; border-top:1px solid var(--border); flex-shrink:0;">
       <div class="breath-widget" onclick="toggleBreathing()" id="breathWidget">
         <div class="breath-circle" id="breathCircle"></div>
         <div class="breath-phase" id="breathPhase">タップして呼吸エクササイズ</div>
@@ -1417,6 +1417,16 @@ const COUNSEL_QUICK = {
 };
 
 function counselQuick(key) {
+  const panel = document.getElementById('counselPanel');
+  if (panel.classList.contains('collapsed')) {
+    panel.classList.remove('collapsed');
+    const k = localStorage.getItem(API_KEY_STORAGE) || '';
+    if (k) {
+      document.getElementById('counselApiKey').value = '****' + k.slice(-8);
+      document.getElementById('counselApiStatus').textContent = '接続済';
+      document.getElementById('counselApiStatus').style.color = '#5a9a5a';
+    }
+  }
   document.getElementById('counselInput').value = COUNSEL_QUICK[key];
   sendCounsel();
 }
