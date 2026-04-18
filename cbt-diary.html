@@ -387,7 +387,7 @@
   .breath-phase { font-size: 0.75rem; color: var(--accent); font-weight: 600; min-height: 1.2em; }
 
   /* Technique cards in sidebar */
-  .technique-panel { padding: 0.5rem; overflow-y: auto; max-height: 300px; }
+  .technique-panel { padding: 0.5rem; overflow-y: auto; }
   .technique-card {
     padding: 0.6rem 0.8rem; margin: 0.3rem 0.5rem; border-radius: 10px;
     background: var(--warm-white); border: 1px solid var(--border);
@@ -397,6 +397,49 @@
   .technique-card .tc-title { font-weight: 700; color: var(--accent); margin-bottom: 0.2rem; }
   .technique-card .tc-desc { color: var(--muted); line-height: 1.4; }
   .technique-card .tc-evidence { font-size: 0.65rem; color: var(--accent3); margin-top: 0.2rem; }
+
+  /* Technique Detail Modal */
+  .tech-overlay {
+    position: fixed; inset: 0; z-index: 3000;
+    background: rgba(74,63,58,0.45); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center;
+  }
+  .tech-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+  .tech-modal {
+    background: linear-gradient(135deg, #fdfbf8, #f5eef8); border: 1px solid var(--border);
+    border-radius: 18px; width: 92%; max-width: 720px; max-height: 88vh;
+    overflow-y: auto; padding: 2rem 2.2rem;
+    box-shadow: 0 20px 60px rgba(180,142,197,0.18);
+    animation: fadeSlideUp 0.35s ease;
+  }
+  .tech-modal::-webkit-scrollbar { width: 6px; }
+  .tech-modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .tech-modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.2rem; }
+  .tech-modal-header h2 { font-size: 1.2rem; color: var(--accent); line-height: 1.4; }
+  .tech-modal-close { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; padding: 0.3rem; }
+  .tech-modal-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .tech-badge {
+    display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px;
+    font-size: 0.65rem; font-weight: 600;
+  }
+  .tech-badge-when { background: rgba(123,181,196,0.15); color: var(--accent2); }
+  .tech-badge-time { background: rgba(141,189,141,0.15); color: var(--accent3); }
+  .tech-badge-difficulty { background: rgba(224,168,124,0.15); color: var(--accent4); }
+  .tech-badge-evidence { background: rgba(180,142,197,0.15); color: var(--accent); }
+  .tech-section { margin-bottom: 1.3rem; }
+  .tech-section h3 { font-size: 0.9rem; color: var(--accent2); margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+  .tech-section p, .tech-section li { font-size: 0.82rem; line-height: 1.7; color: var(--text); }
+  .tech-section ul { padding-left: 1.2rem; }
+  .tech-section li { margin-bottom: 0.4rem; }
+  .tech-step {
+    background: var(--warm-white); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.8rem 1rem; margin-bottom: 0.6rem;
+  }
+  .tech-step-num { display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 0.7rem; text-align: center; line-height: 22px; margin-right: 0.5rem; font-weight: 700; }
+  .tech-example { background: linear-gradient(90deg, rgba(180,142,197,0.06), transparent); border-left: 3px solid var(--accent); padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; margin: 0.5rem 0; font-size: 0.8rem; line-height: 1.6; }
+  .tech-warn { background: rgba(217,112,112,0.06); border-left: 3px solid var(--danger); padding: 0.6rem 1rem; border-radius: 0 8px 8px 0; margin: 0.5rem 0; font-size: 0.78rem; line-height: 1.5; }
+  .tech-btn-counsel { display: inline-block; margin-top: 0.8rem; padding: 0.5rem 1.2rem; border-radius: 20px; background: linear-gradient(135deg, rgba(180,142,197,0.15), rgba(123,181,196,0.15)); border: 1px solid rgba(180,142,197,0.3); color: var(--accent); font-size: 0.78rem; cursor: pointer; transition: all 0.25s; }
+  .tech-btn-counsel:hover { background: linear-gradient(135deg, rgba(180,142,197,0.3), rgba(123,181,196,0.3)); transform: translateY(-1px); }
 
   /* Sidebar tabs */
   .sidebar-tabs {
@@ -437,52 +480,52 @@
 
     <div class="sidebar-tab-content" id="tabTechniques">
       <div class="technique-panel">
-        <div class="technique-card" onclick="counselQuick('behavioral_exp')">
+        <div class="technique-card" onclick="openTechDetail('behavioral_exp')">
           <div class="tc-title">行動実験</div>
           <div class="tc-desc">不安な予測を「仮説」として検証する。思考記録より効果が高い</div>
           <div class="tc-evidence">Clark & Wells モデル / 最重要技法</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('safety_behavior')">
+        <div class="technique-card" onclick="openTechDetail('safety_behavior')">
           <div class="tc-title">安全行動の除去</div>
           <div class="tc-desc">目を合わせない、スマホを握る等 — 不安を維持する隠れた行動を特定・除去</div>
           <div class="tc-evidence">安全行動がある限りエクスポージャー効果は大幅減</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('attention_training')">
+        <div class="technique-card" onclick="openTechDetail('attention_training')">
           <div class="tc-title">注意訓練 (ATT)</div>
           <div class="tc-desc">自己注目を外部に切り替える訓練。1日2回×12分</div>
           <div class="tc-evidence">Wells (2009) メタ認知療法</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('video_feedback')">
+        <div class="technique-card" onclick="openTechDetail('video_feedback')">
           <div class="tc-title">ビデオフィードバック</div>
           <div class="tc-desc">自分の予測 vs 実際の録画映像のギャップで自己イメージを修正</div>
           <div class="tc-evidence">歪んだ自己イメージを直接修正できる唯一の方法</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('self_compassion')">
+        <div class="technique-card" onclick="openTechDetail('self_compassion')">
           <div class="tc-title">セルフコンパッション (CFT)</div>
           <div class="tc-desc">自己批判→思いやり。恥の感情に直接アプローチ</div>
           <div class="tc-evidence">Gilbert (2014) / CBTで頭では分かるが心が追いつかない場合に</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('act_defusion')">
+        <div class="technique-card" onclick="openTechDetail('act_defusion')">
           <div class="tc-title">脱フュージョン (ACT)</div>
           <div class="tc-desc">不安な考えを変えるのではなく、持ったまま行動する</div>
           <div class="tc-evidence">Craske et al. (2014) CBTと同等の効果</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('exposure_inhibitory')">
+        <div class="technique-card" onclick="openTechDetail('exposure_inhibitory')">
           <div class="tc-title">仮説検証型エクスポージャー</div>
           <div class="tc-desc">「耐える」ではなく「予測が外れる」体験。抑制学習モデル</div>
           <div class="tc-evidence">Craske et al. (2014) 抑制学習モデル</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('interoceptive')">
+        <div class="technique-card" onclick="openTechDetail('interoceptive')">
           <div class="tc-title">内受容エクスポージャー</div>
           <div class="tc-desc">赤面・震え・発汗をわざと誘発し「壊滅的結果は起きない」と学ぶ</div>
           <div class="tc-evidence">身体症状への恐怖がSADの中核的維持因子</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('rumination_control')">
+        <div class="technique-card" onclick="openTechDetail('rumination_control')">
           <div class="tc-title">事後反芻の制御</div>
           <div class="tc-desc">「あの時ああ言えば…」の反芻ループを認識して断ち切る</div>
           <div class="tc-evidence">SADの維持因子として極めて重要 / MCT</div>
         </div>
-        <div class="technique-card" onclick="counselQuick('common_mistakes')">
+        <div class="technique-card" onclick="openTechDetail('common_mistakes')">
           <div class="tc-title">セルフ治療のよくある間違い</div>
           <div class="tc-desc">安全行動の維持、思考記録だけ、耐えるだけのエクスポージャー等</div>
           <div class="tc-evidence">8つの典型的な落とし穴をチェック</div>
@@ -1067,9 +1110,295 @@
   </div>
 </div>
 
+<!-- Technique Detail Modal -->
+<div class="tech-overlay" id="techOverlay" onclick="if(event.target===this)closeTechDetail()">
+  <div class="tech-modal" id="techModalContent"></div>
+</div>
+
 <script>
 function openRefLibrary() { document.getElementById('refOverlay').classList.add('open'); }
 function closeRefLibrary() { document.getElementById('refOverlay').classList.remove('open'); }
+
+function closeTechDetail() { document.getElementById('techOverlay').classList.remove('open'); }
+
+const TECH_DETAILS = {
+behavioral_exp: {
+  title: '行動実験（Behavioral Experiments）',
+  when: 'Week 3〜 / 毎週1-2回',
+  time: '1回30分〜1時間（準備+実行+振り返り）',
+  difficulty: '中〜高（最も重要な技法）',
+  evidence: 'Clark & Wells (1995) / 思考記録より効果が高い',
+  sections: [
+    { heading: 'なぜ最重要なのか', content: '<p>思考記録は「頭で理解する」技法。行動実験は「体験で学ぶ」技法。SADでは「頭では分かっているが怖い」状態が多い。感情は体験でしか変わらない。Clark & Wells モデルでは行動実験が治療の中核。</p>' },
+    { heading: '5ステップ手順', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>予測を明確化する</strong><br>「何が起こると思うか」を具体的・測定可能な形に書き出す。確信度も0-100%でスコアリング。</div>' +
+      '<div class="tech-example">悪い例:「うまくいかない気がする」<br>良い例:「会議で発言したら、10人中8人が変な顔をする」（確信度: 80%）</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>安全行動を特定する</strong><br>その場面で無意識にやっている安全行動を書き出す。「メモを見る」「早口で終わらせる」「目を合わせない」等。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>実験を設計する</strong><br>安全行動を<strong>意図的に外して</strong>行動する計画を立てる。注意は自分の内面ではなく外部（相手の表情、会話の内容）に向ける。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>実行して観察する</strong><br>実行中は「自分がどう見えるか」ではなく「相手が実際にどう反応しているか」を観察する。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>予測 vs 現実を比較する</strong><br>この<strong>期待違反（Expectancy Violation）</strong>が学習の本体。日記のStep8に記録する。</div>' +
+      '<div class="tech-example">予測:「8人が変な顔をする」→ 現実:「0人。1人は頷いていた」</div>'
+    },
+    { heading: '具体的な実験アイデア（SAD向け）', content:
+      '<ul>' +
+      '<li><strong>意図的な失敗実験</strong>: わざと言い間違える、飲み物をこぼす → 壊滅的結果が起きないことを体験</li>' +
+      '<li><strong>調査型実験</strong>: 信頼できる人に「私が緊張してるの気づく？」と実際に聞く</li>' +
+      '<li><strong>注意実験</strong>: 同じプレゼンを「自分に注意を向ける」条件 vs「聴衆に注意を向ける」条件で実施し不安レベルを比較</li>' +
+      '<li><strong>安全行動除去実験</strong>: いつもの安全行動あり/なしの2条件でパフォーマンスを比較</li>' +
+      '<li><strong>スタバテスト</strong>: わざと変な名前で注文して呼ばれる → 恥ずかしいが誰も気にしていないことを確認</li>' +
+      '</ul>'
+    },
+    { heading: 'どの段階でどの程度やるか', content:
+      '<ul>' +
+      '<li><strong>Week 3-4</strong>: 軽い実験から開始（店員に質問、エレベーターで挨拶）。週1回。</li>' +
+      '<li><strong>Week 5-8</strong>: 中程度の実験（少人数会議で発言、電話で問い合わせ）。週2回に増やす。</li>' +
+      '<li><strong>Week 9-12</strong>: 強度の実験（プレゼン、意図的失敗）。異なる場面・相手で般化を図る。</li>' +
+      '</ul>' +
+      '<div class="tech-warn">注意: 「70%の準備で実行する」がルール。完璧な準備を待っていたら永遠に始まらない。</div>'
+    }
+  ]
+},
+safety_behavior: {
+  title: '安全行動の認識と除去',
+  when: 'Week 1〜（認識）/ Week 3〜（除去）',
+  time: '日常的に意識する（特別な時間不要）',
+  difficulty: '認識は易 / 除去は中〜高',
+  evidence: 'Clark & Wells (1995) / 安全行動がある限り学習が起きない',
+  sections: [
+    { heading: 'なぜ問題なのか', content: '<p>安全行動は「杖」のようなもの。一時的に不安を下げるが、使い続けると「杖なしでは歩けない」と信じ込む。さらに「心配していたことが実際には起こらない」ことに気づけなくなる。エクスポージャーの効果を根本から殺す。</p>' },
+    { heading: '網羅的チェックリスト', content:
+      '<p><strong>【回避系】</strong><br>目を合わせない / 早口で終わらせる / 電話を避けてチャット / 端・後ろに座る / 早く帰る / 質問しない / 意見を言わない</p>' +
+      '<p><strong>【カモフラージュ系】</strong><br>完璧にリハーサル / メモを持ち歩く / 飲酒して参加 / スマホで「忙しいフリ」/ 汗が目立たない服 / 愛想笑い / 相手に質問し続けて自分の話を避ける</p>' +
+      '<p><strong>【身体制御系】</strong><br>手を握りしめる / 腕を組む / 冷たい飲み物を持つ / 体に力を入れて押さえる</p>' +
+      '<p><strong>【認知的安全行動】</strong><br>全セリフを事前に考える / 会話中に「次に何を言うか」を考え続ける / 自分の見え方を常時モニタリング / 過度な謝罪</p>' +
+      '<div class="tech-warn">注意: 深呼吸やリラクゼーションも「不安を感じてはいけない」というメッセージを強化する安全行動として機能することがある。</div>'
+    },
+    { heading: '除去の3ステップ', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span>上のリストから自分の安全行動にチェック。各項目に「手放す怖さ」を0-100で点数づけ。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span>安全行動あり/なしを交互に試し、結果を比較する行動実験を行う。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span>毎回同じものではなく<strong>変動的に</strong>外す（Craske 2014 抑制学習モデル）。</div>' +
+      '<div class="tech-example">例: 月曜は「目を合わせる」、水曜は「メモなしで話す」、金曜は「端ではなく真ん中に座る」</div>'
+    },
+    { heading: 'どの段階でどの程度', content:
+      '<ul>' +
+      '<li><strong>Week 1-2</strong>: まずリストを作る。自分の安全行動を認識するだけで第一歩。</li>' +
+      '<li><strong>Week 3-4</strong>: 最も軽い安全行動から1つ外す実験。日記Step9に記録。</li>' +
+      '<li><strong>Week 5以降</strong>: 毎日1つ外す。変動的に。行動実験と組み合わせる。</li>' +
+      '</ul>' }
+  ]
+},
+attention_training: {
+  title: '注意訓練技法（ATT）',
+  when: 'Week 3〜 / 毎日',
+  time: '1日2回×12分 = 合計24分',
+  difficulty: '低（座って音を聞くだけ）',
+  evidence: 'Wells (2009) メタ認知療法 / SADの中核維持因子に直接介入',
+  sections: [
+    { heading: 'なぜ効くのか', content: '<p>SADの中核的維持因子は<strong>自己焦点的注意</strong>。「自分がどう見えるか」に注意が向くと不安が増幅する。ATTは注意のコントロール能力自体を鍛えるトレーニング。筋トレのように、やればやるほど注意を自在に動かせるようになる。</p>' },
+    { heading: '実施プロトコル', content:
+      '<p><strong>準備</strong>: 6つの異なる音源を用意する（時計の音、外の車、エアコン、鳥、遠くの音楽、テレビ等）。静かな部屋で椅子に座る。</p>' +
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>選択的注意（6分）</strong><br>1つの音に集中 → 30秒ごとに別の音に切り替え。他の音が聞こえても戻す。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>注意切り替え（6分）</strong><br>複数の音の間で素早く注意を切り替える。5秒ごとに切り替え先を変える。</div>'
+    },
+    { heading: '社会場面での応用（Task Concentration Training）', content:
+      '<p>Bögels & Mansell (2004) の技法。会話中に実践する。</p>' +
+      '<ul>' +
+      '<li>「自分がどう見えるか」→「相手が何を言っているか」に注意を向ける</li>' +
+      '<li>相手の目の色、声のトーン、表情の変化を観察する「タスク」として設定</li>' +
+      '<li>自分の内面（心拍、汗、声の震え）に注意が向いたことに気づいたら、外部に戻す</li>' +
+      '</ul>' +
+      '<div class="tech-example">実験: 同じ会話を「自己注目モード」と「外部注目モード」で行い、不安レベルを比較する。ほぼ例外なく外部注目モードの方が不安が低い。</div>'
+    },
+    { heading: 'どの段階でどの程度', content:
+      '<ul><li><strong>Week 3-4</strong>: 自宅で1日1回12分から開始。</li>' +
+      '<li><strong>Week 5以降</strong>: 1日2回に増やす。社会場面でのTCTも開始。</li>' +
+      '<li><strong>継続</strong>: 日常の習慣として定着させる。通勤中でも練習可能。</li></ul>' }
+  ]
+},
+video_feedback: {
+  title: 'ビデオフィードバック',
+  when: 'Week 5〜 / 週1回',
+  time: '1回20〜30分（録画+視聴+振り返り）',
+  difficulty: '中（心理的抵抗が高いが方法自体は簡単）',
+  evidence: 'Warnock-Parkes et al. (2017) / 98%が「予測よりマシだった」と報告',
+  sections: [
+    { heading: 'なぜ効くのか', content: '<p>SADでは「自分はひどく緊張して見える」「顔が真っ赤だ」「声が震えている」という歪んだ自己イメージを持つ。しかし研究では<strong>98%の患者が映像を見た後「予測よりずっとマシだった」</strong>と報告。自己イメージの歪みを直接修正できる唯一の方法。スマホ1台で自宅実施可能。</p>' },
+    { heading: '5フェーズ手順', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>予測を書き出す</strong><br>録画する前に「自分はどう見えるか」を具体的にスコアリング。<br>例:「不安そうに見える: 85/100」「声の震え: 70/100」「赤面: 90/100」</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>録画する</strong><br>30秒〜1分の自己紹介をスマホで録画。正面やや離れた自然な角度で。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>観察者の視点で見る（最重要）</strong><br>自分を批判する目ではなく「カフェで知らない人を眺めるように」見る。初回は音をミュートにして30秒だけ（自己批判の起動を防ぐ）。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>予測と実際を比較する</strong><br>視聴後に同じ項目を再スコアリング。ギャップを確認。</div>' +
+      '<div class="tech-example">予測:「不安そう85」→ 実際:「30」/ 予測:「赤面90」→「ほぼ分からない」</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>学びを言語化する</strong><br>「不安を80%感じていたが、映像では分からなかった。感情と外見は別物だ」→ 日記Step8に記録。</div>'
+    },
+    { heading: 'どの段階でどの程度', content:
+      '<ul><li><strong>Week 5-6</strong>: 自宅で1人で録画。短い自己紹介から。週1回。</li>' +
+      '<li><strong>Week 7-8</strong>: 実際の会話や電話を録画（相手の許可を得て）。</li>' +
+      '<li><strong>Week 9以降</strong>: 録画なしでも「映像で見た自分」を思い出せるようになる。</li></ul>' +
+      '<div class="tech-warn">可能であれば信頼できる友人に映像を見せて感想をもらう。他者の評価は自己評価よりほぼ常にポジティブ。</div>' }
+  ]
+},
+self_compassion: {
+  title: 'セルフコンパッション（CFT）',
+  when: 'Week 3〜 / 毎日',
+  time: '鎮静呼吸2分 + レター10分 / 日',
+  difficulty: '低〜中',
+  evidence: 'Gilbert (2014) / Werner et al. (2012): SADの自己批判と恥を有意に低減',
+  sections: [
+    { heading: 'なぜSADに効くのか', content: '<p>SADの中核感情は<strong>恥（shame）</strong>。CBTで認知が変わっても「頭では分かるが心が追いつかない」場合、自己批判が邪魔をしている。CFTは恥と自己批判に直接アプローチする。</p>' },
+    { heading: '4つの実践エクササイズ', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>鎮静リズム呼吸（毎日2分）</strong><br>吸気4秒・呼気4秒を均等に。呼吸に「温かさ」のイメージを乗せる。全エクササイズの土台。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>コンパッショネイト・レター</strong><br>社交場面での失敗について「最も思いやりのある親友」の視点から自分に手紙を書く。3要素を含める: 共通の人間性（「誰でもある」）・マインドフルネス（「つらかったね」）・自己への優しさ（「十分やっている」）</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>ダブルスタンダード技法</strong><br>「もし親友が同じ失敗をしたら何と言うか？」を書き出す。→「なぜ自分にだけ言わないのか？」</div>' +
+      '<div class="tech-example">友人が会議で言い間違えた → 「気にしなくていいよ、誰でもあるよ」<br>自分が同じことをした → 「最悪だ、みんなバカだと思ってる」← この差が自己批判</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>思いやりのある自分</strong><br>「温かさ・強さ・知恵を持つ理想の自分」をイメージ。困難な場面で「この自分ならどうするか」と問う。</div>'
+    },
+    { heading: 'どの段階でどの程度', content:
+      '<ul><li><strong>Week 3-4</strong>: 鎮静呼吸を毎日2分。寝る前がおすすめ。</li>' +
+      '<li><strong>Week 5-6</strong>: コンパッショネイト・レターを週1回。</li>' +
+      '<li><strong>Week 7以降</strong>: ダブルスタンダード技法を自動思考が出たときにリアルタイムで使う。</li></ul>' }
+  ]
+},
+act_defusion: {
+  title: '脱フュージョン（ACT）',
+  when: 'Week 3〜 / 不安な考えが浮かんだとき',
+  time: '各エクササイズ1〜3分',
+  difficulty: '低（馬鹿馬鹿しいほど簡単だが効果的）',
+  evidence: 'Craske et al. (2014): CBTと同等の効果 / 回避が強い場合に特に有効',
+  sections: [
+    { heading: 'CBTとの違い', content: '<p><strong>CBT</strong>: 不安な考えを「変える」（リフレーミング）。<strong>ACT</strong>: 不安な考えを「持ったまま行動する」。考えを変えなくても、考えとの関係を変えれば十分。</p>' },
+    { heading: '6つの脱フュージョン技法', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>「〜という考えを持っている」</strong><br>「私はダメだ」→「私は『ダメだ』という考えを持っている」→「…ということに気づいている」<br>映画館の最前列から最後列に移動するイメージ。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>ミルクミルクエクササイズ</strong><br>不安な言葉（「バカ」「恥」「失敗」等）を45秒間早口で繰り返す。言葉が単なる音に変わり、感情的インパクトが消える。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>歌にして歌う</strong><br>「どうせ認められない」をハッピーバースデーのメロディで歌う。馬鹿馬鹿しいほど効く。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>「ありがとう、脳」</strong><br>不安な考えに「ありがとう、脳！また心配してくれてるんだね」と返す。抑圧でも同意でもなく、ただ受け取る。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>スローモーション</strong><br>不安な考えを超スローで再生：「ど・う・せ・だ・め・だ」。音が引き伸ばされると意味が解体される。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">6</span><strong>変な声で言う</strong><br>不安な思考をアニメキャラの声で言い直す。思考の「権威」が崩れる。</div>'
+    },
+    { heading: '価値の明確化', content:
+      '<p>ACTの核心:「不安を減らす」ことではなく「大切なことのために動く」こと。</p>' +
+      '<div class="tech-example">問い:「もし不安が完全になくなったら、明日何をするか？」→ その答えが「価値」。<br>毎日、価値に基づく小さな行動を1つ。「不安があっても大切だからやる」。</div>'
+    },
+    { heading: 'どの段階でどの程度', content:
+      '<ul><li><strong>Week 3</strong>: 技法1と4を日常で試す。不安な考えが浮かんだらすぐ使う。</li>' +
+      '<li><strong>Week 5以降</strong>: 自分に合う技法を2-3個見つけてレパートリー化。</li>' +
+      '<li><strong>継続</strong>: 価値の明確化ワークを月1回。コンパスの再確認。</li></ul>' }
+  ]
+},
+exposure_inhibitory: {
+  title: '仮説検証型エクスポージャー',
+  when: 'Week 5〜 / 週2-3回',
+  time: '1回30分〜1時間',
+  difficulty: '高（最も不安を感じるが最も効果的）',
+  evidence: 'Craske et al. (2014) 抑制学習モデル / 従来の習慣化モデルより効果的',
+  sections: [
+    { heading: '従来モデルとの違い', content:
+      '<p>従来:「不安に慣れるまで耐える」（習慣化モデル）→ 古い。<br>' +
+      '現在:「予測が外れる体験を蓄積する」（抑制学習モデル）→ 不安が残っていても予測が外れれば学習成立。</p>' +
+      '<div class="tech-warn">「不安が下がるまでその場にいる」は目標ではない。「予測が外れたか」が唯一の基準。</div>'
+    },
+    { heading: '4つの原則', content:
+      '<ul>' +
+      '<li><strong>期待違反の最大化</strong>: 最も恐れていることが起きないことを学ぶ</li>' +
+      '<li><strong>深い消去</strong>: 異なる場所・相手・状況で繰り返す</li>' +
+      '<li><strong>変動性</strong>: 難易度をランダムに変える（毎回同じ階層を登らない）</li>' +
+      '<li><strong>安全行動の完全除去</strong>: 1つも残さない</li>' +
+      '</ul>'
+    },
+    { heading: '段階別エクスポージャー例', content:
+      '<p><strong>軽度</strong>: 店員に質問する / エレベーターで挨拶 / 道を聞く</p>' +
+      '<p><strong>中程度</strong>: 少人数会議で発言 / 電話で問い合わせ（事前準備なし）/ レストランで注文変更</p>' +
+      '<p><strong>高強度</strong>: プレゼンで「えーと」を意図的に多用 / わざと目立つ服 / 知らない人に「鼻に何かついてますか？」と聞く</p>' +
+      '<div class="tech-example">各エクスポージャーを「仮説検証」として実施。Before:「何が起こると予測するか（確信度%）」→ After:「実際に何が起こったか」</div>'
+    },
+    { heading: 'どの段階でどの程度', content:
+      '<ul><li><strong>Week 5-6</strong>: 軽度から開始。週2回。</li>' +
+      '<li><strong>Week 7-8</strong>: 中程度。変動的に難易度を変える。</li>' +
+      '<li><strong>Week 9-12</strong>: 高強度含む。異なる場面で般化。</li></ul>' }
+  ]
+},
+interoceptive: {
+  title: '内受容エクスポージャー',
+  when: 'Week 7〜 / 週1-2回',
+  time: '1回15〜20分',
+  difficulty: '中〜高',
+  evidence: 'パニック障害で確立 / SADの身体症状恐怖にも有効',
+  sections: [
+    { heading: 'なぜSADに有効か', content: '<p>SADでは身体症状（赤面・震え・発汗・声の震え）への恐怖が中核的。身体症状→「みんなに気づかれる」→恥→回避というサイクル。身体症状を<strong>わざと誘発</strong>し、壊滅的結果が起きないことを学ぶ。</p>' },
+    { heading: '身体症状別の誘発方法', content:
+      '<ul>' +
+      '<li><strong>赤面</strong>: 温かいスカーフを巻く / 辛い食べ物を食べる / 恥ずかしい話を誰かにする</li>' +
+      '<li><strong>震え</strong>: カフェインを摂取 / 筋肉を緊張させてから脱力</li>' +
+      '<li><strong>発汗</strong>: 厚着をする / 階段を駆け上がってからミーティングに入る</li>' +
+      '<li><strong>心拍上昇</strong>: その場で走る / 階段を駆け上がる</li>' +
+      '<li><strong>声の震え</strong>: わざと声を震わせて話す</li>' +
+      '</ul>' +
+      '<div class="tech-example">最も効果的な使い方: 身体症状を誘発した状態で社会場面に入る。例:「階段を走ってから会議に入る」→ 汗をかいていても誰も気にしないことを学ぶ。</div>'
+    },
+    { heading: 'どの段階でどの程度', content:
+      '<ul><li><strong>Week 7-8</strong>: 自宅で1人で症状誘発。感覚に慣れる。週1回。</li>' +
+      '<li><strong>Week 9以降</strong>: 社会場面と組み合わせて実施。週2回。</li></ul>' }
+  ]
+},
+rumination_control: {
+  title: '事後反芻の制御（メタ認知療法）',
+  when: 'Week 1〜 / 反芻に気づいたとき即座に',
+  time: '特別な時間不要（気づいたら実行）',
+  difficulty: '低〜中（気づくことが最初のハードル）',
+  evidence: 'Wells (2009) / SADの維持因子として極めて重要',
+  sections: [
+    { heading: '事後反芻とは', content: '<p>社交場面の後に「あの時ああ言えばよかった」「あの表情は嫌われたサインでは」と何時間も繰り返し考えること。<strong>分析のふりをした不安の増幅装置</strong>。反芻すればするほど不安は強くなる。</p>' },
+    { heading: '4つの制御技法', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>心配の先送り</strong><br>反芻が始まったら「今は考えない。19時からの15分間で考える」と決める。その時間になると多くの場合もう気にならない。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>メタ認知的ラベリング</strong><br>「これは反芻だ。分析ではない。有害な習慣であり問題解決ではない」と心の中で宣言する。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>5-4-3-2-1 グラウンディング</strong><br>見えるもの5つ・聞こえるもの4つ・触れるもの3つ・匂い2つ・味1つ。注意を強制的に外部に向ける。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>行動実験で検証</strong><br>条件A: 場面後に30分反芻 → 条件B: 反芻を止める → 翌日の気分を比較。ほぼ例外なく反芻しない方が良い。</div>'
+    },
+    { heading: 'どの段階でどの程度', content:
+      '<ul><li><strong>Week 1〜</strong>: まず反芻に「気づく」訓練。「あ、今反芻してる」と認識できるだけで第一歩。</li>' +
+      '<li><strong>Week 3〜</strong>: 技法1-3を実践。気づいたら即実行。</li>' +
+      '<li><strong>Week 7〜</strong>: 技法4（行動実験）で反芻の有害性を自分で検証。</li></ul>' }
+  ]
+},
+common_mistakes: {
+  title: 'セルフ治療の8つの落とし穴',
+  when: '常に / 月1回セルフチェック推奨',
+  time: '10分（チェックリスト確認）',
+  difficulty: '低（読むだけ）',
+  evidence: '臨床研究の知見を統合',
+  sections: [
+    { heading: 'チェックリスト', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>安全行動を維持したままエクスポージャー</strong><br>カフェに行くがスマホを見続ける → 学習が起きない。<br>対策: 安全行動リストを作り、外してからエクスポージャー。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>思考記録だけで行動が変わらない</strong><br>「合理的な考え」を書けても感情が変わらない。<br>対策: 行動実験で「体験」する。感情は体験でしか変わらない。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>エクスポージャーが「耐える」</strong><br>不安が下がるのを待つ（white-knuckle approach）は効果が低い。<br>対策: 仮説検証型に切り替え。「予測が外れたか」が基準。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>事後反芻を放置</strong><br>放置すると回復を完全に阻害。<br>対策: 「これは反芻であり分析ではない」と認識する。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>微細な回避を認識しない</strong><br>「早く帰る」「端に座る」「飲酒して参加」も回避。<br>対策: 安全行動チェックリストで網羅的に確認。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">6</span><strong>段階的すぎて進まない</strong><br>「完璧に準備してから」は永遠に来ない。<br>対策: 70%の準備で実行。不安はあって当然。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">7</span><strong>自己批判をモチベーションにしている</strong><br>「こんなこともできないなんて」→恥→回避→悪化。<br>対策: CFTで勇気を認める。挑戦したこと自体が価値。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">8</span><strong>般化の失敗</strong><br>1つの場面でうまくいっても他に広がらない。<br>対策: 異なる場所・相手・状況で繰り返す（深い消去）。</div>'
+    },
+    { heading: '使い方', content: '<p>月に1回、このリストを見直して自分が落とし穴にハマっていないか確認する。日記のパターン分析と組み合わせるとさらに効果的。Claudeの「間違いチェック」ボタンでも確認できる。</p>' }
+  ]
+}
+};
+
+function openTechDetail(key) {
+  const d = TECH_DETAILS[key];
+  if (!d) return;
+  let html = '<div class="tech-modal-header"><h2>' + d.title + '</h2><button class="tech-modal-close" onclick="closeTechDetail()">&#x2715;</button></div>';
+  html += '<div class="tech-modal-meta">';
+  html += '<span class="tech-badge tech-badge-when">' + d.when + '</span>';
+  html += '<span class="tech-badge tech-badge-time">' + d.time + '</span>';
+  html += '<span class="tech-badge tech-badge-difficulty">' + d.difficulty + '</span>';
+  html += '<span class="tech-badge tech-badge-evidence">' + d.evidence + '</span>';
+  html += '</div>';
+  d.sections.forEach(function(s) {
+    html += '<div class="tech-section"><h3>' + s.heading + '</h3>' + s.content + '</div>';
+  });
+  html += '<button class="tech-btn-counsel" onclick="closeTechDetail();counselQuick(\'' + key + '\')">Claudeにこの技法について相談する</button>';
+  document.getElementById('techModalContent').innerHTML = html;
+  document.getElementById('techOverlay').classList.add('open');
+}
 
 function switchSidebarTab(tab) {
   document.querySelectorAll('.sidebar-tab').forEach((t, i) => {
