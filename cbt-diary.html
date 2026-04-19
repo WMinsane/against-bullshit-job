@@ -589,6 +589,11 @@
         <div class="breath-label">4-7-8 呼吸法（副交感神経活性化）</div>
       </div>
       <button class="btn-ref" onclick="openRefLibrary()" style="margin-top:0.4rem;">参考資料ライブラリ</button>
+      <div style="display:flex; gap:0.3rem; margin-top:0.4rem;">
+        <button class="btn-ref" onclick="exportJSON()" style="flex:1; font-size:0.7rem; padding:0.4rem;">エクスポート</button>
+        <button class="btn-ref" onclick="document.getElementById('importFile').click()" style="flex:1; font-size:0.7rem; padding:0.4rem;">インポート</button>
+        <input type="file" id="importFile" accept=".json" onchange="importJSON(event)" style="display:none;">
+      </div>
     </div>
   </div>
 
@@ -1720,6 +1725,39 @@ function deleteEntry() {
   document.getElementById('diaryForm').style.display = 'none';
   document.getElementById('emptyState').style.display = 'flex';
   renderEntryList();
+}
+
+function exportJSON() {
+  const data = JSON.stringify(entries, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cbt-diary-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) { alert('無効なファイル形式です'); return; }
+      const existingIds = new Set(entries.map(en => en.id));
+      let added = 0;
+      imported.forEach(item => {
+        if (!existingIds.has(item.id)) { entries.push(item); added++; }
+      });
+      saveEntries();
+      renderEntryList();
+      alert(`${added}件の日記をインポートしました（重複${imported.length - added}件スキップ）`);
+    } catch (err) { alert('ファイルの読み込みに失敗: ' + err.message); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 // ==================== Sidebar Rendering ====================
