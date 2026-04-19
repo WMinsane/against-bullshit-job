@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CBT転職日記 - 認知行動療法ジャーナル</title>
+<title>CBTセルフケア日記 - 認知行動療法ジャーナル</title>
 <style>
   :root {
     --bg: #faf5f0;
@@ -557,7 +557,7 @@
   <!-- Sidebar: Entry List -->
   <div class="sidebar">
     <div class="sidebar-header">
-      <h2>CBT転職日記</h2>
+      <h2>CBTセルフケア日記</h2>
       <button class="btn-new" onclick="newEntry()">+ 新しい日記</button>
     </div>
     <div class="sidebar-tabs">
@@ -653,7 +653,7 @@
       <div id="emptyState" class="empty-state">
         <div class="icon">&#x1F4D3;</div>
         <p>左の「+ 新しい日記」から始めましょう</p>
-        <small>認知行動療法のフレームワークで<br>転職活動の不安やストレスを整理できます</small>
+        <small>認知行動療法のフレームワークで<br>日常の不安やストレスを整理できます</small>
       </div>
 
       <div id="diaryForm" style="display:none;">
@@ -686,7 +686,7 @@
         <div class="form-section">
           <div class="section-label"><span class="section-num">2</span> 状況</div>
           <div class="help-text">どんな出来事があったか、客観的な事実を書いてください</div>
-          <textarea id="situation" placeholder="例: 求人サイトで気になる企業の応募要項を見ていた。「AWS実務経験3年以上」が必須条件だった。" rows="3"></textarea>
+          <textarea id="situation" placeholder="例: チームミーティングで全員の前で進捗報告を求められた。準備していなかった。" rows="3"></textarea>
         </div>
 
         <!-- 3. 不安の予測（自動思考） -->
@@ -722,14 +722,14 @@
         <div class="form-section">
           <div class="section-label"><span class="section-num">5</span> それに代わる見方</div>
           <div class="help-text">別の角度から見たら？親友が同じ悩みを抱えていたら何と言う？</div>
-          <textarea id="alternativeView" placeholder="例: 「クラウド経験がなくても、Java8年+PL経験がある。むしろオンプレからクラウドへの移行プロジェクトを経験したい意欲を伝えられるのでは。33歳ならまだキャリアチェンジの余地は十分ある。」" rows="4"></textarea>
+          <textarea id="alternativeView" placeholder="例: 「完璧に話せなくても、要点が伝わればいい。前回も結局質問には答えられていた。緊張してる=能力がないではない。」" rows="4"></textarea>
         </div>
 
         <!-- 6. 最終結論 -->
         <div class="form-section">
           <div class="section-label"><span class="section-num">6</span> 最終結論</div>
           <div class="help-text">「不安の予測」と「代わる見方」を踏まえて、バランスの取れた結論は？</div>
-          <textarea id="conclusion" placeholder="例: 「すべての条件を満たす必要はない。自分の強みを活かせる部分をアピールし、足りない部分は学ぶ意欲を見せよう。まずは1社応募してみる。」" rows="3"></textarea>
+          <textarea id="conclusion" placeholder="例: 「完璧な報告でなくても大丈夫。要点を3つに絞って話せばいい。まず次のミーティングで試してみよう。」" rows="3"></textarea>
           <div style="margin-top:0.8rem">
             <label>結論を出した後の不安の強さ (0〜100%)</label>
             <input type="text" id="anxietyAfter" placeholder="例: 40%">
@@ -740,7 +740,7 @@
         <div class="form-section">
           <div class="section-label"><span class="section-num">7</span> 生きるためのルール</div>
           <div class="help-text">この経験から導き出す、自分を守るためのルールや気づき</div>
-          <textarea id="lifeRule" placeholder="例: 「求人の必須条件は理想像であって足切りラインではない。70%合致していれば挑戦する価値がある。」" rows="3"></textarea>
+          <textarea id="lifeRule" placeholder="例: 「緊張は悪いことではない。大事な場面で緊張するのは自然。70%の準備で行動に移す。」" rows="3"></textarea>
         </div>
 
         <!-- 8. 行動実験 -->
@@ -1759,12 +1759,11 @@ function saveCounselApiKey() {
 }
 
 // ==================== Counsel Chat ====================
-const CBT_SYSTEM = `あなたはSAD（社交不安障害）の認知行動療法に精通した転職カウンセラーです。
+const CBT_SYSTEM = `あなたはSAD（社交不安障害）の認知行動療法に精通したCBTカウンセラーです。
 
 # 相談者プロフィール
-- 33歳、SE歴8年、Java3年、TypeScript1年、PL経験10ヶ月
-- 転職先: 中堅SIer、技術寄り社内SE、AI活用企業を検討中
-- SADの自己治療に取り組んでいる。専門家ではないため、エビデンスに基づく助言を重視
+- 33歳、SE。SADの自己治療に取り組んでいる
+- 専門家ではないため、エビデンスに基づく助言を重視
 
 # 治療モデルの知識（応答に活用すること）
 - **Clark & Wells (1995) モデル**: 自己注目、安全行動、事後反芻がSADを維持する3因子
