@@ -386,17 +386,46 @@
   .breath-label { font-size: 0.7rem; color: var(--muted); }
   .breath-phase { font-size: 0.75rem; color: var(--accent); font-weight: 600; min-height: 1.2em; }
 
-  /* Technique cards in sidebar */
-  .technique-panel { padding: 0.5rem; overflow-y: auto; }
-  .technique-card {
-    padding: 0.6rem 0.8rem; margin: 0.3rem 0.5rem; border-radius: 10px;
-    background: var(--warm-white); border: 1px solid var(--border);
-    font-size: 0.72rem; cursor: pointer; transition: all 0.25s ease;
+  /* Technique grid in main area */
+  .tech-grid-view { padding: 1.5rem; animation: fadeIn 0.3s ease; }
+  .tech-grid-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.2rem;
   }
-  .technique-card:hover { transform: translateX(3px); border-color: var(--accent); box-shadow: 0 2px 8px var(--glow); }
-  .technique-card .tc-title { font-weight: 700; color: var(--accent); margin-bottom: 0.2rem; }
-  .technique-card .tc-desc { color: var(--muted); line-height: 1.4; }
-  .technique-card .tc-evidence { font-size: 0.65rem; color: var(--accent3); margin-top: 0.2rem; }
+  .tech-grid-header h2 { font-size: 1.1rem; color: var(--accent); }
+  .tech-grid-header p { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+  .tech-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.8rem;
+  }
+  .technique-card {
+    padding: 1rem 1.2rem; border-radius: 14px;
+    background: var(--warm-white); border: 1px solid var(--border);
+    font-size: 0.82rem; cursor: pointer; transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(180,142,197,0.04);
+    animation: fadeSlideUp 0.4s ease both;
+  }
+  .technique-card:nth-child(2) { animation-delay: 0.03s; }
+  .technique-card:nth-child(3) { animation-delay: 0.06s; }
+  .technique-card:nth-child(4) { animation-delay: 0.09s; }
+  .technique-card:nth-child(5) { animation-delay: 0.12s; }
+  .technique-card:nth-child(6) { animation-delay: 0.15s; }
+  .technique-card:nth-child(7) { animation-delay: 0.18s; }
+  .technique-card:nth-child(8) { animation-delay: 0.21s; }
+  .technique-card:nth-child(9) { animation-delay: 0.24s; }
+  .technique-card:nth-child(10) { animation-delay: 0.27s; }
+  .technique-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 8px 24px var(--glow); }
+  .technique-card .tc-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .technique-card .tc-title { font-weight: 700; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.3rem; }
+  .technique-card .tc-desc { color: var(--text); line-height: 1.5; margin-bottom: 0.4rem; }
+  .technique-card .tc-evidence { font-size: 0.72rem; color: var(--accent3); }
+  .btn-tech {
+    padding: 0.45rem 1rem; border-radius: 20px; border: 1px solid rgba(141,189,141,0.4);
+    background: linear-gradient(135deg, rgba(141,189,141,0.1), rgba(123,181,196,0.1));
+    color: var(--accent3); font-size: 0.8rem; cursor: pointer; transition: all 0.25s;
+    display: inline-flex; align-items: center; gap: 0.3rem;
+  }
+  .btn-tech:hover { transform: translateY(-1px); box-shadow: 0 3px 12px rgba(141,189,141,0.15); background: linear-gradient(135deg, rgba(141,189,141,0.2), rgba(123,181,196,0.2)); }
 
   /* Technique Detail Modal */
   .tech-overlay {
@@ -536,19 +565,6 @@
   }
   .tut-replay-btn:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 3px 12px var(--glow); }
 
-  /* Sidebar tabs */
-  .sidebar-tabs {
-    display: flex; border-bottom: 1px solid var(--border);
-  }
-  .sidebar-tab {
-    flex: 1; padding: 0.5rem; text-align: center; font-size: 0.7rem;
-    color: var(--muted); cursor: pointer; border: none; background: none;
-    border-bottom: 2px solid transparent; transition: all 0.25s ease;
-  }
-  .sidebar-tab:hover { color: var(--accent); }
-  .sidebar-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-  .sidebar-tab-content { display: none; flex: 1; overflow-y: auto; min-height: 0; }
-  .sidebar-tab-content.active { display: block; }
 </style>
 </head>
 <body>
@@ -560,73 +576,11 @@
       <h2>CBTセルフケア日記</h2>
       <button class="btn-new" onclick="newEntry()">+ 新しい日記</button>
     </div>
-    <div class="sidebar-tabs">
-      <button class="sidebar-tab active" onclick="switchSidebarTab('entries')">日記一覧</button>
-      <button class="sidebar-tab" onclick="switchSidebarTab('techniques')">技法ツールキット</button>
+    <div class="sidebar-search">
+      <input type="text" id="searchInput" placeholder="日記を検索..." oninput="renderEntryList()">
     </div>
-
-    <div class="sidebar-tab-content active" id="tabEntries">
-      <div class="sidebar-search">
-        <input type="text" id="searchInput" placeholder="日記を検索..." oninput="renderEntryList()">
-      </div>
-      <div class="entry-list" id="entryList"></div>
-      <div class="sidebar-stats" id="sidebarStats"></div>
-    </div>
-
-    <div class="sidebar-tab-content" id="tabTechniques">
-      <div class="technique-panel">
-        <div class="technique-card" onclick="openTechDetail('behavioral_exp')">
-          <div class="tc-title">行動実験</div>
-          <div class="tc-desc">不安な予測を「仮説」として検証する。思考記録より効果が高い</div>
-          <div class="tc-evidence">Clark & Wells モデル / 最重要技法</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('safety_behavior')">
-          <div class="tc-title">安全行動の除去</div>
-          <div class="tc-desc">目を合わせない、スマホを握る等 — 不安を維持する隠れた行動を特定・除去</div>
-          <div class="tc-evidence">安全行動がある限りエクスポージャー効果は大幅減</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('attention_training')">
-          <div class="tc-title">注意訓練 (ATT)</div>
-          <div class="tc-desc">自己注目を外部に切り替える訓練。1日2回×12分</div>
-          <div class="tc-evidence">Wells (2009) メタ認知療法</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('video_feedback')">
-          <div class="tc-title">ビデオフィードバック</div>
-          <div class="tc-desc">自分の予測 vs 実際の録画映像のギャップで自己イメージを修正</div>
-          <div class="tc-evidence">歪んだ自己イメージを直接修正できる唯一の方法</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('self_compassion')">
-          <div class="tc-title">セルフコンパッション (CFT)</div>
-          <div class="tc-desc">自己批判→思いやり。恥の感情に直接アプローチ</div>
-          <div class="tc-evidence">Gilbert (2014) / CBTで頭では分かるが心が追いつかない場合に</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('act_defusion')">
-          <div class="tc-title">脱フュージョン (ACT)</div>
-          <div class="tc-desc">不安な考えを変えるのではなく、持ったまま行動する</div>
-          <div class="tc-evidence">Craske et al. (2014) CBTと同等の効果</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('exposure_inhibitory')">
-          <div class="tc-title">仮説検証型エクスポージャー</div>
-          <div class="tc-desc">「耐える」ではなく「予測が外れる」体験。抑制学習モデル</div>
-          <div class="tc-evidence">Craske et al. (2014) 抑制学習モデル</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('interoceptive')">
-          <div class="tc-title">内受容エクスポージャー</div>
-          <div class="tc-desc">赤面・震え・発汗をわざと誘発し「壊滅的結果は起きない」と学ぶ</div>
-          <div class="tc-evidence">身体症状への恐怖がSADの中核的維持因子</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('rumination_control')">
-          <div class="tc-title">事後反芻の制御</div>
-          <div class="tc-desc">「あの時ああ言えば…」の反芻ループを認識して断ち切る</div>
-          <div class="tc-evidence">SADの維持因子として極めて重要 / MCT</div>
-        </div>
-        <div class="technique-card" onclick="openTechDetail('common_mistakes')">
-          <div class="tc-title">セルフ治療のよくある間違い</div>
-          <div class="tc-desc">安全行動の維持、思考記録だけ、耐えるだけのエクスポージャー等</div>
-          <div class="tc-evidence">8つの典型的な落とし穴をチェック</div>
-        </div>
-      </div>
-    </div>
+    <div class="entry-list" id="entryList"></div>
+    <div class="sidebar-stats" id="sidebarStats"></div>
 
     <div style="padding:0.5rem 1rem; border-top:1px solid var(--border); flex-shrink:0;">
       <div class="breath-widget" onclick="toggleBreathing()" id="breathWidget">
@@ -643,6 +597,7 @@
     <div class="main-header">
       <h1 id="formTitle">新しい日記</h1>
       <div class="header-actions">
+        <button class="btn btn-tech" onclick="showTechGrid()">セルフケア技法</button>
         <button class="btn btn-counsel" onclick="toggleCounsel()">Claudeに相談</button>
         <button class="btn btn-primary" onclick="saveEntry()">保存</button>
         <button class="btn btn-danger" id="deleteBtn" onclick="deleteEntry()" style="display:none;">削除</button>
@@ -654,6 +609,79 @@
         <div class="icon">&#x1F4D3;</div>
         <p>左の「+ 新しい日記」から始めましょう</p>
         <small>認知行動療法のフレームワークで<br>日常の不安やストレスを整理できます</small>
+        <button class="btn btn-tech" onclick="showTechGrid()" style="margin-top:1.2rem; font-size:0.85rem; padding:0.6rem 1.4rem;">セルフケア技法を見る</button>
+      </div>
+
+      <div id="techGridView" class="tech-grid-view" style="display:none;">
+        <div class="tech-grid-header">
+          <div>
+            <h2>セルフケア技法</h2>
+            <p>エビデンスに基づく10のテクニック。カードをクリックで詳しい手順・具体例が開きます。</p>
+          </div>
+          <button class="btn btn-secondary" onclick="hideTechGrid()">戻る</button>
+        </div>
+        <div class="tech-grid">
+          <div class="technique-card" onclick="openTechDetail('behavioral_exp')">
+            <div class="tc-icon">&#x1F9EA;</div>
+            <div class="tc-title">行動実験</div>
+            <div class="tc-desc">不安な予測を「仮説」として検証する。思考記録より効果が高い</div>
+            <div class="tc-evidence">Clark & Wells モデル / 最重要技法</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('safety_behavior')">
+            <div class="tc-icon">&#x1F6E1;</div>
+            <div class="tc-title">安全行動の除去</div>
+            <div class="tc-desc">目を合わせない、スマホを握る等 — 不安を維持する隠れた行動を特定・除去</div>
+            <div class="tc-evidence">安全行動がある限りエクスポージャー効果は大幅減</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('attention_training')">
+            <div class="tc-icon">&#x1F3AF;</div>
+            <div class="tc-title">注意訓練 (ATT)</div>
+            <div class="tc-desc">自己注目を外部に切り替える訓練。1日2回×12分</div>
+            <div class="tc-evidence">Wells (2009) メタ認知療法</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('video_feedback')">
+            <div class="tc-icon">&#x1F4F9;</div>
+            <div class="tc-title">ビデオフィードバック</div>
+            <div class="tc-desc">自分の予測 vs 実際の録画映像のギャップで自己イメージを修正</div>
+            <div class="tc-evidence">歪んだ自己イメージを直接修正できる唯一の方法</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('self_compassion')">
+            <div class="tc-icon">&#x1F49C;</div>
+            <div class="tc-title">セルフコンパッション (CFT)</div>
+            <div class="tc-desc">自己批判→思いやり。恥の感情に直接アプローチ</div>
+            <div class="tc-evidence">Gilbert (2014) / CBTで頭では分かるが心が追いつかない場合に</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('act_defusion')">
+            <div class="tc-icon">&#x1F343;</div>
+            <div class="tc-title">脱フュージョン (ACT)</div>
+            <div class="tc-desc">不安な考えを変えるのではなく、持ったまま行動する</div>
+            <div class="tc-evidence">Craske et al. (2014) CBTと同等の効果</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('exposure_inhibitory')">
+            <div class="tc-icon">&#x26A1;</div>
+            <div class="tc-title">仮説検証型エクスポージャー</div>
+            <div class="tc-desc">「耐える」ではなく「予測が外れる」体験。抑制学習モデル</div>
+            <div class="tc-evidence">Craske et al. (2014) 抑制学習モデル</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('interoceptive')">
+            <div class="tc-icon">&#x1F525;</div>
+            <div class="tc-title">内受容エクスポージャー</div>
+            <div class="tc-desc">赤面・震え・発汗をわざと誘発し「壊滅的結果は起きない」と学ぶ</div>
+            <div class="tc-evidence">身体症状への恐怖がSADの中核的維持因子</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('rumination_control')">
+            <div class="tc-icon">&#x1F504;</div>
+            <div class="tc-title">事後反芻の制御</div>
+            <div class="tc-desc">「あの時ああ言えば…」の反芻ループを認識して断ち切る</div>
+            <div class="tc-evidence">SADの維持因子として極めて重要 / MCT</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('common_mistakes')">
+            <div class="tc-icon">&#x26A0;</div>
+            <div class="tc-title">セルフ治療のよくある間違い</div>
+            <div class="tc-desc">安全行動の維持、思考記録だけ、耐えるだけのエクスポージャー等</div>
+            <div class="tc-evidence">8つの典型的な落とし穴をチェック</div>
+          </div>
+        </div>
       </div>
 
       <div id="diaryForm" style="display:none;">
@@ -1191,7 +1219,7 @@
     </div>
     <div class="ref-concept">
       <strong>Week 5-8: 技法を広げる</strong><br>
-      ACTの脱フュージョン、CFTのセルフコンパッション、ATTの注意訓練を日常に組み込む。サイドバーの「技法ツールキット」からClaudeに相談できる。
+      ACTの脱フュージョン、CFTのセルフコンパッション、ATTの注意訓練を日常に組み込む。ヘッダーの「セルフケア技法」からClaudeに相談できる。
     </div>
     <div class="ref-concept">
       <strong>Week 9-12: 般化と再発予防</strong><br>
@@ -1513,12 +1541,20 @@ function openTechDetail(key) {
   document.getElementById('techOverlay').classList.add('open');
 }
 
-function switchSidebarTab(tab) {
-  document.querySelectorAll('.sidebar-tab').forEach((t, i) => {
-    t.classList.toggle('active', (tab === 'entries' && i === 0) || (tab === 'techniques' && i === 1));
-  });
-  document.getElementById('tabEntries').classList.toggle('active', tab === 'entries');
-  document.getElementById('tabTechniques').classList.toggle('active', tab === 'techniques');
+function showTechGrid() {
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('diaryForm').style.display = 'none';
+  document.getElementById('techGridView').style.display = 'block';
+  document.getElementById('formTitle').textContent = 'セルフケア技法';
+}
+function hideTechGrid() {
+  document.getElementById('techGridView').style.display = 'none';
+  if (currentEntryId) {
+    document.getElementById('diaryForm').style.display = 'block';
+  } else {
+    document.getElementById('emptyState').style.display = '';
+  }
+  document.getElementById('formTitle').textContent = currentEntryId ? '日記を編集' : '新しい日記';
 }
 
 let breathingActive = false;
@@ -1576,6 +1612,7 @@ function newEntry() {
   document.getElementById('entryTime').value = now.toTimeString().slice(0, 5);
   document.getElementById('diaryForm').style.display = 'block';
   document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('techGridView').style.display = 'none';
   document.getElementById('deleteBtn').style.display = 'none';
   document.getElementById('formTitle').textContent = '新しい日記';
   document.getElementById('formArea').classList.remove('view-mode');
@@ -1598,6 +1635,7 @@ function loadEntry(id) {
   currentEntryId = id;
   document.getElementById('diaryForm').style.display = 'block';
   document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('techGridView').style.display = 'none';
   document.getElementById('deleteBtn').style.display = 'inline-flex';
   document.getElementById('formTitle').textContent = entry.date + ' の日記';
   document.getElementById('formArea').classList.remove('view-mode');
@@ -1978,10 +2016,10 @@ const TUT_STEPS = [
     position: 'left'
   },
   {
-    target: '.sidebar-tabs',
-    title: '3. 技法ツールキット',
-    text: 'このタブを切り替えると、エビデンスに基づいた10の自己療法テクニックが見られます。カードをクリックすると詳しい手順・具体例が開きます。',
-    position: 'right'
+    target: '.btn-tech',
+    title: '3. セルフケア技法',
+    text: 'ここを押すとエビデンスに基づいた10のテクニック一覧が開きます。カードをクリックすると詳しい手順・具体例・Claudeへの相談ボタンが表示されます。',
+    position: 'bottom'
   },
   {
     target: '.btn-counsel',
@@ -2076,9 +2114,6 @@ function showTutStep() {
 function nextTutStep() {
   tutStep++;
   if (tutStep >= TUT_STEPS.length) { endTutorial(); return; }
-  if (tutStep === 2) {
-    switchSidebarTab('techniques');
-  }
   showTutStep();
 }
 
@@ -2086,7 +2121,6 @@ function endTutorial() {
   document.getElementById('tutOverlay').classList.remove('open');
   document.getElementById('tutWelcome').style.display = 'none';
   localStorage.setItem('cbt_tutorial_done', '1');
-  if (tutStep === 2) switchSidebarTab('entries');
 }
 
 // ==================== Init ====================
