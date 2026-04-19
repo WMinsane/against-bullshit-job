@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WSL → Windows 無音トースト通知 完全ガイド</title>
+<style>
+  :root {
+    --bg: #faf5f0; --card: #ffffff; --surface: #f3ebe3;
+    --accent: #b48ec5; --accent2: #7bb5c4; --accent3: #8dbd8d;
+    --accent4: #e0a87c; --danger: #d97070; --text: #4a3f3a;
+    --muted: #9b8e85; --border: #e4d9cf;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: linear-gradient(135deg, #faf5f0 0%, #f0e6f6 50%, #e8f0f0 100%);
+    color: var(--text); line-height: 1.8; padding: 2rem;
+  }
+  .container { max-width: 820px; margin: 0 auto; }
+  h1 {
+    font-size: 1.6rem; color: var(--accent); margin-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent); padding-bottom: 0.6rem;
+  }
+  .subtitle { font-size: 0.85rem; color: var(--muted); margin-bottom: 2rem; }
+  h2 {
+    font-size: 1.15rem; color: var(--accent2); margin: 2rem 0 0.8rem;
+    padding-left: 0.8rem; border-left: 4px solid var(--accent2);
+  }
+  h3 { font-size: 0.95rem; color: var(--accent3); margin: 1.2rem 0 0.5rem; }
+  p, li { font-size: 0.88rem; margin-bottom: 0.6rem; }
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.2rem 1.4rem; margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(180,142,197,0.06);
+  }
+  .concept {
+    background: linear-gradient(90deg, rgba(180,142,197,0.06), transparent);
+    border-left: 3px solid var(--accent);
+    padding: 0.8rem 1rem; border-radius: 0 10px 10px 0;
+    margin-bottom: 0.8rem; font-size: 0.85rem;
+  }
+  .warn {
+    background: rgba(217,112,112,0.06);
+    border-left: 3px solid var(--danger);
+    padding: 0.7rem 1rem; border-radius: 0 8px 8px 0;
+    margin-bottom: 0.8rem; font-size: 0.82rem;
+  }
+  .success {
+    background: rgba(141,189,141,0.08);
+    border-left: 3px solid var(--accent3);
+    padding: 0.7rem 1rem; border-radius: 0 8px 8px 0;
+    margin-bottom: 0.8rem; font-size: 0.82rem;
+  }
+  pre {
+    background: #2d2a2e; color: #e0dbd5; border-radius: 10px;
+    padding: 1rem 1.2rem; overflow-x: auto; margin-bottom: 1rem;
+    font-size: 0.8rem; line-height: 1.6; font-family: 'Cascadia Code', 'Fira Code', monospace;
+  }
+  code {
+    background: rgba(180,142,197,0.12); padding: 0.1rem 0.4rem;
+    border-radius: 4px; font-size: 0.82rem; font-family: 'Cascadia Code', 'Fira Code', monospace;
+  }
+  pre code { background: none; padding: 0; }
+  .tag {
+    display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 600; margin-right: 0.3rem;
+  }
+  .tag-key { background: rgba(180,142,197,0.15); color: var(--accent); }
+  .tag-info { background: rgba(123,181,196,0.15); color: var(--accent2); }
+  .tag-warn { background: rgba(224,168,124,0.15); color: var(--accent4); }
+
+  .diagram {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem; margin: 1rem 0;
+    text-align: center; font-size: 0.85rem;
+  }
+  .diagram .flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0.5rem; flex-wrap: wrap;
+  }
+  .diagram .box {
+    padding: 0.5rem 1rem; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--surface);
+    font-weight: 600; font-size: 0.8rem;
+  }
+  .diagram .arrow { color: var(--accent); font-size: 1.2rem; }
+  table {
+    width: 100%; border-collapse: collapse; margin-bottom: 1rem;
+    font-size: 0.82rem;
+  }
+  th {
+    background: linear-gradient(135deg, rgba(180,142,197,0.1), rgba(123,181,196,0.08));
+    padding: 0.5rem 0.8rem; text-align: left; border-bottom: 2px solid var(--border);
+    font-size: 0.78rem; color: var(--accent);
+  }
+  td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--border); }
+  .toc {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1rem 1.5rem; margin-bottom: 1.5rem;
+  }
+  .toc h3 { margin-top: 0; color: var(--accent); }
+  .toc ol { margin-bottom: 0; }
+  .toc a { color: var(--accent2); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>WSL → Windows 無音トースト通知 完全ガイド</h1>
+<p class="subtitle">
+  <span class="tag tag-key">WSL2</span>
+  <span class="tag tag-info">PowerShell</span>
+  <span class="tag tag-warn">WinRT API</span>
+  — CLIツールの完了通知を Windows トーストで無音で受け取る方法
+</p>
+
+<div class="toc">
+  <h3>目次</h3>
+  <ol>
+    <li><a href="#sec1">全体像 — 何が起きているのか</a></li>
+    <li><a href="#sec2">前提知識 — Windows通知の仕組み</a></li>
+    <li><a href="#sec3">方法1: NotifyIcon（簡単だが音が消せない）</a></li>
+    <li><a href="#sec4">方法2: WinRT Toast API（無音対応・本命）</a></li>
+    <li><a href="#sec5">なぜ AppID が必要なのか</a></li>
+    <li><a href="#sec6">シェルスクリプト化して使い回す</a></li>
+    <li><a href="#sec7">Claude Code のフックに組み込む</a></li>
+    <li><a href="#sec8">トラブルシューティング</a></li>
+  </ol>
+</div>
+
+<!-- ===== 1 ===== -->
+<h2 id="sec1">1. 全体像 — 何が起きているのか</h2>
+
+<div class="diagram">
+  <div class="flow">
+    <div class="box">WSL2 (Linux)</div>
+    <div class="arrow">→</div>
+    <div class="box">powershell.exe</div>
+    <div class="arrow">→</div>
+    <div class="box">WinRT Toast API</div>
+    <div class="arrow">→</div>
+    <div class="box">Windows 通知センター</div>
+  </div>
+  <p style="margin-top:0.8rem; font-size:0.78rem; color:var(--muted);">WSL2 から Windows 側の powershell.exe を直接呼び出せる（相互運用機能）</p>
+</div>
+
+<div class="card">
+  <p><strong>ポイント</strong>: WSL2 は Linux カーネルだが、Windows のプロセスを直接起動できる。<code>powershell.exe</code> を叩けば Windows 側の API にアクセス可能。つまり Linux のシェルスクリプトから Windows のトースト通知を飛ばせる。</p>
+</div>
+
+<div class="concept">
+  <strong>WSL2 の相互運用</strong><br>
+  WSL2 では <code>/mnt/c/</code> 経由で Windows ファイルシステムにアクセスでき、<code>*.exe</code> を直接実行できる。逆に Windows 側から <code>wsl</code> コマンドで Linux を呼ぶこともできる。この双方向ブリッジが通知連携の土台。
+</div>
+
+<!-- ===== 2 ===== -->
+<h2 id="sec2">2. 前提知識 — Windows 通知の仕組み</h2>
+
+<p>Windows 10/11 には大きく2種類の通知メカニズムがある:</p>
+
+<table>
+  <tr><th>方式</th><th>API</th><th>音の制御</th><th>通知センター残留</th></tr>
+  <tr><td>バルーン通知（レガシー）</td><td><code>NotifyIcon.ShowBalloonTip()</code></td><td>ToolTipIcon で種類を選ぶだけ。<strong>None でも OS 設定次第で鳴る</strong></td><td>一時的</td></tr>
+  <tr><td>トースト通知（モダン）</td><td><code>Windows.UI.Notifications</code> (WinRT)</td><td><strong><code>&lt;audio silent='true'/&gt;</code> で完全無音</strong></td><td>残る</td></tr>
+</table>
+
+<div class="warn">
+  <strong>落とし穴</strong>: <code>NotifyIcon</code> の <code>ToolTipIcon.None</code> は「アイコンなし」の意味であって「無音」ではない。OS の通知音設定に従うため、結局音が鳴る。これが最初のアプローチで無音にできなかった理由。
+</div>
+
+<div class="concept">
+  <strong>WinRT (Windows Runtime) とは</strong><br>
+  Windows 8 以降に導入されたモダン API 群。UWP アプリ向けだが、PowerShell からも <code>[Windows.UI.Notifications.ToastNotificationManager]</code> のように .NET 経由でアクセスできる。トースト通知の XML スキーマで <code>&lt;audio&gt;</code> 要素を制御でき、ここで <code>silent='true'</code> を指定すると<strong>確実に無音</strong>になる。
+</div>
+
+<!-- ===== 3 ===== -->
+<h2 id="sec3">3. 方法1: NotifyIcon（簡単だが音が消せない）</h2>
+
+<p>参考として載せるが、<strong>無音が必要なら方法2を使うべき</strong>。</p>
+
+<pre><code># WSL から実行
+powershell.exe -Command "
+  Add-Type -AssemblyName System.Windows.Forms
+  \$n = New-Object System.Windows.Forms.NotifyIcon
+  \$n.Icon = [System.Drawing.SystemIcons]::Information
+  \$n.Visible = \$true
+  \$n.ShowBalloonTip(3000, 'タイトル', '本文', 'None')
+  Start-Sleep -Seconds 4
+  \$n.Dispose()
+"</code></pre>
+
+<div class="card">
+  <h3>仕組み</h3>
+  <ol>
+    <li><code>System.Windows.Forms</code> をロード（.NET のデスクトップ UI ライブラリ）</li>
+    <li><code>NotifyIcon</code> = タスクトレイのアイコン。これがないとバルーン通知を出せない</li>
+    <li><code>ShowBalloonTip(ミリ秒, タイトル, 本文, アイコン種類)</code> でバルーンを表示</li>
+    <li><code>Dispose()</code> でトレイアイコンを片付ける（やらないとゴーストアイコンが残る）</li>
+  </ol>
+</div>
+
+<div class="warn">
+  <strong>問題点</strong>: 第4引数 <code>None</code> はアイコン種類が「なし」になるだけ。通知音は OS の「通知」サウンド設定に従って鳴る。レジストリをいじって一時的に消す方法もあるが、レースコンディションがあり確実ではない。
+</div>
+
+<!-- ===== 4 ===== -->
+<h2 id="sec4">4. 方法2: WinRT Toast API（無音対応・本命）</h2>
+
+<h3>最小構成（これだけコピーすれば動く）</h3>
+
+<pre><code># WSL から実行
+powershell.exe -Command "
+[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+[Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime] | Out-Null
+
+\$xml = @'
+&lt;toast&gt;
+  &lt;visual&gt;
+    &lt;binding template='ToastGeneric'&gt;
+      &lt;text&gt;タイトル&lt;/text&gt;
+      &lt;text&gt;本文メッセージ&lt;/text&gt;
+    &lt;/binding&gt;
+  &lt;/visual&gt;
+  &lt;audio silent='true'/&gt;
+&lt;/toast&gt;
+'@
+
+\$doc = New-Object Windows.Data.Xml.Dom.XmlDocument
+\$doc.LoadXml(\$xml)
+\$toast = [Windows.UI.Notifications.ToastNotification]::new(\$doc)
+\$appId = '{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\WindowsPowerShell\v1.0\powershell.exe'
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier(\$appId).Show(\$toast)
+"</code></pre>
+
+<div class="card">
+  <h3>各行の意味</h3>
+  <table>
+    <tr><th>行</th><th>やっていること</th></tr>
+    <tr><td><code>[Windows.UI.Notifications...] | Out-Null</code></td><td>WinRT の型をPowerShellセッションにロード。<code>Out-Null</code> は出力を捨てるだけ</td></tr>
+    <tr><td><code>$xml = @'...'@</code></td><td>トースト通知の定義XML（ヒアストリング構文）</td></tr>
+    <tr><td><code>&lt;audio silent='true'/&gt;</code></td><td><strong>これが無音のキモ</strong>。この1行で通知音を完全に抑制</td></tr>
+    <tr><td><code>XmlDocument → LoadXml</code></td><td>XML文字列をDOMオブジェクトにパース</td></tr>
+    <tr><td><code>ToastNotification::new($doc)</code></td><td>DOMから通知オブジェクトを生成</td></tr>
+    <tr><td><code>CreateToastNotifier($appId)</code></td><td>通知を発行するアプリを指定（後述）</td></tr>
+    <tr><td><code>.Show($toast)</code></td><td>通知を表示!</td></tr>
+  </table>
+</div>
+
+<h3>トースト XML のスキーマ</h3>
+
+<div class="concept">
+  トースト通知の見た目と挙動はすべて XML で定義する。Microsoft の<strong>トーストスキーマ</strong>に従う。主な要素:
+</div>
+
+<pre><code>&lt;toast&gt;                          &lt;!-- ルート要素 --&gt;
+  &lt;visual&gt;                       &lt;!-- 見た目の定義 --&gt;
+    &lt;binding template='ToastGeneric'&gt;
+      &lt;text&gt;1行目（太字タイトル）&lt;/text&gt;
+      &lt;text&gt;2行目（本文）&lt;/text&gt;
+      &lt;text&gt;3行目（補足、小さめ）&lt;/text&gt;
+    &lt;/binding&gt;
+  &lt;/visual&gt;
+  &lt;audio silent='true'/&gt;         &lt;!-- 無音にする。省略すると既定音が鳴る --&gt;
+  &lt;!-- &lt;audio src='ms-winsoundevent:Notification.Default'/&gt;  音を鳴らす場合 --&gt;
+&lt;/toast&gt;</code></pre>
+
+<!-- ===== 5 ===== -->
+<h2 id="sec5">5. なぜ AppID が必要なのか</h2>
+
+<div class="card">
+  <p>Windows のトースト通知は「どのアプリが出したか」を必ず紐づける。UWP アプリなら自動的に設定されるが、PowerShell スクリプトから出す場合は<strong>手動で既存アプリの AppID を借りる</strong>必要がある。</p>
+</div>
+
+<pre><code># PowerShell 自身の AppID（これを使うのが最も安全）
+{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\WindowsPowerShell\v1.0\powershell.exe</code></pre>
+
+<p>この文字列は PowerShell の「AppUserModelID」で、Windows のスタートメニューに登録されたアプリの識別子。通知センターではこの ID に基づいて「Windows PowerShell からの通知」と表示される。</p>
+
+<div class="warn">
+  <strong>AppID を省略 or 適当な文字列にすると</strong>: 通知が表示されないか、通知センターに残らない。先ほど <code>'Claude Code'</code> という架空の AppID を指定して通知が消えたのはこれが原因。
+</div>
+
+<div class="concept">
+  <strong>AppID を調べる方法</strong><br>
+  <code>Get-StartApps</code> コマンドで Windows に登録されたアプリ一覧と AppID が見れる。カスタム AppID を登録する方法もあるがレジストリ操作が必要で、通常は PowerShell の AppID を借りるのが手軽。
+</div>
+
+<!-- ===== 6 ===== -->
+<h2 id="sec6">6. シェルスクリプト化して使い回す</h2>
+
+<h3>汎用通知スクリプト</h3>
+
+<pre><code>#!/bin/bash
+# notify.sh — WSL から Windows 無音トースト通知を送る
+# 使い方: ./notify.sh "タイトル" "メッセージ"
+
+TITLE="${1:-通知}"
+MSG="${2:-完了しました}"
+
+powershell.exe -Command "
+[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+[Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime] | Out-Null
+
+\$xml = @\"
+&lt;toast&gt;
+  &lt;visual&gt;
+    &lt;binding template='ToastGeneric'&gt;
+      &lt;text&gt;$TITLE&lt;/text&gt;
+      &lt;text&gt;$MSG&lt;/text&gt;
+    &lt;/binding&gt;
+  &lt;/visual&gt;
+  &lt;audio silent='true'/&gt;
+&lt;/toast&gt;
+\"@
+
+\\\$doc = New-Object Windows.Data.Xml.Dom.XmlDocument
+\\\$doc.LoadXml(\\\$xml)
+\\\$toast = [Windows.UI.Notifications.ToastNotification]::new(\\\$doc)
+\\\$appId = '{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\WindowsPowerShell\v1.0\powershell.exe'
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier(\\\$appId).Show(\\\$toast)
+"</code></pre>
+
+<pre><code># 使い方
+chmod +x notify.sh
+./notify.sh "Claude Code" "ビルド完了"
+./notify.sh "テスト" "全件パス ✓"</code></pre>
+
+<!-- ===== 7 ===== -->
+<h2 id="sec7">7. Claude Code のフックに組み込む</h2>
+
+<div class="concept">
+  <strong>Claude Code のフック（Hooks）とは</strong><br>
+  Claude Code はツール呼び出し等のイベント時にシェルコマンドを自動実行できる。<code>.claude/settings.json</code> に定義する。これを使えば「タスク完了時に自動で通知」が実現できる。
+</div>
+
+<h3>設定例: Notification Hook</h3>
+
+<pre><code>// .claude/settings.json
+{
+  "hooks": {
+    "notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/notify.sh \"Claude Code\" \"$CLAUDE_NOTIFICATION_TITLE\""
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+<div class="card">
+  <h3>フックの仕組み</h3>
+  <ol>
+    <li>Claude Code がバックグラウンドタスクを完了すると <code>notification</code> イベントが発火</li>
+    <li>設定されたコマンド（notify.sh）が自動実行される</li>
+    <li>Windows 側にトースト通知が飛ぶ（無音）</li>
+  </ol>
+  <p>これにより、指示を投げて別の作業をしていても、完了が分かる。</p>
+</div>
+
+<!-- ===== 8 ===== -->
+<h2 id="sec8">8. トラブルシューティング</h2>
+
+<table>
+  <tr><th>症状</th><th>原因</th><th>対処</th></tr>
+  <tr><td>通知が表示されない</td><td>AppID が無効</td><td>PowerShell の GUID AppID を使う（上記参照）</td></tr>
+  <tr><td>音が鳴る</td><td><code>NotifyIcon</code> 方式を使っている</td><td>WinRT Toast API に切り替える</td></tr>
+  <tr><td><code>powershell.exe</code> が見つからない</td><td>WSL の PATH に Windows パスが含まれていない</td><td><code>/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe</code> をフルパスで指定</td></tr>
+  <tr><td>WinRT 型のロードエラー</td><td>PowerShell 5.1 以前 or .NET ランタイム不足</td><td><code>pwsh.exe</code>（PowerShell 7）は WinRT 非対応の場合あり。<code>powershell.exe</code>（5.1）を使う</td></tr>
+  <tr><td>通知が一瞬で消える</td><td>Windows の集中モード / 通知設定</td><td>設定 → システム → 通知 → PowerShell の通知を許可</td></tr>
+  <tr><td>XML パースエラー</td><td>ヒアストリング内の変数展開 or エスケープ</td><td>PowerShell の <code>@'...'@</code>（シングルクォート）は変数展開しない。Bash 経由の場合はエスケープに注意</td></tr>
+</table>
+
+<div class="success">
+  <strong>まとめ</strong>: WSL → Windows 通知は「<code>powershell.exe</code> で WinRT Toast API を叩く」のが正解。<code>&lt;audio silent='true'/&gt;</code> で確実に無音にでき、AppID に PowerShell の GUID を使えば通知センターにも残る。シェルスクリプト化すれば任意の CLI ツールから <code>./notify.sh "タイトル" "完了"</code> で呼べる。
+</div>
+
+</div>
+</body>
+</html>
