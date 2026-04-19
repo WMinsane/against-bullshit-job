@@ -603,7 +603,6 @@
         <div class="breath-phase" id="breathPhase">タップして呼吸エクササイズ</div>
         <div class="breath-label">4-7-8 呼吸法（副交感神経活性化）</div>
       </div>
-      <button class="btn-ref" onclick="openRefLibrary()" style="margin-top:0.4rem;">参考資料ライブラリ</button>
       <div style="display:flex; gap:0.3rem; margin-top:0.4rem;">
         <button class="btn-ref" onclick="exportJSON()" style="flex:1; font-size:0.7rem; padding:0.4rem;">エクスポート</button>
         <button class="btn-ref" onclick="document.getElementById('importFile').click()" style="flex:1; font-size:0.7rem; padding:0.4rem;">インポート</button>
@@ -700,6 +699,18 @@
             <div class="tc-title">セルフ治療のよくある間違い</div>
             <div class="tc-desc">安全行動の維持、思考記録だけ、耐えるだけのエクスポージャー等</div>
             <div class="tc-evidence">8つの典型的な落とし穴をチェック</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('usage_guide')">
+            <div class="tc-icon">&#x1F4CB;</div>
+            <div class="tc-title">この日記の使い方ガイド</div>
+            <div class="tc-desc">Week 1-2から12週間のステップバイステップ実践スケジュール</div>
+            <div class="tc-evidence">初心者向け / 何から始めればいいか迷ったらここ</div>
+          </div>
+          <div class="technique-card" onclick="openTechDetail('evidence_books')">
+            <div class="tc-icon">&#x1F4DA;</div>
+            <div class="tc-title">エビデンス・書籍・公的資料</div>
+            <div class="tc-desc">各技法の根拠論文、推奨書籍、診療ガイドラインへのリンク集</div>
+            <div class="tc-evidence">出典を確認したい時に</div>
           </div>
         </div>
       </div>
@@ -876,383 +887,6 @@
   </div>
 </div>
 
-<!-- Reference Library Modal -->
-<div class="ref-overlay" id="refOverlay" onclick="if(event.target===this)closeRefLibrary()">
-  <div class="ref-modal" style="max-width:900px;">
-    <h2>
-      SAD セルフ治療ナレッジベース
-      <button class="ref-close" onclick="closeRefLibrary()">&#x2715;</button>
-    </h2>
-    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">
-      このライブラリは「概要紹介」ではなく、<strong>実際に自分で実践できるレベル</strong>まで手順を記載しています。<br>
-      すべてエビデンスに基づく技法です。出典を明記しているので、原典にも当たれます。
-    </p>
-
-    <!-- ===== 1. 行動実験 ===== -->
-    <h3>1. 行動実験（Behavioral Experiments）— 最重要技法</h3>
-    <div class="ref-concept">
-      <strong>なぜ思考記録より重要なのか</strong><br>
-      思考記録は「頭で理解する」技法。行動実験は「体験で学ぶ」技法。SADでは「頭では分かっているが怖い」状態が多く、体験による学習が圧倒的に有効。Clark & Wells (1995) のモデルでは行動実験が治療の中核に位置づけられている。
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">実施手順（5ステップ）</div>
-      <span class="ref-tag ref-tag-technique">実践プロトコル</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        <strong>Step 1 — 予測を明確化する</strong><br>
-        「何が起こると思うか」を具体的・測定可能な形に。<br>
-        悪い例: 「うまくいかない気がする」<br>
-        良い例: 「会議で発言したら、10人中8人が変な顔をする」（確信度: 80%）<br><br>
-        <strong>Step 2 — 安全行動を特定する</strong><br>
-        普段その場面で無意識にやっている安全行動を書き出す。「メモを見る」「早口で終わらせる」「目を合わせない」など。<br><br>
-        <strong>Step 3 — 実験を設計する</strong><br>
-        安全行動を<strong>意図的に外して</strong>行動する。注意を自分の内面ではなく外部（相手の表情、会話の内容）に向ける。<br><br>
-        <strong>Step 4 — 実行して観察する</strong><br>
-        実行中は「自分がどう見えるか」ではなく「相手が実際にどう反応しているか」を観察する。これがClarkモデルの「注意の外部シフト」。<br><br>
-        <strong>Step 5 — 予測 vs 現実を比較する</strong><br>
-        「予測: 8人が変な顔をする → 現実: 0人。1人は頷いていた」<br>
-        この<strong>期待違反（Expectancy Violation）</strong>が学習の本体。
-      </div>
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">SAD向け行動実験の具体例</div>
-      <span class="ref-tag ref-tag-technique">実践例</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        <strong>意図的な失敗実験</strong>: わざと言い間違える、飲み物をこぼす → 壊滅的結果が起きないことを体験する<br>
-        <strong>調査型実験</strong>: 信頼できる人に「私が緊張してるの気づく？」と聞いてみる<br>
-        <strong>注意実験</strong>: 同じプレゼンを「自分に注意を向ける」条件と「聴衆に注意を向ける」条件で行い、不安レベルを比較する<br>
-        <strong>安全行動除去実験</strong>: いつもの安全行動あり/なしの2条件でパフォーマンスを比較する<br><br>
-        出典: <a href="https://www.mentalclinic.com/treatment/p6619/" target="_blank">あらたまこころのクリニック — 行動実験</a>
-      </div>
-    </div>
-    <div class="ref-concept">
-      <strong>よくある間違い: 「耐える」エクスポージャー</strong><br>
-      従来の「不安に慣れるまで耐える」習慣化モデルは古い。Craske et al. (2014) の<strong>抑制学習モデル</strong>では、「不安が下がること」ではなく「予測が外れること」が治療効果の本体。不安が残っていても、予測が外れた体験があれば学習は成立する。だから「70%の準備で実行」で十分。
-    </div>
-
-    <!-- ===== 2. 安全行動 ===== -->
-    <h3>2. 安全行動の認識と除去 — 不安の維持装置を外す</h3>
-    <div class="ref-concept">
-      <strong>なぜ安全行動が問題なのか</strong><br>
-      安全行動は「杖」のようなもの。一時的に不安を下げるが、使い続けると「杖なしでは歩けない」と信じ込む。さらに「心配していたことが実際には起こらない」ことに気づけなくなる。結果、不安はむしろ強化される。（<a href="https://www.mentalclinic.com/disease/p560/" target="_blank">あらたまこころのクリニック</a>）
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">SAD安全行動チェックリスト（網羅版）</div>
-      <span class="ref-tag ref-tag-technique">セルフチェック</span>
-      <div class="ref-desc" style="line-height:2.0;">
-        <strong>【回避系】</strong> 目を合わせない / 早口で終わらせる / 電話を避けてチャット / 端・後ろに座る / 早く帰る / 質問しない / 意見を言わない<br>
-        <strong>【カモフラージュ系】</strong> 完璧にリハーサルする / メモを持ち歩く / 飲酒して参加 / スマホで「忙しいフリ」/ 汗が目立たない服 / 愛想笑いで壁を作る / 相手に質問し続けて自分の話を避ける<br>
-        <strong>【身体制御系】</strong> 手を握りしめる / 腕を組む（震えを隠す）/ 冷たい飲み物を持つ / 体に力を入れて押さえる<br>
-        <strong>【認知的安全行動】</strong> 会話前に全セリフを考える / 会話中に「次に何を言うか」を考え続ける（→注意が内向きになる）/ 自分の見え方を常時モニタリング / 過度な謝罪（「つまらない話ですみません」）<br><br>
-        <em>重要: 深呼吸やリラクゼーションも「不安を感じてはいけない」というメッセージを強化する安全行動として機能することがある。ACTの視点では、不安を「管理する」のではなく「持ったまま行動する」ことが目標。</em>
-      </div>
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">安全行動の外し方（3ステップ）</div>
-      <span class="ref-tag ref-tag-technique">実践プロトコル</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        <strong>Step 1</strong>: 上のリストから自分の安全行動にチェック。各項目に「手放す怖さ」を0-100で点数づけ。<br>
-        <strong>Step 2</strong>: 安全行動あり/なしを交互に試し、結果を比較する行動実験を行う。「安全行動がなくても大丈夫だった」体験を蓄積する。<br>
-        <strong>Step 3</strong>: 毎回同じものを外すのではなく、<strong>変動的に</strong>（毎回違うものを落とす）外すのが効果的（Craske 2014 抑制学習モデル）。
-      </div>
-    </div>
-
-    <!-- ===== 3. ビデオフィードバック ===== -->
-    <h3>3. ビデオフィードバック — 歪んだ自己イメージを直接修正する</h3>
-    <div class="ref-concept">
-      <strong>なぜ効くのか</strong><br>
-      SADでは「自分はひどく緊張して見える」「顔が真っ赤だ」「声が震えている」という歪んだ自己イメージを持つ。しかし研究では、<strong>98%の患者が「実際の映像は予測よりずっとマシだった」</strong>と報告している（Warnock-Parkes et al., 2017, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5627505/" target="_blank">PMC</a>）。スマホ1台で自宅実施可能。
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">自宅で実施するビデオフィードバック（5フェーズ）</div>
-      <span class="ref-tag ref-tag-technique">実践プロトコル</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        <strong>フェーズ1 — 予測を書き出す</strong><br>
-        録画する前に、「自分はどう見えると思うか」を具体的に予測してスコアリングする。<br>
-        例:「不安そうに見える度: 85/100」「声の震え: 70/100」「赤面の目立ち度: 90/100」<br><br>
-
-        <strong>フェーズ2 — 録画する</strong><br>
-        30秒〜1分の自己紹介や独り言をスマホで録画。カメラは正面やや離れた位置に。自然な角度で全体が映るように。<br><br>
-
-        <strong>フェーズ3 — 観察者の視点で見る</strong><br>
-        <em>ここが最重要</em>。自分を批判する目ではなく、「知らない人のカフェでの会話を眺めるように」見る。<br>
-        初回は音をミュートにして30秒だけ見る（自己批判が起動するのを防ぐ）。<br>
-        「この人は緊張しているように見えるか？」と第三者の目で判断する。<br><br>
-
-        <strong>フェーズ4 — 予測と実際を比較する</strong><br>
-        視聴後に同じ項目を再スコアリング。予測と実際のギャップを確認する。<br>
-        例:「予測: 不安そう85 → 実際: 30」「予測: 赤面90 → 実際: ほぼ分からない」<br><br>
-
-        <strong>フェーズ5 — 学びを言語化する</strong><br>
-        「不安を80%感じていたが、映像では分からなかった。感情と外見は別物だ」<br>
-        この文を日記のStep8（行動実験の結果）に記録する。<br><br>
-
-        <em>可能であれば、信頼できる友人に映像を見せて「この人はどう見えるか」と率直な感想をもらう。他者の評価は自己評価よりほぼ常にポジティブ。</em>
-      </div>
-    </div>
-
-    <!-- ===== 4. ACT 脱フュージョン ===== -->
-    <h3>4. ACT（アクセプタンス&コミットメント・セラピー）— 不安を持ったまま動く</h3>
-    <div class="ref-concept">
-      <strong>CBTとの違い</strong><br>
-      CBTは不安な考えを「変える」。ACTは不安な考えを「持ったまま、価値に基づいて行動する」。<br>
-      Craske et al. (2014) のメタ分析ではCBTと<strong>同等の効果</strong>が確認されており、特に完璧主義傾向が強い人、回避が根深い人にはACTが有効な場合がある。
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">脱フュージョン（Cognitive Defusion）— 思考と距離を取る6つの技法</div>
-      <span class="ref-tag ref-tag-technique">実践エクササイズ</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        <strong>1. 「〜という考えを持っている」フォーマット</strong><br>
-        「私はダメだ」→「私は『ダメだ』という考えを持っている」→「私は『ダメだ』という考えをただ今持っていることに気づいている」<br>
-        映画館の最前列から最後列に移動するイメージ。考えは変わらないが、距離が変わる。<br><br>
-
-        <strong>2. ミルクミルクエクササイズ</strong><br>
-        不安な言葉（「バカ」「恥」「失敗」等）を45秒間、早口で繰り返す。すると言葉が単なる音の連続に変わり、感情的インパクトが消える。（Hayes et al., 1999 の原典実験で効果確認済み）<br><br>
-
-        <strong>3. 歌にして歌う</strong><br>
-        「どうせ誰にも認められない」をハッピーバースデーのメロディで歌う。馬鹿馬鹿しいほど効果的。考えの「重さ」が消えて、ただの言葉に戻る。<br><br>
-
-        <strong>4. 「ありがとう、脳」</strong><br>
-        不安な考えが浮かんだら「ありがとう、脳！また心配してくれてるんだね」と心の中で返す。抑圧でも同意でもなく、ただ受け取る。<br><br>
-
-        <strong>5. スローモーション</strong><br>
-        不安な考えを、壊れたレコードプレーヤーのように超スローで再生するイメージ。「ど・う・せ・だ・め・だ」— 音が引き伸ばされると意味が解体される。<br><br>
-
-        <strong>6. 変な声で言う</strong><br>
-        不安な思考をアニメキャラの声で言い直す。思考の「権威」が崩れ、真剣に取り合う必要がなくなる。<br><br>
-
-        出典: <a href="https://cogbtherapy.com/cbt-blog/cognitive-defusion-techniques-and-exercises" target="_blank">CogBTherapy — Defusion Techniques</a>
-      </div>
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">価値の明確化 — 「不安がなかったら何をするか」</div>
-      <span class="ref-tag ref-tag-technique">ワーク</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        ACTの核心は「不安を減らす」ことではなく「大切なことのために動く」こと。<br><br>
-        <strong>人生のコンパスワーク</strong>: 人間関係・仕事・趣味・健康の4領域で「本当に大切なこと」を書き出す。<br>
-        <strong>問い</strong>: 「もし不安が完全になくなったら、明日何をするか？」— その答えが「価値」。<br>
-        <strong>コミットされた行動</strong>: 価値に基づく小さな行動を毎日1つ。「不安が減ったから行動する」ではなく「大切だから不安があっても行動する」。<br><br>
-        出典: <a href="https://positivepsychology.com/act-worksheets/" target="_blank">PositivePsychology.com — ACT Worksheets</a>
-      </div>
-    </div>
-
-    <!-- ===== 5. セルフコンパッション ===== -->
-    <h3>5. セルフコンパッション（CFT）— 自己批判から思いやりへ</h3>
-    <div class="ref-concept">
-      <strong>なぜSADにCFTが有効なのか</strong><br>
-      SADの中核感情は<strong>恥（shame）</strong>。CBTで認知が変わっても「頭では分かるが心が追いつかない」場合、自己批判が邪魔をしている。CFT（Gilbert, 2014）は恥と自己批判に直接アプローチする。Werner et al. (2012) でSADの自己批判と恥の有意な低減が確認されている。
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">実践できるセルフコンパッション・エクササイズ</div>
-      <span class="ref-tag ref-tag-technique">実践エクササイズ</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        <strong>1. 鎮静リズム呼吸（Soothing Rhythm Breathing）</strong><br>
-        吸気4秒・呼気4秒を均等に。呼吸に「温かさ」のイメージを乗せる。CFTの全エクササイズの土台として毎回最初に2分行う。副交感神経を活性化し、脅威システムを鎮める。<br><br>
-
-        <strong>2. コンパッショネイト・レター（自分への手紙）</strong><br>
-        社交場面での失敗について、「最も思いやりのある親友」の視点から自分に手紙を書く。<br>
-        3要素を含めること: <br>
-        ・共通の人間性（「誰でも恥ずかしい経験はある」）<br>
-        ・マインドフルネス（「つらかったんだね。それは事実」）<br>
-        ・自己への優しさ（「あなたは十分やっている。それで大丈夫」）<br><br>
-
-        <strong>3. ダブルスタンダード技法</strong><br>
-        「もし親友が同じ失敗をしたら、自分は何と言うか？」を書き出す。そして、「なぜ自分にだけそれを言わないのか？」と問う。ほとんどの場合、他人には優しいのに自分には残酷であることに気づく。<br><br>
-
-        <strong>4. 思いやりのある自分（Compassionate Self）</strong><br>
-        理想的な「温かさ・強さ・知恵を持つ自分」をイメージする。困難な場面で「この思いやりある自分ならどうするか」を問う。<br><br>
-
-        出典: <a href="https://www.the-melon.com/blog/blog/selfcompassion-7236/" target="_blank">MELON — セルフコンパッション</a>、<a href="https://hisato.jp/self-compassion/" target="_blank">寿心理オフィス</a>
-      </div>
-    </div>
-
-    <!-- ===== 6. メタ認知療法と反芻制御 ===== -->
-    <h3>6. 事後反芻の制御（メタ認知療法）— 不安の「燃料」を断つ</h3>
-    <div class="ref-concept">
-      <strong>事後反芻とは</strong><br>
-      社交場面の後に「あの時ああ言えばよかった」「あの表情は嫌われたサインでは」と何時間も繰り返し考えること。Wells (2009) のメタ認知療法では、これを「有害な対処戦略」と再定義する。反芻は分析ではない。分析のふりをした不安の増幅装置。
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">反芻を断ち切る4つの技法</div>
-      <span class="ref-tag ref-tag-technique">実践プロトコル</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        <strong>1. 心配の先送り（Worry Postponement）</strong><br>
-        反芻が始まったら「今は考えない。19時からの15分間で考える」と決める。その時間になったら考えてよい（多くの場合、もう気にならなくなっている）。<br><br>
-
-        <strong>2. メタ認知的ラベリング</strong><br>
-        「これは反芻だ。分析ではない。有害な習慣であり、問題解決ではない」と心の中で宣言する。反芻を「有用な振り返り」と信じている限り、止められない。<br><br>
-
-        <strong>3. 注意の外部シフト</strong><br>
-        反芻に気づいたら、5-4-3-2-1グラウンディング（見えるもの5つ、聞こえるもの4つ、触れるもの3つ、匂い2つ、味1つ）で注意を外部に向ける。<br><br>
-
-        <strong>4. 行動実験で検証する</strong><br>
-        条件A: 社交場面の後に30分間反芻する → 条件B: 反芻を止める → 翌日の気分を比較する。ほぼ例外なく、反芻しない方が気分が良いことが分かる。
-      </div>
-    </div>
-
-    <!-- ===== 7. 注意訓練 ===== -->
-    <h3>7. 注意訓練技法（ATT）— 自己注目を解除する</h3>
-    <div class="ref-card">
-      <div class="ref-title">ATTの実施プロトコル（Wells, 2009）— 1日2回×12分</div>
-      <span class="ref-tag ref-tag-technique">実践プロトコル</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        SADの中核的維持因子は<strong>自己焦点的注意</strong>。「自分がどう見えるか」に注意が向くと不安が増幅する。ATTは注意のコントロール能力自体を鍛える。<br><br>
-
-        <strong>準備</strong>: 6つの異なる音源を用意する（時計の音、外の車、エアコン、鳥、音楽、テレビ等）。<br><br>
-        <strong>Phase 1 — 選択的注意（6分）</strong><br>
-        1つの音に集中 → 30秒ごとに別の音に切り替え。他の音が聞こえても戻す。<br><br>
-        <strong>Phase 2 — 注意切り替え（6分）</strong><br>
-        複数の音の間で素早く注意を切り替える。5秒ごとに切り替え先を変える。<br><br>
-        <strong>社会場面での応用（Task Concentration Training）</strong><br>
-        会話中に「自分がどう見えるか」ではなく「相手が何を言っているか」「相手の目の色」「声のトーン」にタスクとして注意を向ける。（Bögels & Mansell, 2004）
-      </div>
-    </div>
-
-    <!-- ===== 8. エビデンスサマリー ===== -->
-    <h3>8. エビデンス・サマリー — 何がどの程度効くか</h3>
-    <div class="ref-card">
-      <div class="ref-title">2024-2025年メタ分析の知見</div>
-      <span class="ref-tag ref-tag-paper">研究エビデンス</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        <strong>CBT全般</strong>: SAD治療で最も推奨される第一選択。効果量大（<a href="https://www.tandfonline.com/doi/full/10.1080/00050067.2024.2356804" target="_blank">2024年メタ分析</a>）<br>
-        <strong>ガイド付きセルフヘルプ</strong>: 効果量 g=0.825。対面療法に近い効果（同上）<br>
-        <strong>完全セルフガイド</strong>: 効果量 g=0.271。ガイド付きより低いが有意な改善あり<br>
-        <strong>インターネットCBT</strong>: 効果量 g=0.95。対面と同等に近い（<a href="https://www.sciencedirect.com/science/article/abs/pii/S0887618523001251" target="_blank">2023年メタ分析</a>）<br>
-        <strong>ACT vs CBT</strong>: 同等の効果。回避が強いケースではACT優位の可能性<br>
-        <strong>治療の成功率</strong>: 薬物+心理療法で約1年治療すると<strong>約80%が治癒</strong>（<a href="https://fukuoka-mental-clinic.jp/column/sad/social-anxiety-disorder-cure-method/" target="_blank">福岡天神メンタルクリニック</a>）<br><br>
-        <em>このセルフケア日記はガイド付きセルフヘルプ（Claude APIによるフィードバック）+ 構造化プログラムの組み合わせ。エビデンス的には最も効果的なセルフヘルプ形態に該当する。</em>
-      </div>
-    </div>
-
-    <!-- ===== 9. よくある間違い ===== -->
-    <h3>9. セルフ治療の8つの落とし穴</h3>
-    <div class="ref-card">
-      <div class="ref-title">やりがちな間違いと対策</div>
-      <span class="ref-tag ref-tag-technique">セルフチェック</span>
-      <div class="ref-desc" style="line-height:2.0;">
-        <strong>1. 安全行動を維持したままエクスポージャー</strong><br>
-        → カフェに行くがスマホを見続ける → 学習が起きない。安全行動を外すことがセット。<br><br>
-        <strong>2. 思考記録だけで行動が変わらない</strong><br>
-        → 「合理的な考え」を書けても感情的に信じられない → 行動実験で「体験」する。<br><br>
-        <strong>3. エクスポージャーが「耐える」になっている</strong><br>
-        → 仮説検証型に切り替える。目標は「不安が下がること」ではなく「予測が外れること」。<br><br>
-        <strong>4. 事後反芻を放置している</strong><br>
-        → 放置すると回復を完全に阻害する。メタ認知的に「これは分析ではなく反芻だ」と認識する。<br><br>
-        <strong>5. 微細な回避を認識しない</strong><br>
-        → 明白な回避（行かない）は気づきやすいが、「早く帰る」「端に座る」「飲酒して参加」も回避。<br><br>
-        <strong>6. 段階的すぎて進まない</strong><br>
-        → 「完璧に準備ができてから次のステップ」は永遠に来ない。70%の準備で実行。<br><br>
-        <strong>7. 自己批判をモチベーションにしている</strong><br>
-        → 「こんなこともできないなんてダメだ」→ 恥 → 回避 → 悪化。CFTのアプローチで勇気を認める。<br><br>
-        <strong>8. 般化の失敗</strong><br>
-        → 1つの場面でうまくいっても他の場面に広がらない → 異なる場所・相手・状況で繰り返す（深い消去）。
-      </div>
-    </div>
-
-    <!-- ===== 体験談 ===== -->
-    <h3>10. 体験談 — 30代営業職のSAD克服</h3>
-    <div class="ref-card">
-      <div class="ref-title">厚生労働省「こころの耳」掲載体験記より</div>
-      <span class="ref-tag ref-tag-web">体験談</span>
-      <div class="ref-desc" style="line-height:1.8;">
-        中学時代から自意識過剰が強まり、授業中に指されると緊張でどもり、字を書いているところを見られると手が止まった。30代で営業職の責任が増し、プレゼンで赤面したまま固まり何も話せなくなった。<br><br>
-        治療は薬物療法とカウンセリングの併用。カウンセラーとの間で「ネガティブな考え方のクセ」を認識し、結婚式出席を事前にシミュレーション訓練。当日、思い切って出席すると不安なく楽しめた。この成功体験が仕事復帰のきっかけになった。<br><br>
-        本人の言葉:「まず専門家の門を叩くこと。そして少しずつ行動すること。」<br><br>
-        <a href="https://kokoro.mhlw.go.jp/over/875/" target="_blank">体験記全文を読む（厚労省こころの耳）&rarr;</a>
-      </div>
-    </div>
-
-    <!-- ===== 書籍 ===== -->
-    <h3>11. 推薦書籍</h3>
-    <h4>日本語</h4>
-    <div class="ref-card">
-      <div class="ref-title">自分で治す「社交不安症」</div>
-      <div class="ref-author">清水栄司 著 / 法研</div>
-      <span class="ref-tag ref-tag-book">書籍</span><span class="ref-tag ref-tag-book">セルフヘルプ</span>
-      <div class="ref-desc">千葉大学SADチーム監修。先生と患者のやりとり形式で実際の治療ステップを再現。独力でCBTを進めたい人にとって最も実践的な1冊。</div>
-      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">💰 ¥737〜 / Kindle版あり ｜ ⭐ 4.1（96件）</div>
-      <a href="https://www.amazon.co.jp/dp/4865130802" target="_blank">Amazonで見る &rarr;</a>
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">はじめての認知療法</div>
-      <div class="ref-author">大野裕 著 / 講談社現代新書</div>
-      <span class="ref-tag ref-tag-book">書籍</span>
-      <div class="ref-desc">日本のCBT第一人者。コラム法（7つのコラム）を平易に解説。この日記のStep3〜6はコラム法がベース。</div>
-      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">💰 ¥1,056 / Kindle ¥385 ｜ ⭐ 3.9（132件）</div>
-      <a href="https://www.amazon.co.jp/dp/4062881055" target="_blank">Amazonで見る &rarr;</a>
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">こころが晴れるノート</div>
-      <div class="ref-author">大野裕 著 / 創元社</div>
-      <span class="ref-tag ref-tag-book">書籍</span><span class="ref-tag ref-tag-book">ワークブック</span>
-      <div class="ref-desc">書き込み式CBTワークブック。この日記のデジタル版元ネタ。</div>
-      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">💰 ¥1,320</div>
-      <a href="https://www.amazon.co.jp/dp/442211283X" target="_blank">Amazonで見る &rarr;</a>
-    </div>
-    <h4>英語（国際的定番）</h4>
-    <div class="ref-card">
-      <div class="ref-title">Overcoming Social Anxiety and Shyness (Gillian Butler)</div>
-      <span class="ref-tag ref-tag-book">書籍</span><span class="ref-tag ref-tag-en">英語</span>
-      <div class="ref-desc">英国NHS推薦のSADセルフヘルプ定番。Clark & Wellsモデルに基づく実践ワーク満載。</div>
-      <div style="margin-top:0.4rem;font-size:0.75rem;color:var(--muted);">⭐ 4.6（295件）</div>
-      <a href="https://www.amazon.co.jp/dp/0465005454" target="_blank">Amazonで見る &rarr;</a>
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">The Happiness Trap (Russ Harris)</div>
-      <span class="ref-tag ref-tag-book">書籍</span><span class="ref-tag ref-tag-en">英語</span>
-      <div class="ref-desc">ACT入門の決定版。脱フュージョン、価値の明確化、コミットされた行動を平易に解説。SAD以外にも応用可能。</div>
-      <a href="https://www.amazon.co.jp/s?k=The+Happiness+Trap+Russ+Harris" target="_blank">Amazonで検索 &rarr;</a>
-    </div>
-
-    <!-- ===== 公的資料 ===== -->
-    <h3>12. 公的資料・ガイドライン</h3>
-    <div class="ref-card">
-      <div class="ref-title">社交不安障害の認知行動療法マニュアル（治療者用）</div>
-      <div class="ref-author">吉永尚紀・清水栄司 / 厚生労働省</div>
-      <span class="ref-tag ref-tag-pdf">PDF</span><span class="ref-tag ref-tag-paper">公式</span>
-      <div class="ref-desc">Clark & Wellsモデルに基づく14回セッションの全プロトコル。治療者が何を意図しているか理解できる。</div>
-      <a href="https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000113841.pdf" target="_blank">PDFを開く &rarr;</a>
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">Self-Study Assisted Cognitive Therapy for SAD (Oxford CAADAT)</div>
-      <div class="ref-author">Oxford Centre for Anxiety Disorders and Trauma</div>
-      <span class="ref-tag ref-tag-pdf">PDF</span><span class="ref-tag ref-tag-en">英語</span>
-      <div class="ref-desc">Clark & Wellsモデルに基づくセルフガイドCTの完全マニュアル。セルフで治療する人向けに設計された公式ガイド。</div>
-      <a href="https://oxcadatresources.com/wp-content/uploads/2021/01/Self-StudyAssistedCTGuide30_9_2020.pdf" target="_blank">PDFを開く &rarr;</a>
-    </div>
-    <div class="ref-card">
-      <div class="ref-title">社交不安症の診療ガイドライン</div>
-      <div class="ref-author">日本不安症学会 / 日本神経精神薬理学会（2021年）</div>
-      <span class="ref-tag ref-tag-pdf">PDF</span><span class="ref-tag ref-tag-paper">ガイドライン</span>
-      <div class="ref-desc">薬物療法・心理療法の両面からSADの標準治療を定義。</div>
-      <a href="https://www.jsnp-org.jp/csrinfo/img/sad_guideline.pdf" target="_blank">PDFを開く &rarr;</a>
-    </div>
-
-    <!-- ===== 日記の使い方 ===== -->
-    <h3>13. この日記の使い方ガイド</h3>
-    <div class="ref-concept">
-      <strong>Week 1-2: まず書く習慣をつける</strong><br>
-      完璧に埋める必要はない。「状況」と「不安の予測」だけでも十分。認知のキャッチ（自動思考に気づく）が最初の目標。安全行動リストも作成開始。
-    </div>
-    <div class="ref-concept">
-      <strong>Week 3-4: 行動実験を始める</strong><br>
-      思考記録に留まらず、Step8「行動実験」を使って予測を検証する。安全行動を1つずつ外す実験も。ビデオフィードバックも試す。
-    </div>
-    <div class="ref-concept">
-      <strong>Week 5-8: 技法を広げる</strong><br>
-      ACTの脱フュージョン、CFTのセルフコンパッション、ATTの注意訓練を日常に組み込む。ヘッダーの「セルフケア技法」からClaudeに相談できる。
-    </div>
-    <div class="ref-concept">
-      <strong>Week 9-12: 般化と再発予防</strong><br>
-      異なる場面・相手・状況で行動実験を繰り返す（深い消去）。日記のパターン分析でコアビリーフを特定し、柔軟なルールに書き換えていく。
-    </div>
-    <div class="ref-concept">
-      <strong>常に: Claudeを壁打ち相手に</strong><br>
-      「日記を分析」で歪みの見落としチェック。「行動実験を設計」で次の実験を一緒に考える。「間違いチェック」で落とし穴にハマっていないか確認。ただし最終判断は常に自分。
-    </div>
-
-  </div>
-</div>
-
 <!-- Technique Detail Modal -->
 <div class="tech-overlay" id="techOverlay" onclick="if(event.target===this)closeTechDetail()">
   <div class="tech-modal" id="techModalContent"></div>
@@ -1277,9 +911,6 @@
 <button class="tut-replay-btn" id="tutReplayBtn" onclick="startTutorial()" title="使い方ガイド">&#x2753; 使い方</button>
 
 <script>
-function openRefLibrary() { document.getElementById('refOverlay').classList.add('open'); }
-function closeRefLibrary() { document.getElementById('refOverlay').classList.remove('open'); }
-
 function closeTechDetail() { document.getElementById('techOverlay').classList.remove('open'); }
 
 const TECH_DETAILS = {
@@ -1539,6 +1170,50 @@ common_mistakes: {
       '<div class="tech-step"><span class="tech-step-num">8</span><strong>般化の失敗</strong><br>1つの場面でうまくいっても他に広がらない。<br>対策: 異なる場所・相手・状況で繰り返す（深い消去）。</div>'
     },
     { heading: '使い方', content: '<p>月に1回、このリストを見直して自分が落とし穴にハマっていないか確認する。日記のパターン分析と組み合わせるとさらに効果的。Claudeの「間違いチェック」ボタンでも確認できる。</p>' }
+  ]
+},
+usage_guide: {
+  title: 'この日記の使い方ガイド',
+  when: '初回 / 迷った時',
+  time: '5分（読むだけ）',
+  difficulty: '低',
+  evidence: 'Clark & Wells モデルに基づく段階的プログラム',
+  sections: [
+    { heading: 'Week 1-2: まず書く習慣をつける', content:
+      '<p>完璧に埋める必要はない。<strong>「状況」と「不安の予測」だけでも十分</strong>。認知のキャッチ（自動思考に気づく）が最初の目標。安全行動リストも作成開始。</p>' +
+      '<div class="tech-example">最初は「今日こんなことがあって嫌だった」レベルでOK。書くこと自体が自動思考に気づくトレーニング。</div>' },
+    { heading: 'Week 3-4: 行動実験を始める', content:
+      '<p>思考記録に留まらず、Step8「行動実験」を使って予測を検証する。安全行動を1つずつ外す実験も。ビデオフィードバックも試す。</p>' },
+    { heading: 'Week 5-8: 技法を広げる', content:
+      '<p>ACTの脱フュージョン、CFTのセルフコンパッション、ATTの注意訓練を日常に組み込む。ヘッダーの「セルフケア技法」から各技法の詳細を確認し、Claudeに相談できる。</p>' },
+    { heading: 'Week 9-12: 般化と再発予防', content:
+      '<p>異なる場面・相手・状況で行動実験を繰り返す（深い消去）。日記のパターン分析でコアビリーフを特定し、柔軟なルールに書き換えていく。</p>' },
+    { heading: 'Claudeの活用', content:
+      '<p>「日記を分析」で歪みの見落としチェック。「行動実験を設計」で次の実験を一緒に考える。「間違いチェック」で落とし穴にハマっていないか確認。ただし最終判断は常に自分。</p>' }
+  ]
+},
+evidence_books: {
+  title: 'エビデンス・書籍・公的資料',
+  when: '必要な時に参照',
+  time: '-',
+  difficulty: '-',
+  evidence: '学術論文・臨床ガイドライン',
+  sections: [
+    { heading: 'エビデンスサマリー', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>Clark & Wells (1995)</strong><br>SADの認知モデル。自己注目・安全行動・事後反芻が維持因子。行動実験が治療の中核。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>Craske et al. (2014)</strong><br>抑制学習モデル。「慣れ」ではなく「期待違反の最大化」がエクスポージャーの鍵。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>Wells (2009)</strong><br>メタ認知療法。反芻・心配は有害な対処戦略。注意訓練（ATT）で自己注目を外す。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>Gilbert (2014)</strong><br>コンパッション焦点療法（CFT）。恥と自己批判に直接アプローチ。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>Warnock-Parkes et al. (2017)</strong><br>ビデオフィードバック研究。98%が「実際の映像は予測よりマシ」と報告。</div>' },
+    { heading: '推奨書籍', content:
+      '<div class="tech-step"><strong>「いやな気分よ、さようなら」</strong> — David D. Burns（星和書店）<br>CBTの古典的入門書。認知の歪み10パターンの原典。</div>' +
+      '<div class="tech-step"><strong>「自信がなくても行動すれば自信はあとからついてくる」</strong> — Russ Harris<br>ACT入門。脱フュージョン技法が豊富。</div>' +
+      '<div class="tech-step"><strong>「マインドフル・セルフ・コンパッション ワークブック」</strong> — Kristin Neff<br>CFTの実践ワーク集。</div>' +
+      '<div class="tech-step"><strong>「Social Anxiety Disorder (Oxford Guide)」</strong> — Clark & Wells<br>Clark & Wellsモデルの原典。英語。専門家向け。</div>' },
+    { heading: '公的資料・ガイドライン', content:
+      '<div class="tech-step"><strong>社交不安症の診療ガイドライン</strong><br>日本不安症学会 / 日本神経精神薬理学会（2021年）<br><a href="https://www.jsnp-org.jp/csrinfo/img/sad_guideline.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' +
+      '<div class="tech-step"><strong>NICE Guidelines: Social Anxiety Disorder</strong><br>英国NICE。エビデンスレベル付きの治療推奨。<br><a href="https://www.nice.org.uk/guidance/cg159" target="_blank" style="color:var(--accent2)">NICE CG159 →</a></div>' +
+      '<div class="tech-step"><strong>不安障害についてもっと知る</strong><br>不安障害研究センター（東京大学）<br><a href="https://www.ncnp.go.jp/nimh/behavior/anxiety/" target="_blank" style="color:var(--accent2)">NCNPページ →</a></div>' }
   ]
 }
 };
@@ -2085,12 +1760,6 @@ const TUT_STEPS = [
     title: '5. 呼吸エクササイズ',
     text: 'タップすると4-7-8呼吸法が始まります。不安が強い時にまず呼吸を整えてから日記を書くと効果的です。',
     position: 'right'
-  },
-  {
-    target: '.btn-ref',
-    title: '6. 参考資料ライブラリ',
-    text: '行動実験、安全行動、ビデオFB、ACT、CFT等の詳しいプロトコルとエビデンスをまとめた資料集です。技法の背景を知りたい時に。',
-    position: 'top'
   }
 ];
 
