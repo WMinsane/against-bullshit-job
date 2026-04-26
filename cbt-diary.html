@@ -535,20 +535,63 @@
   .tech-badge-time { background: rgba(141,189,141,0.15); color: var(--accent3); }
   .tech-badge-difficulty { background: rgba(224,168,124,0.15); color: var(--accent4); }
   .tech-badge-evidence { background: rgba(158,138,118,0.15); color: var(--accent); }
-  .tech-section { margin-bottom: 1.3rem; }
-  .tech-section h3 { font-size: 0.9rem; color: var(--accent2); margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
-  .tech-section p, .tech-section li { font-size: 0.82rem; line-height: 1.7; color: var(--text); }
+  .tech-section { margin-bottom: 1.5rem; animation: fadeSlideUp 0.4s ease both; }
+  .tech-section:nth-child(2) { animation-delay: 0.08s; }
+  .tech-section:nth-child(3) { animation-delay: 0.16s; }
+  .tech-section:nth-child(4) { animation-delay: 0.24s; }
+  .tech-section:nth-child(5) { animation-delay: 0.32s; }
+  .tech-section:nth-child(6) { animation-delay: 0.40s; }
+  .tech-section h3 { font-size: 0.95rem; color: var(--accent2); margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--border); }
+  .tech-section p, .tech-section li { font-size: 0.84rem; line-height: 1.85; color: var(--text); }
   .tech-section ul { padding-left: 1.2rem; }
-  .tech-section li { margin-bottom: 0.4rem; }
+  .tech-section li { margin-bottom: 0.5rem; }
   .tech-step {
-    background: var(--warm-white); border: 1px solid var(--border); border-radius: 10px;
-    padding: 0.8rem 1rem; margin-bottom: 0.6rem;
+    background: var(--warm-white); border: 1px solid var(--border); border-radius: 12px;
+    padding: 0.9rem 1.1rem; margin-bottom: 0.7rem;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
-  .tech-step-num { display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 0.7rem; text-align: center; line-height: 22px; margin-right: 0.5rem; font-weight: 700; }
-  .tech-example { background: linear-gradient(90deg, rgba(158,138,118,0.06), transparent); border-left: 3px solid var(--accent); padding: 0.7rem 1rem; border-radius: 0 8px 8px 0; margin: 0.5rem 0; font-size: 0.8rem; line-height: 1.6; }
-  .tech-warn { background: rgba(217,112,112,0.06); border-left: 3px solid var(--danger); padding: 0.6rem 1rem; border-radius: 0 8px 8px 0; margin: 0.5rem 0; font-size: 0.78rem; line-height: 1.5; }
-  .tech-btn-counsel { display: inline-block; margin-top: 0.8rem; padding: 0.5rem 1.2rem; border-radius: 20px; background: linear-gradient(135deg, rgba(158,138,118,0.15), rgba(123,181,196,0.15)); border: 1px solid rgba(158,138,118,0.3); color: var(--accent); font-size: 0.78rem; cursor: pointer; transition: all 0.25s; }
-  .tech-btn-counsel:hover { background: linear-gradient(135deg, rgba(158,138,118,0.3), rgba(123,181,196,0.3)); transform: translateY(-1px); }
+  .tech-step:hover { transform: translateX(3px); box-shadow: 0 2px 12px rgba(158,138,118,0.08); }
+  .tech-step-num { display: inline-block; width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 0.72rem; text-align: center; line-height: 24px; margin-right: 0.5rem; font-weight: 700; }
+  .tech-example { background: linear-gradient(90deg, rgba(158,138,118,0.06), transparent); border-left: 3px solid var(--accent); padding: 0.8rem 1.1rem; border-radius: 0 10px 10px 0; margin: 0.7rem 0; font-size: 0.82rem; line-height: 1.7; }
+  .tech-warn { background: rgba(217,112,112,0.06); border-left: 3px solid var(--danger); padding: 0.7rem 1.1rem; border-radius: 0 10px 10px 0; margin: 0.7rem 0; font-size: 0.8rem; line-height: 1.6; }
+  .tech-scenario {
+    background: linear-gradient(135deg, rgba(122,158,142,0.08), rgba(158,138,118,0.06));
+    border: 1px solid rgba(122,158,142,0.2); border-radius: 12px;
+    padding: 1rem 1.2rem; margin: 0.8rem 0; font-size: 0.84rem; line-height: 1.85;
+    position: relative;
+  }
+  .tech-scenario::before { content: '💭'; position: absolute; top: -8px; left: 12px; font-size: 1rem; }
+  .tech-insight {
+    background: linear-gradient(135deg, rgba(196,149,106,0.1), rgba(196,149,106,0.04));
+    border: 1px solid rgba(196,149,106,0.25); border-radius: 12px;
+    padding: 0.9rem 1.2rem; margin: 0.8rem 0; font-size: 0.84rem; line-height: 1.7;
+    position: relative;
+  }
+  .tech-insight::before { content: '✨'; position: absolute; top: -8px; left: 12px; font-size: 1rem; }
+  .tech-quote {
+    background: var(--warm-white); border-radius: 12px;
+    padding: 1rem 1.3rem; margin: 0.8rem 0;
+    font-style: italic; font-size: 0.84rem; line-height: 1.8;
+    border: 1px solid var(--border); position: relative;
+  }
+  .tech-quote::before { content: '"'; position: absolute; top: -4px; left: 10px; font-size: 2.5rem; color: var(--accent); opacity: 0.3; font-style: normal; line-height: 1; }
+  .hl { color: var(--accent4); font-weight: 700; }
+  .hl-green { color: var(--accent2); font-weight: 700; }
+  .hl-soft { color: var(--accent); font-weight: 600; }
+  .tech-book {
+    background: var(--warm-white); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1rem 1.2rem; margin-bottom: 0.8rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .tech-book:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(158,138,118,0.1); }
+  .tech-book-title { font-weight: 700; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.2rem; }
+  .tech-book-author { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.4rem; }
+  .tech-book-desc { font-size: 0.82rem; line-height: 1.7; margin-bottom: 0.4rem; }
+  .tech-book-meta { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.3rem; }
+  .tech-book a { color: var(--accent2); font-size: 0.8rem; font-weight: 600; text-decoration: none; }
+  .tech-book a:hover { text-decoration: underline; }
+  .tech-btn-counsel { display: inline-block; margin-top: 1rem; padding: 0.6rem 1.4rem; border-radius: 24px; background: linear-gradient(135deg, rgba(158,138,118,0.15), rgba(123,181,196,0.15)); border: 1px solid rgba(158,138,118,0.3); color: var(--accent); font-size: 0.8rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .tech-btn-counsel:hover { background: linear-gradient(135deg, rgba(158,138,118,0.3), rgba(123,181,196,0.3)); transform: translateY(-2px) scale(1.03); box-shadow: 0 4px 16px rgba(158,138,118,0.15); }
 
   /* Tutorial overlay */
   .tut-overlay {
@@ -981,202 +1024,229 @@ function closeTechDetail() { document.getElementById('techOverlay').classList.re
 
 const TECH_DETAILS = {
 behavioral_exp: {
-  title: '行動実験（Behavioral Experiments）',
+  title: '行動実験 — 「やってみたら意外と大丈夫だった」を積み重ねる',
   when: 'Week 3〜 / 毎週1-2回',
-  time: '1回30分〜1時間（準備+実行+振り返り）',
-  difficulty: '中〜高（最も重要な技法）',
-  evidence: 'Clark & Wells (1995) / 思考記録より効果が高い',
+  time: '1回30分〜1時間',
+  difficulty: '中〜高（でもいちばん大事）',
+  evidence: 'Clark & Wells (1995) / 全技法の中で最も中核的',
   sections: [
-    { heading: 'なぜいちばん大事なの？', content: '<p>ノートに「大丈夫、大丈夫」と書いても、心は「でも怖い」と言いますよね。行動実験は<strong>「じゃあ実際にやってみよう」</strong>というアプローチ。やってみて「あれ、案外平気だった」を体験するのが、いちばんの薬です。Clark & Wells モデルでも治療の中心に置かれています。</p>' },
-    { heading: '5ステップ手順', content:
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>予測を明確化する</strong><br>「何が起こると思うか」を具体的・測定可能な形に書き出す。確信度も0-100%でスコアリング。</div>' +
-      '<div class="tech-example">悪い例:「うまくいかない気がする」<br>良い例:「会議で発言したら、10人中8人が変な顔をする」（確信度: 80%）</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>安全行動を特定する</strong><br>その場面で無意識にやっている安全行動を書き出す。「メモを見る」「早口で終わらせる」「目を合わせない」等。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span><strong>実験を設計する</strong><br>安全行動を<strong>意図的に外して</strong>行動する計画を立てる。注意は自分の内面ではなく外部（相手の表情、会話の内容）に向ける。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">4</span><strong>実行して観察する</strong><br>実行中は「自分がどう見えるか」ではなく「相手が実際にどう反応しているか」を観察する。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">5</span><strong>予測 vs 現実を比較する</strong><br>この<strong>期待違反（Expectancy Violation）</strong>が学習の本体。日記のStep8に記録する。</div>' +
-      '<div class="tech-example">予測:「8人が変な顔をする」→ 現実:「0人。1人は頷いていた」</div>'
+    { heading: 'ノートに書くだけでは、心は変わらない', content:
+      '<div class="tech-scenario">会議で発言したいけど、怖い。「変なこと言ったらどうしよう」「みんな呆れるかも」。<br>ノートに「大丈夫、合理的に考えればそんなことは起きない」と書いてみる。……でも心は「いや、でもやっぱり怖い」と言い続ける。</div>' +
+      '<p>この「頭ではわかっているけど怖い」問題、実はとても自然なことです。<span class="hl">感情は「体験」でしか本当には変わらない</span>からです。</p>' +
+      '<p>行動実験は、不安な予測を<strong>「仮説」</strong>として扱い、実際に試して確かめるアプローチ。科学者が実験するように、あなた自身の不安を検証します。Clark & Wells モデルでも治療の中心に置かれている、<span class="hl-green">いちばん効果が高い技法</span>です。</p>'
     },
-    { heading: '具体的な実験アイデア（SAD向け）', content:
-      '<ul>' +
-      '<li><strong>意図的な失敗実験</strong>: わざと言い間違える、飲み物をこぼす → 壊滅的結果が起きないことを体験</li>' +
-      '<li><strong>調査型実験</strong>: 信頼できる人に「私が緊張してるの気づく？」と実際に聞く</li>' +
-      '<li><strong>注意実験</strong>: 同じプレゼンを「自分に注意を向ける」条件 vs「聴衆に注意を向ける」条件で実施し不安レベルを比較</li>' +
-      '<li><strong>安全行動除去実験</strong>: いつもの安全行動あり/なしの2条件でパフォーマンスを比較</li>' +
-      '<li><strong>スタバテスト</strong>: わざと変な名前で注文して呼ばれる → 恥ずかしいが誰も気にしていないことを確認</li>' +
-      '</ul>' +
-      '<p style="margin-top:0.8rem;font-size:0.82rem;color:var(--muted);">出典: <a href="https://www.mentalclinic.com/treatment/p6619/" target="_blank" style="color:var(--accent2)">あらたまこころのクリニック — 行動実験</a></p>'
+    { heading: '5つのステップで進めよう', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>不安な予測を「仮説」にする</strong><br>ぼんやりした不安を、検証できる形に変えます。これだけで少し楽になる人も。</div>' +
+      '<div class="tech-example"><span class="hl">Before:</span>「うまくいかない気がする」（検証しようがない）<br><span class="hl-green">After:</span>「会議で発言したら、10人中8人が変な顔をする」確信度 80%<br><br>ポイントは<strong>数字</strong>をつけること。「何人が」「何%の確率で」と書くと、後で現実と比較できます。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>「お守り行動」をリストアップ</strong><br>いつもその場面でやっている安全行動を書き出します。メモを見る、早口で終わらせる、目を合わせない…。自分では気づいていないものも多いので、じっくり考えてみてください。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>実験を計画する</strong><br>お守りを<strong>あえて外して</strong>行動する計画を立てます。そして、注意を自分の内側（「今どう見えてる？」）ではなく、<span class="hl-green">外側（相手の表情、話の内容）</span>に向けると決めておきます。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>実行！ そして「相手」を観察する</strong><br>ここが大事。自分のことは一旦忘れて、<strong>「相手が実際にどう反応しているか」</strong>を観察します。変な顔をしている人は本当にいますか？</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>予測と現実を並べてみる</strong><br>この瞬間が、いちばん大切な瞬間です。</div>' +
+      '<div class="tech-insight">予測:「8人が変な顔をする」<br>現実:「0人。1人は頷いてくれていた」<br><br>この<strong>「あれ…？ 全然違うじゃん」</strong>という驚き（期待違反）こそが、脳の学び方を変えるエンジンです。日記の Step 8 に記録しましょう。</div>'
     },
-    { heading: 'よくある間違い:「耐える」エクスポージャー', content:
-      '<p>従来の「不安に慣れるまで耐える」習慣化モデルは古い。Craske et al. (2014) の<strong>抑制学習モデル</strong>では、「不安が下がること」ではなく「予測が外れること」が治療効果の本体。不安が残っていても、予測が外れた体験があれば学習は成立する。だから<strong>「70%の準備で実行」</strong>で十分。</p>'
+    { heading: '何から始めればいい？ — すぐ試せるアイデア集', content:
+      '<p>いきなり大きなことをしなくて大丈夫。小さな実験でも、脳はしっかり学びます。</p>' +
+      '<div class="tech-step"><strong>コンビニ実験</strong><br>店員さんに「これ、おすすめですか？」と聞いてみる。たった一言。でも「話しかけたら迷惑がられる」という予測を検証できます。</div>' +
+      '<div class="tech-step"><strong>意図的ミス実験</strong><br>わざと言い間違える、飲み物をちょっとこぼす。「失敗したら終わり」と思っていたのに、<span class="hl-green">誰も気にしていない</span>ことを体験します。</div>' +
+      '<div class="tech-step"><strong>直球で聞いてみる実験</strong><br>信頼できる人に「ねえ、私が緊張してるの、気づく？」と率直に聞いてみる。答えはほぼ確実に「え、全然」。</div>' +
+      '<div class="tech-step"><strong>注意シフト実験</strong><br>同じプレゼンを「自分を意識する」モードと「聞き手を見る」モードで実施。不安レベルの差に驚くはず。</div>' +
+      '<p style="margin-top:1rem;font-size:0.8rem;color:var(--muted);">出典: <a href="https://www.mentalclinic.com/treatment/p6619/" target="_blank" style="color:var(--accent2);">あらたまこころのクリニック — 行動実験</a></p>'
     },
-    { heading: 'どの段階でどの程度やるか', content:
-      '<ul>' +
-      '<li><strong>Week 3-4</strong>: 軽い実験から開始（店員に質問、エレベーターで挨拶）。週1回。</li>' +
-      '<li><strong>Week 5-8</strong>: 中程度の実験（少人数会議で発言、電話で問い合わせ）。週2回に増やす。</li>' +
-      '<li><strong>Week 9-12</strong>: 強度の実験（プレゼン、意図的失敗）。異なる場面・相手で般化を図る。</li>' +
-      '</ul>' +
-      '<div class="tech-warn">注意: 「70%の準備で実行する」がルール。完璧な準備を待っていたら永遠に始まらない。</div>'
+    { heading: '「完璧に準備できてから」は、永遠に来ない', content:
+      '<div class="tech-insight">昔は「不安に慣れるまで耐える」のが治療でした。でも今は違います。<br><br>Craske (2014) の<strong>抑制学習モデル</strong>によると、治療効果の正体は「不安が下がること」ではなく<span class="hl">「予測が外れること」</span>。つまり、<strong>不安が残っていても、予測が外れた体験があれば、それだけで脳は学んでいる</strong>のです。</div>' +
+      '<p>だから、<span class="hl">70%の準備で実行</span>してOK。完璧を待つ必要はありません。むしろ待っていると、「やっぱりできない自分」というストーリーが強化されてしまいます。</p>'
+    },
+    { heading: 'あなたのペースで', content:
+      '<div class="tech-step"><strong>Week 3-4</strong> — まずは小さく。店員に質問、エレベーターで挨拶、道を聞く。週1回でOK。</div>' +
+      '<div class="tech-step"><strong>Week 5-8</strong> — 少しレベルアップ。少人数の場で発言、電話で問い合わせ。週2回に。</div>' +
+      '<div class="tech-step"><strong>Week 9-12</strong> — 思い切って。プレゼン、意図的なミス。いろんな場面・相手で試して広げていきます。</div>'
     }
   ]
 },
 safety_behavior: {
-  title: '安全行動の認識と除去',
-  when: 'Week 1〜（認識）/ Week 3〜（除去）',
-  time: '日常的に意識する（特別な時間不要）',
-  difficulty: '認識は易 / 除去は中〜高',
-  evidence: 'Clark & Wells (1995) / 安全行動がある限り学習が起きない',
+  title: '安全行動 — あなたの不安を「こっそり」維持しているもの',
+  when: 'Week 1〜（気づく）/ Week 3〜（外す）',
+  time: '特別な時間は不要',
+  difficulty: '気づくのは簡単 / 外すのは勇気がいる',
+  evidence: 'Clark & Wells (1995) / これを外さないと他の技法が効かない',
   sections: [
-    { heading: 'なぜ気づくことが大事？', content: '<p>安全行動って、いわば「お守り」。持っていると安心するけど、持ち続けると「これがないと無理」と思い込んでしまう。しかも「本当は大丈夫だった」ことに気づくチャンスも奪われてしまいます。まずは「あ、自分これやってるな」と気づくだけで、大きな一歩です。</p>' },
-    { heading: '網羅的チェックリスト', content:
-      '<p><strong>【回避系】</strong><br>目を合わせない / 早口で終わらせる / 電話を避けてチャット / 端・後ろに座る / 早く帰る / 質問しない / 意見を言わない</p>' +
-      '<p><strong>【カモフラージュ系】</strong><br>完璧にリハーサル / メモを持ち歩く / 飲酒して参加 / スマホで「忙しいフリ」/ 汗が目立たない服 / 愛想笑い / 相手に質問し続けて自分の話を避ける</p>' +
-      '<p><strong>【身体制御系】</strong><br>手を握りしめる / 腕を組む / 冷たい飲み物を持つ / 体に力を入れて押さえる</p>' +
-      '<p><strong>【認知的安全行動】</strong><br>全セリフを事前に考える / 会話中に「次に何を言うか」を考え続ける / 自分の見え方を常時モニタリング / 過度な謝罪</p>' +
-      '<div class="tech-warn">注意: 深呼吸やリラクゼーションも「不安を感じてはいけない」というメッセージを強化する安全行動として機能することがある。</div>'
+    { heading: 'お守りは、あなたを守っているようで、実は閉じ込めている', content:
+      '<div class="tech-scenario">飲み会でスマホをぎゅっと握っていませんか？ 会議では端っこの席を選んでいませんか？ プレゼンの前に、全セリフを頭の中でリハーサルしていませんか？</div>' +
+      '<p>これらはすべて<span class="hl">安全行動</span>と呼ばれるもの。不安なときに無意識にやってしまう「お守り」的な行動です。</p>' +
+      '<p>問題は、お守りを持ち続けると<strong>「お守りがないとダメだ」</strong>と信じ込んでしまうこと。そして何より、「お守りなしでも大丈夫だった」という<span class="hl-green">いちばん大事な体験</span>ができなくなってしまいます。</p>' +
+      '<div class="tech-insight">安全行動がある限り、どんなにがんばってエクスポージャーしても効果が半減する — これは研究で繰り返し示されている事実です。<br>でも安心してください。まずは「あ、これやってるな」と気づくだけで、大きな第一歩です。</div>'
     },
-    { heading: '除去の3ステップ', content:
-      '<div class="tech-step"><span class="tech-step-num">1</span>上のリストから自分の安全行動にチェック。各項目に「手放す怖さ」を0-100で点数づけ。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span>安全行動あり/なしを交互に試し、結果を比較する行動実験を行う。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span>毎回同じものではなく<strong>変動的に</strong>外す（Craske 2014 抑制学習モデル）。</div>' +
-      '<div class="tech-example">例: 月曜は「目を合わせる」、水曜は「メモなしで話す」、金曜は「端ではなく真ん中に座る」</div>'
+    { heading: 'あなたはいくつ当てはまる？ — セルフチェックリスト', content:
+      '<p>意外なものが安全行動だったりします。正直に、自分に聞いてみてください。</p>' +
+      '<div class="tech-step"><strong>逃げ系（回避）</strong><br><span style="color:var(--muted);">目を合わせない / 早口で終わらせる / 電話を避けてチャット / 端や後ろに座る / 早めに帰る / 質問しない / 意見を言わない</span></div>' +
+      '<div class="tech-step"><strong>隠れ系（カモフラージュ）</strong><br><span style="color:var(--muted);">完璧にリハーサルする / メモを手放せない / お酒の力で参加する / スマホで「忙しいフリ」/ 汗が見えない服を選ぶ / 愛想笑いでやり過ごす / 相手に質問し続けて自分のことは話さない</span></div>' +
+      '<div class="tech-step"><strong>からだ制御系</strong><br><span style="color:var(--muted);">手をぎゅっと握る / 腕を組んで震えを隠す / 冷たい飲み物をずっと持つ / からだに力を入れて動揺を押さえる</span></div>' +
+      '<div class="tech-step"><strong>頭の中の安全行動（見落としやすい！）</strong><br><span style="color:var(--muted);">話す前に全セリフを組み立てる / 会話中ずっと「次に何を言うか」を考えている / 自分がどう見えているかを常にチェック / やたら謝る（「つまらない話ですみません」）</span></div>' +
+      '<div class="tech-warn">意外かもしれませんが、<strong>深呼吸やリラクゼーション</strong>も安全行動になることがあります。「不安を感じちゃダメ」というメッセージを自分に送ってしまうからです。ACTでは「不安を管理する」のではなく「不安を持ったまま動く」ことを目指します。</div>'
     },
-    { heading: 'どの段階でどの程度', content:
-      '<ul>' +
-      '<li><strong>Week 1-2</strong>: まずリストを作る。自分の安全行動を認識するだけで第一歩。</li>' +
-      '<li><strong>Week 3-4</strong>: 最も軽い安全行動から1つ外す実験。日記Step9に記録。</li>' +
-      '<li><strong>Week 5以降</strong>: 毎日1つ外す。変動的に。行動実験と組み合わせる。</li>' +
-      '</ul>' }
+    { heading: 'お守りの外し方 — 3ステップ', content:
+      '<p>いきなり全部外す必要はありません。少しずつ、自分のペースで。</p>' +
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>リストを作って「怖さ」を点数化</strong><br>上のチェックリストで当てはまるものに印をつけて、それぞれ「手放す怖さ」を0〜100で書きます。点数が低いものから始めればOK。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>あり/なしで比較する実験をやってみる</strong><br>月曜日はメモを持ってプレゼン。水曜日はメモなしでプレゼン。結果を比べてみると…<span class="hl-green">「あれ、メモなしでも案外いけた」</span>と気づけることが多いです。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>毎回違うものを外す</strong><br>同じお守りばかり外すのではなく、<span class="hl">ランダムに変える</span>のがコツ。月曜は「目を見る」、水曜は「メモなし」、金曜は「真ん中の席」。脳が柔軟に学んでくれます。</div>'
+    },
+    { heading: 'あなたのペースで', content:
+      '<div class="tech-step"><strong>Week 1-2</strong> — まずはリスト作り。「あ、自分これやってたんだ…」と気づくだけで素晴らしいスタートです。</div>' +
+      '<div class="tech-step"><strong>Week 3-4</strong> — いちばん軽いお守りを1つ外す実験。結果は日記に記録。</div>' +
+      '<div class="tech-step"><strong>Week 5〜</strong> — 毎日1つずつ、ランダムに。行動実験と組み合わせるとさらに効果的。</div>'
+    }
   ]
 },
 attention_training: {
-  title: '注意訓練技法（ATT）',
-  when: 'Week 3〜 / 毎日',
-  time: '1日2回×12分 = 合計24分',
+  title: '注意トレーニング — 「自分の見え方」への囚われを解く',
+  when: 'Week 3〜 / 毎日12分',
+  time: '1日12分（2回に分けてもOK）',
   difficulty: '低（座って音を聞くだけ）',
-  evidence: 'Wells (2009) メタ認知療法 / SADの中核維持因子に直接介入',
+  evidence: 'Wells (2009) メタ認知療法',
   sections: [
-    { heading: 'なぜ効くのか', content: '<p>SADの中核的維持因子は<strong>自己焦点的注意</strong>。「自分がどう見えるか」に注意が向くと不安が増幅する。ATTは注意のコントロール能力自体を鍛えるトレーニング。筋トレのように、やればやるほど注意を自在に動かせるようになる。</p>' },
-    { heading: '実施プロトコル', content:
-      '<p><strong>準備</strong>: 6つの異なる音源を用意する（時計の音、外の車、エアコン、鳥、遠くの音楽、テレビ等）。静かな部屋で椅子に座る。</p>' +
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>選択的注意（6分）</strong><br>1つの音に集中 → 30秒ごとに別の音に切り替え。他の音が聞こえても戻す。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>注意切り替え（6分）</strong><br>複数の音の間で素早く注意を切り替える。5秒ごとに切り替え先を変える。</div>'
+    { heading: '「自分がどう見えてるか」が頭から離れない問題', content:
+      '<div class="tech-scenario">会話中、相手の話を聞いているようで、実は頭の中では…<br>「今の表情、変じゃなかった？」「声、震えてない？」「汗、見えてるかな」<br><br>会話が終わった後、相手が何を話していたかよく覚えていない。</div>' +
+      '<p>これは<span class="hl">自己焦点的注意</span>と呼ばれる状態です。注意が自分の内側に向きっぱなしになっている。</p>' +
+      '<p>問題は、内側を見れば見るほど不安が増幅すること。<span class="hl-green">注意を外側（相手の話、表情、声）に向けると、不安は大幅に下がる</span>ことが研究で繰り返し示されています。</p>' +
+      '<div class="tech-insight">注意トレーニング（ATT）は、注意のコントロール能力自体を鍛える「筋トレ」です。やればやるほど、注意を自在に動かせるようになります。</div>'
     },
-    { heading: '社会場面での応用（Task Concentration Training）', content:
-      '<p>Bögels & Mansell (2004) の技法。会話中に実践する。</p>' +
-      '<ul>' +
-      '<li>「自分がどう見えるか」→「相手が何を言っているか」に注意を向ける</li>' +
-      '<li>相手の目の色、声のトーン、表情の変化を観察する「タスク」として設定</li>' +
-      '<li>自分の内面（心拍、汗、声の震え）に注意が向いたことに気づいたら、外部に戻す</li>' +
-      '</ul>' +
-      '<div class="tech-example">実験: 同じ会話を「自己注目モード」と「外部注目モード」で行い、不安レベルを比較する。ほぼ例外なく外部注目モードの方が不安が低い。</div>'
+    { heading: 'やり方 — 自宅で12分', content:
+      '<p><strong>準備</strong>：6つの異なる音が聞こえる場所で椅子に座ります。時計の音、外の車、エアコン、鳥、遠くの音楽、テレビなど。特別な道具は不要です。</p>' +
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>選択的注意（6分）</strong><br>1つの音だけに集中します。30秒ごとに、聞く音を切り替え。他の音が聞こえても気にせず、選んだ音に戻す。<br><br><span style="color:var(--muted);">「意識が逸れた → 戻す」のくり返しが、まさにトレーニングです。逸れること自体は失敗じゃありません。</span></div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>注意の素早い切り替え（6分）</strong><br>複数の音の間で、5秒ごとに注意をパッパッと切り替えます。スピードを上げていくのがコツ。</div>'
     },
-    { heading: 'どの段階でどの程度', content:
-      '<ul><li><strong>Week 3-4</strong>: 自宅で1日1回12分から開始。</li>' +
-      '<li><strong>Week 5以降</strong>: 1日2回に増やす。社会場面でのTCTも開始。</li>' +
-      '<li><strong>継続</strong>: 日常の習慣として定着させる。通勤中でも練習可能。</li></ul>' }
+    { heading: '実践編 — 会話の中で使う', content:
+      '<p>自宅でのトレーニングに慣れたら、実際の会話で使ってみましょう（Bögels & Mansell, 2004）。</p>' +
+      '<div class="tech-step"><strong>注意のタスクを設定する</strong><br>会話中、こんな「タスク」を自分に課します：<br><br>・<span class="hl-green">相手の目の色を観察する</span><br>・相手の声のトーンの変化に注目する<br>・相手の表情がどう動くか見る<br><br>「自分の見え方」にゼロ注意を向ける必要はありません。<span class="hl">ただ「外側に向けるタスク」を1つ持つだけ</span>で、内側への注意が自然に減ります。</div>' +
+      '<div class="tech-insight">実験してみてください：同じ会話を「自己注目モード」と「外部注目モード」で行い、不安レベルを比較する。<span class="hl-green">ほぼ例外なく、外部に注意を向けた方が不安が低い</span>です。</div>'
+    },
+    { heading: 'あなたのペースで', content:
+      '<div class="tech-step"><strong>Week 3-4</strong> — 自宅で1日12分から。通勤中でも練習可能。</div>' +
+      '<div class="tech-step"><strong>Week 5〜</strong> — 1日2回に増やす。会話中の注意タスクも開始。</div>' +
+      '<div class="tech-step"><strong>継続</strong> — 歯磨きのように、日常の習慣にしていきましょう。</div>'
+    }
   ]
 },
 video_feedback: {
-  title: 'ビデオフィードバック',
+  title: 'ビデオフィードバック — 「思っていた自分」と「本当の自分」の差を見る',
   when: 'Week 5〜 / 週1回',
-  time: '1回20〜30分（録画+視聴+振り返り）',
-  difficulty: '中（心理的抵抗が高いが方法自体は簡単）',
-  evidence: 'Warnock-Parkes et al. (2017) / 98%が「予測よりマシだった」と報告',
+  time: '20〜30分（スマホ1台でOK）',
+  difficulty: '最初は抵抗あるけど、やったら驚く',
+  evidence: 'Warnock-Parkes et al. (2017) / 98%が「予測よりマシだった」',
   sections: [
-    { heading: 'なぜ効くの？', content: '<p>「自分は顔が真っ赤で、声が震えて、みんなに気づかれてる」— そう思い込んでいませんか？ 実は研究では、<strong>98%の人が録画を見た後「思ったよりずっと普通だった…！」</strong>と驚いています。頭の中の自分と、実際の自分はかなり違うんです。スマホ1台でお家でできます。</p>' },
-    { heading: '5フェーズ手順', content:
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>予測を書き出す</strong><br>録画する前に「自分はどう見えるか」を具体的にスコアリング。<br>例:「不安そうに見える: 85/100」「声の震え: 70/100」「赤面: 90/100」</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>録画する</strong><br>30秒〜1分の自己紹介をスマホで録画。正面やや離れた自然な角度で。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span><strong>観察者の視点で見る（最重要）</strong><br>自分を批判する目ではなく「カフェで知らない人を眺めるように」見る。初回は音をミュートにして30秒だけ（自己批判の起動を防ぐ）。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">4</span><strong>予測と実際を比較する</strong><br>視聴後に同じ項目を再スコアリング。ギャップを確認。</div>' +
-      '<div class="tech-example">予測:「不安そう85」→ 実際:「30」/ 予測:「赤面90」→「ほぼ分からない」</div>' +
-      '<div class="tech-step"><span class="tech-step-num">5</span><strong>学びを言語化する</strong><br>「不安を80%感じていたが、映像では分からなかった。感情と外見は別物だ」→ 日記Step8に記録。</div>'
+    { heading: '頭の中の「自分の映像」は、だいぶ嘘をついている', content:
+      '<div class="tech-scenario">プレゼンの後、頭の中にはこんな映像が流れていませんか？<br>「顔が真っ赤になっていた」「声が震えて聞き取れなかったはず」「みんな退屈そうだった」</div>' +
+      '<p>でも、ちょっと立ち止まって考えてみてください。<span class="hl">その「映像」は、あなたの目で見たものですか？</span> 違いますよね。自分の顔は自分では見えない。声のトーンだって、自分の耳と他人の耳ではまったく違って聞こえます。</p>' +
+      '<p>つまり、頭の中で再生している「自分の姿」は、<strong>不安が作り出した想像</strong>にすぎないのです。</p>' +
+      '<div class="tech-insight">Warnock-Parkes et al. (2017) の研究では、<span class="hl-green">実に98%の参加者</span>が録画を見た後にこう言いました：<br><br><strong>「え…思ったよりずっと普通だった」</strong><br><br>不安を80%感じていても、映像ではほとんど分からない。<span class="hl">感情の強さと外見は、まったく別のもの</span>です。</div>'
     },
-    { heading: 'どの段階でどの程度', content:
-      '<ul><li><strong>Week 5-6</strong>: 自宅で1人で録画。短い自己紹介から。週1回。</li>' +
-      '<li><strong>Week 7-8</strong>: 実際の会話や電話を録画（相手の許可を得て）。</li>' +
-      '<li><strong>Week 9以降</strong>: 録画なしでも「映像で見た自分」を思い出せるようになる。</li></ul>' +
-      '<div class="tech-warn">可能であれば信頼できる友人に映像を見せて感想をもらう。他者の評価は自己評価よりほぼ常にポジティブ。</div>' }
+    { heading: 'やり方 — 5つのフェーズ', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>録画の前に、予測を書き出す</strong><br>「自分はどう見えると思うか」を数字で。こうすると後で比較できます。<br><span style="color:var(--muted);">例：不安そうに見える <span class="hl">85</span>/100、声の震え <span class="hl">70</span>/100、赤面 <span class="hl">90</span>/100</span></div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>30秒〜1分、録画する</strong><br>スマホを少し離して正面に置き、自己紹介でも独り言でもOK。自然体で。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>「カフェで隣の人を眺めるように」見る</strong><br>ここがいちばん大事。<span class="hl-green">自分を批判する目ではなく、知らない人を観察するように見てください</span>。<br><br>初回のコツ：<strong>音をミュートにして、30秒だけ見る</strong>。自分の声を聞くと自己批判モードが起動しやすいので、最初は映像だけで充分です。「この人は緊張して見えるか？」と、第三者の目で判断してみましょう。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>予測と実際を比べてみる</strong><br>同じ項目を再スコアリング。</div>' +
+      '<div class="tech-insight">予測：不安そう <span class="hl">85</span> → 実際：<span class="hl-green">30</span><br>予測：赤面 <span class="hl">90</span> → 実際：<span class="hl-green">ほぼ分からない</span><br><br>この「え…？」という驚きこそ、脳が学んでいる証拠です。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>気づきを言葉にする</strong><br>「不安を80%感じていたけど、映像では普通に見えた。<span class="hl-green">感情の強さと外見は別物なんだ</span>」— この一文を日記に記録してください。</div>'
+    },
+    { heading: 'あなたのペースで', content:
+      '<div class="tech-step"><strong>Week 5-6</strong> — 自宅で1人で。短い自己紹介を録画してみるところから。週1回。</div>' +
+      '<div class="tech-step"><strong>Week 7-8</strong> — 実際の会話や電話を（相手の許可を得て）録画。</div>' +
+      '<div class="tech-step"><strong>Week 9〜</strong> — 録画なしでも「映像で見た本当の自分」を思い出せるようになります。</div>' +
+      '<div class="tech-quote">もし可能なら、信頼できる友人に映像を見せて「この人どう見える？」と聞いてみてください。他の人の評価は、自分の評価よりほぼ確実にポジティブです。</div>'
+    }
   ]
 },
 self_compassion: {
-  title: 'セルフコンパッション（CFT）',
-  when: 'Week 3〜 / 毎日',
-  time: '鎮静呼吸2分 + レター10分 / 日',
+  title: 'セルフコンパッション — 自分へのやさしさが、回復の鍵になる',
+  when: 'Week 3〜 / 毎日少しずつ',
+  time: '呼吸2分 + レター10分',
   difficulty: '低〜中',
-  evidence: 'Gilbert (2014) / Werner et al. (2012): SADの自己批判と恥を有意に低減',
+  evidence: 'Gilbert (2014) / Werner et al. (2012): SADの恥と自己批判を有意に低減',
   sections: [
-    { heading: 'こんな経験ありませんか？', content: '<p>「考え方を変えればいい」と頭では分かる。でも心がついてこない。その正体は、自分に対する厳しすぎる声かもしれません。SADの根っこにあるのは<strong>「恥」の感情</strong>。セルフコンパッションは、その恥に直接やさしく語りかけるアプローチです。</p>' },
-    { heading: '4つの実践エクササイズ', content:
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>鎮静リズム呼吸（毎日2分）</strong><br>吸気4秒・呼気4秒を均等に。呼吸に「温かさ」のイメージを乗せる。全エクササイズの土台。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>コンパッショネイト・レター</strong><br>社交場面での失敗について「最も思いやりのある親友」の視点から自分に手紙を書く。3要素を含める: 共通の人間性（「誰でもある」）・マインドフルネス（「つらかったね」）・自己への優しさ（「十分やっている」）</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span><strong>ダブルスタンダード技法</strong><br>「もし親友が同じ失敗をしたら何と言うか？」を書き出す。→「なぜ自分にだけ言わないのか？」</div>' +
-      '<div class="tech-example">友人が会議で言い間違えた → 「気にしなくていいよ、誰でもあるよ」<br>自分が同じことをした → 「最悪だ、みんなバカだと思ってる」← この差が自己批判</div>' +
-      '<div class="tech-step"><span class="tech-step-num">4</span><strong>思いやりのある自分</strong><br>「温かさ・強さ・知恵を持つ理想の自分」をイメージ。困難な場面で「この自分ならどうするか」と問う。</div>'
+    { heading: '「頭ではわかるけど、心がついてこない」の正体', content:
+      '<div class="tech-scenario">CBTで認知を修正した。「失敗しても大丈夫」と頭では理解できる。<br>でも、いざという場面になると心が叫ぶ。<br>「お前はダメだ」「また恥をかくに決まってる」「みんなバカだと思ってる」</div>' +
+      '<p>この声の正体は、<span class="hl">自分に向けた厳しすぎる批判</span>です。</p>' +
+      '<p>社交不安の根っこには<strong>「恥」の感情</strong>があります。恥は、他のどの感情よりも深く、しつこく、自己批判と結びついています。CBTで思考を変えても、この「自分を攻撃する声」が残っている限り、なかなか楽になれません。</p>' +
+      '<div class="tech-insight">セルフコンパッション（CFT）は、恥と自己批判に<span class="hl-green">直接やさしく語りかける</span>アプローチです。「甘え」ではありません。自分を責め続けても何も変わらなかった、というあなた自身の経験が、いちばんの証拠です。</div>'
     },
-    { heading: 'どの段階でどの程度', content:
-      '<ul><li><strong>Week 3-4</strong>: 鎮静呼吸を毎日2分。寝る前がおすすめ。</li>' +
-      '<li><strong>Week 5-6</strong>: コンパッショネイト・レターを週1回。</li>' +
-      '<li><strong>Week 7以降</strong>: ダブルスタンダード技法を自動思考が出たときにリアルタイムで使う。</li></ul>' }
+    { heading: '4つのエクササイズ', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>鎮静リズム呼吸（毎日たった2分）</strong><br>吸う4秒、吐く4秒。均等なリズムで。息に「温かさ」のイメージを乗せてみてください。<br><br>これは全エクササイズの<span class="hl-green">土台</span>。副交感神経を活性化し、脳の「脅威モード」を鎮めます。寝る前の2分がおすすめ。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>自分への手紙（コンパッショネイト・レター）</strong><br>社交場面で辛かった出来事について、<span class="hl-green">「世界でいちばん思いやりのある親友」の立場</span>から自分に手紙を書きます。<br><br>手紙には3つの要素を含めてください：<br>・<strong>共通の人間性</strong>：「誰だってそういう経験はあるよ」<br>・<strong>マインドフルネス</strong>：「つらかったんだね。それは事実」<br>・<strong>やさしさ</strong>：「あなたは十分がんばっている。それで大丈夫」</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>ダブルスタンダードに気づく</strong><br>こう自分に問いかけてみてください：<br><span class="hl">「もし親友がまったく同じ失敗をしたら、私はなんて声をかける？」</span></div>' +
+      '<div class="tech-insight">親友が会議で言い間違えた → <span class="hl-green">「気にしなくていいよ、誰でもあるよ」</span><br>自分が同じことをした → <span class="hl">「最悪だ。みんなバカだと思ってる」</span><br><br>…なぜ自分にだけ、こんなに残酷なのでしょう？ ほとんどの人が、他人にはやさしいのに自分にだけ厳しい。この気づきそのものが、変化の始まりです。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>思いやりのある自分をイメージする</strong><br>「温かさ・強さ・知恵を持った理想の自分」を思い浮かべます。困難な場面で「この自分なら、今の私になんて声をかけるだろう？」と問いかけてみてください。</div>'
+    },
+    { heading: 'あなたのペースで', content:
+      '<div class="tech-step"><strong>Week 3-4</strong> — 鎮静リズム呼吸を毎晩2分。これだけでも確実に変わります。</div>' +
+      '<div class="tech-step"><strong>Week 5-6</strong> — 自分への手紙を週1回。最初は照れくさくても、書いてみてください。</div>' +
+      '<div class="tech-step"><strong>Week 7〜</strong> — ダブルスタンダード技法を、自己批判が浮かんだ瞬間にリアルタイムで使えるように。</div>'
+    }
   ]
 },
 act_defusion: {
-  title: '脱フュージョン（ACT）',
-  when: 'Week 3〜 / 不安な考えが浮かんだとき',
+  title: '脱フュージョン（ACT）— 考えを変えなくても、楽になれる',
+  when: 'Week 3〜 / 不安が浮かんだその瞬間に',
   time: '各エクササイズ1〜3分',
-  difficulty: '低（馬鹿馬鹿しいほど簡単だが効果的）',
-  evidence: 'Craske et al. (2014): CBTと同等の効果 / 回避が強い場合に特に有効',
+  difficulty: 'バカバカしいほど簡単（でも効く）',
+  evidence: 'Craske et al. (2014): CBTと同等の効果',
   sections: [
-    { heading: 'CBTとどう違うの？', content: '<p>CBTは「その考え方、ちょっと偏ってるかも？」と考えを修正するアプローチ。ACTは「その考え、そのままでいいよ。ただ、振り回されなくていいよ」というアプローチ。考えを変えなくても、考えとの<strong>距離感</strong>を変えるだけで楽になれます。</p>' },
-    { heading: '6つの脱フュージョン技法', content:
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>「〜という考えを持っている」</strong><br>「私はダメだ」→「私は『ダメだ』という考えを持っている」→「…ということに気づいている」<br>映画館の最前列から最後列に移動するイメージ。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>ミルクミルクエクササイズ</strong><br>不安な言葉（「バカ」「恥」「失敗」等）を45秒間早口で繰り返す。言葉が単なる音に変わり、感情的インパクトが消える。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span><strong>歌にして歌う</strong><br>「どうせ認められない」をハッピーバースデーのメロディで歌う。馬鹿馬鹿しいほど効く。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">4</span><strong>「ありがとう、脳」</strong><br>不安な考えに「ありがとう、脳！また心配してくれてるんだね」と返す。抑圧でも同意でもなく、ただ受け取る。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">5</span><strong>スローモーション</strong><br>不安な考えを超スローで再生：「ど・う・せ・だ・め・だ」。音が引き伸ばされると意味が解体される。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">6</span><strong>変な声で言う</strong><br>不安な思考をアニメキャラの声で言い直す。思考の「権威」が崩れる。</div>'
+    { heading: '考えを「変えなくていい」という発想', content:
+      '<div class="tech-scenario">「私はダメな人間だ」という考えが浮かんだとき。CBTなら「その考え、本当？ 証拠は？」と問い直す。でも、正直めんどくさい時ってありませんか。</div>' +
+      '<p>ACT（アクセプタンス＆コミットメント・セラピー）は、まったく別のアプローチを取ります。</p>' +
+      '<p><span class="hl-green">考えの中身を変えなくても、考えとの「距離感」を変えるだけで楽になれる</span>。映画館の最前列で巨大スクリーンに圧倒されていた状態から、最後列に移動するイメージ。同じ映画なのに、もう怖くない。</p>' +
+      '<div class="tech-insight">Craske et al. (2014) のメタ分析でCBTと<strong>同等の効果</strong>が確認されています。特に「考えすぎる」タイプ、回避が根深い人に向いています。</div>'
     },
-    { heading: '価値の明確化', content:
-      '<p>ACTの核心:「不安を減らす」ことではなく「大切なことのために動く」こと。</p>' +
-      '<div class="tech-example">問い:「もし不安が完全になくなったら、明日何をするか？」→ その答えが「価値」。<br>毎日、価値に基づく小さな行動を1つ。「不安があっても大切だからやる」。</div>'
+    { heading: '脱フュージョン — 6つの「距離を取る」ワザ', content:
+      '<p>どれも1〜3分でできます。バカバカしく感じるほど効果的。お気に入りを2〜3個見つけてください。</p>' +
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>「…という考えを持っている」</strong><br>言い方を変えるだけ。でも効果は絶大。<br><br><span class="hl">「私はダメだ」</span><br>→ 「私は<em>『ダメだ』という考え</em>を持っている」<br>→ 「私は<em>『ダメだ』という考えを持っていること</em>に、今、気づいている」<br><br>ほら、もう少し遠くなったでしょう？</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>ミルクミルクエクササイズ</strong><br>不安な言葉（「バカ」「恥」「失敗」など）を<span class="hl">45秒間、早口で繰り返して</span>ください。<br><br>ばかばかばかばかばかばかばか…<br><br>30秒くらいで、ただの「音」に変わる瞬間が来ます。言葉が持っていた感情の重さが消えるのを体験できます。（Hayes et al., 1999 の実験で効果確認済み）</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>ハッピーバースデーで歌う</strong><br>「どうせ誰にも認められない」をハッピーバースデーのメロディに乗せて歌ってみてください。<br><br><span class="hl-green">バカバカしすぎて笑える</span>。それがまさにポイント。笑った瞬間、その考えの「権威」が崩れます。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>「ありがとう、脳」</strong><br>不安な考えが浮かんだら：<span class="hl-green">「ありがとう、脳！ また心配してくれてるんだね」</span><br><br>否定でも同意でもなく、ただ受け取る。脳は善意で警報を鳴らしてるだけなんだ、と気づけます。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>超スローモーション</strong><br>不安な思考を、壊れたレコードのように超スローで再生：<br><span style="letter-spacing:4px;color:var(--muted);">ど・う・せ・だ・め・だ</span><br><br>引き伸ばされると、意味が溶けていくのを感じます。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">6</span><strong>アニメ声で言い直す</strong><br>不安な思考を、好きなアニメキャラの声で脳内再生。ドラえもんでもルフィでも。思考の「威厳」が一瞬で崩壊します。</div>' +
+      '<p style="margin-top:0.8rem;font-size:0.8rem;color:var(--muted);">出典: <a href="https://cogbtherapy.com/cbt-blog/cognitive-defusion-techniques-and-exercises" target="_blank" style="color:var(--accent2);">CogBTherapy — Defusion Techniques</a></p>'
     },
-    { heading: 'どの段階でどの程度', content:
-      '<ul><li><strong>Week 3</strong>: 技法1と4を日常で試す。不安な考えが浮かんだらすぐ使う。</li>' +
-      '<li><strong>Week 5以降</strong>: 自分に合う技法を2-3個見つけてレパートリー化。</li>' +
-      '<li><strong>継続</strong>: 価値の明確化ワークを月1回。コンパスの再確認。</li></ul>' }
+    { heading: '「不安がなかったら、明日何をする？」', content:
+      '<p>ACTの核心は「不安を減らす」ことではありません。<span class="hl-green">大切なことのために、不安があっても動く</span>ことです。</p>' +
+      '<div class="tech-quote">もし不安が完全に消えたら、明日あなたは何をしますか？<br><br>その答えが、あなたにとっての「価値」です。<br>毎日、その価値に基づく小さな行動を1つ。「怖いけど、大切だからやる」。</div>'
+    },
+    { heading: 'あなたのペースで', content:
+      '<div class="tech-step"><strong>Week 3</strong> — 技法1と4を日常で使い始める。不安が浮かんだらすぐ。</div>' +
+      '<div class="tech-step"><strong>Week 5〜</strong> — 自分に合うワザを2〜3個見つけてレパートリーに。</div>' +
+      '<div class="tech-step"><strong>継続</strong> — 月1回、「今いちばん大切なことは何か？」を振り返る。</div>'
+    }
   ]
 },
 exposure_inhibitory: {
-  title: '仮説検証型エクスポージャー',
+  title: '仮説検証エクスポージャー — 「耐える」ではなく「確かめる」',
   when: 'Week 5〜 / 週2-3回',
   time: '1回30分〜1時間',
-  difficulty: '高（最も不安を感じるが最も効果的）',
-  evidence: 'Craske et al. (2014) 抑制学習モデル / 従来の習慣化モデルより効果的',
+  difficulty: '高（でもいちばん変わる）',
+  evidence: 'Craske et al. (2014) 抑制学習モデル',
   sections: [
-    { heading: '従来モデルとの違い', content:
-      '<p>従来:「不安に慣れるまで耐える」（習慣化モデル）→ 古い。<br>' +
-      '現在:「予測が外れる体験を蓄積する」（抑制学習モデル）→ 不安が残っていても予測が外れれば学習成立。</p>' +
-      '<div class="tech-warn">「不安が下がるまでその場にいる」は目標ではない。「予測が外れたか」が唯一の基準。</div>'
+    { heading: '「とにかく我慢して場数を踏む」は、もう古い', content:
+      '<div class="tech-scenario">「苦手な場面に何度も飛び込めば、いつか慣れる」— そう信じてがんばっていませんか？<br><br>でも何回やっても楽にならない。むしろ「またあの恐怖を味わうのか」と、エクスポージャー自体が怖くなってきた…。</div>' +
+      '<p>これは「習慣化モデル」と呼ばれる古いアプローチの限界です。</p>' +
+      '<p>2014年、Craskeたちが提唱した<span class="hl">抑制学習モデル</span>は、エクスポージャーの考え方をまるで変えました。</p>' +
+      '<div class="tech-insight">治療効果の正体は「不安が下がること」ではなく、<span class="hl-green">「予測が外れること」</span>。<br><br>つまり、不安が残ったままでも、「あれ、予測していた最悪のことは起きなかったな」という体験があれば、<strong>それだけで脳は学んでいる</strong>のです。</div>'
     },
-    { heading: '4つの原則', content:
-      '<ul>' +
-      '<li><strong>期待違反の最大化</strong>: 最も恐れていることが起きないことを学ぶ</li>' +
-      '<li><strong>深い消去</strong>: 異なる場所・相手・状況で繰り返す</li>' +
-      '<li><strong>変動性</strong>: 難易度をランダムに変える（毎回同じ階層を登らない）</li>' +
-      '<li><strong>安全行動の完全除去</strong>: 1つも残さない</li>' +
-      '</ul>'
+    { heading: '効果を最大化する4つの原則', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>「あれ？起きなかった」を最大化する</strong><br>いちばん恐れていることが起きないことを体験する。中途半端な場面より、<span class="hl">「これは絶対やばい」と思っている場面</span>の方が、予測が外れたときの学びが大きい。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>場所・相手・状況を変える</strong><br>同じカフェで同じことを繰り返すだけでは、「あのカフェでは大丈夫」としか学べません。<span class="hl-green">違う場面で繰り返すことで、学びが広がります</span>。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>難易度をランダムに変える</strong><br>「簡単なことから順番に」は直感的には正しいけど、実は<span class="hl">ランダムに変える方が効果的</span>。毎回同じ階段を登るのではなく、あえてジグザグに。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>お守り行動を全部外す</strong><br>安全行動が1つでも残っていると、「お守りのおかげで助かった」と脳が解釈してしまいます。外せるものは外して臨みましょう。</div>'
     },
-    { heading: '段階別エクスポージャー例', content:
-      '<p><strong>軽度</strong>: 店員に質問する / エレベーターで挨拶 / 道を聞く</p>' +
-      '<p><strong>中程度</strong>: 少人数会議で発言 / 電話で問い合わせ（事前準備なし）/ レストランで注文変更</p>' +
-      '<p><strong>高強度</strong>: プレゼンで「えーと」を意図的に多用 / わざと目立つ服 / 知らない人に「鼻に何かついてますか？」と聞く</p>' +
-      '<div class="tech-example">各エクスポージャーを「仮説検証」として実施。Before:「何が起こると予測するか（確信度%）」→ After:「実際に何が起こったか」</div>'
+    { heading: '具体的にどんなことをする？', content:
+      '<div class="tech-step"><strong>やさしめ</strong><br><span style="color:var(--muted);">店員さんに質問する / エレベーターで「何階ですか？」/ 道を聞く</span></div>' +
+      '<div class="tech-step"><strong>中くらい</strong><br><span style="color:var(--muted);">少人数の場で意見を言う / 電話で問い合わせ（台本なし）/ レストランで注文を変更する</span></div>' +
+      '<div class="tech-step"><strong>チャレンジ</strong><br><span style="color:var(--muted);">プレゼンで「えーと」を意図的に言う / わざと目立つ服で出社 / 知らない人に「鼻に何かついてますか？」と聞く</span></div>' +
+      '<div class="tech-example">すべてのエクスポージャーを<strong>仮説検証</strong>として実施するのがポイント。<br>Before:「何が起こると思う？（確信度%）」→ After:「実際に何が起きた？」<br>この比較を毎回記録することで、学びが蓄積されていきます。</div>'
     },
-    { heading: 'どの段階でどの程度', content:
-      '<ul><li><strong>Week 5-6</strong>: 軽度から開始。週2回。</li>' +
-      '<li><strong>Week 7-8</strong>: 中程度。変動的に難易度を変える。</li>' +
-      '<li><strong>Week 9-12</strong>: 高強度含む。異なる場面で般化。</li></ul>' }
+    { heading: 'あなたのペースで', content:
+      '<div class="tech-step"><strong>Week 5-6</strong> — やさしめから開始。週2回。</div>' +
+      '<div class="tech-step"><strong>Week 7-8</strong> — 中くらい。難易度をランダムに変えながら。</div>' +
+      '<div class="tech-step"><strong>Week 9-12</strong> — チャレンジも含めて。いろんな場面で試していきます。</div>'
+    }
   ]
 },
 interoceptive: {
@@ -1203,96 +1273,130 @@ interoceptive: {
   ]
 },
 rumination_control: {
-  title: '事後反芻の制御（メタ認知療法）',
-  when: 'Week 1〜 / 反芻に気づいたとき即座に',
-  time: '特別な時間不要（気づいたら実行）',
-  difficulty: '低〜中（気づくことが最初のハードル）',
-  evidence: 'Wells (2009) / SADの維持因子として極めて重要',
+  title: '反芻ストップ — 「ぐるぐる思考」を断ち切る方法',
+  when: 'Week 1〜 / 気づいたらすぐ',
+  time: '特別な時間は不要',
+  difficulty: '気づくことが最初のハードル',
+  evidence: 'Wells (2009) メタ認知療法 / 放置すると回復を大幅に遅らせる',
   sections: [
-    { heading: '反芻ってなに？', content: '<p>帰宅後に「あの時こう言えばよかったのに…」「あの人の顔、怒ってたかも…」とぐるぐる考え続けてしまうこと、ありませんか？ 自分では「振り返り」のつもりでも、実はこれ、<strong>不安をどんどん大きくする増幅装置</strong>なんです。</p>' },
-    { heading: '4つの制御技法', content:
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>心配の先送り</strong><br>反芻が始まったら「今は考えない。19時からの15分間で考える」と決める。その時間になると多くの場合もう気にならない。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>メタ認知的ラベリング</strong><br>「これは反芻だ。分析ではない。有害な習慣であり問題解決ではない」と心の中で宣言する。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span><strong>5-4-3-2-1 グラウンディング</strong><br>見えるもの5つ・聞こえるもの4つ・触れるもの3つ・匂い2つ・味1つ。注意を強制的に外部に向ける。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">4</span><strong>行動実験で検証</strong><br>条件A: 場面後に30分反芻 → 条件B: 反芻を止める → 翌日の気分を比較。ほぼ例外なく反芻しない方が良い。</div>'
+    { heading: '帰り道の「あの時ああ言えば…」は、振り返りじゃない', content:
+      '<div class="tech-scenario">飲み会の帰り道。電車の中で、さっきの会話が頭の中でリプレイされている。<br>「あの時、もっと気の利いたことが言えたのに」「あの沈黙、気まずかったよな」「あの人の表情、呆れてたかも…」<br><br>家に着いても、お風呂に入っても、ベッドに入っても止まらない。</div>' +
+      '<p>これが<span class="hl">事後反芻（Post-Event Processing）</span>です。</p>' +
+      '<p>自分では「反省」や「分析」のつもりかもしれません。でも、Wells (2009) のメタ認知療法ではこれを明確に<strong>「有害な対処戦略」</strong>と定義しています。反芻すればするほど、記憶はネガティブに歪み、不安はどんどん大きくなります。</p>' +
+      '<div class="tech-insight">反芻は分析ではありません。<span class="hl">分析のふりをした、不安の増幅装置</span>です。<br>でも大丈夫。気づいた瞬間から止められる技法があります。</div>'
     },
-    { heading: 'どの段階でどの程度', content:
-      '<ul><li><strong>Week 1〜</strong>: まず反芻に「気づく」訓練。「あ、今反芻してる」と認識できるだけで第一歩。</li>' +
-      '<li><strong>Week 3〜</strong>: 技法1-3を実践。気づいたら即実行。</li>' +
-      '<li><strong>Week 7〜</strong>: 技法4（行動実験）で反芻の有害性を自分で検証。</li></ul>' }
+    { heading: '反芻を断ち切る4つのワザ', content:
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>心配の「予約」をする</strong><br>ぐるぐる始まったら、こう言い聞かせます：<span class="hl-green">「今は考えない。今日の19時から15分だけ考えよう」</span>。<br><br>そしていざ19時になると…もう気にならなくなっていることがほとんど。不安は「今考えなきゃ！」という緊急感で成り立っていて、先送りすると自然としぼみます。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>「これは反芻だ」と名前をつける</strong><br>いちばんシンプルで強力な方法。心の中で宣言します：<br><span class="hl">「これは反芻。分析じゃない。有害な習慣であって、問題解決じゃない」</span><br><br>反芻を「有用な振り返り」と信じている限り、止めることはできません。まず正体を見破ることが大切です。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>5-4-3-2-1 グラウンディング</strong><br>五感を使って注意を「今ここ」に強制的に引き戻します。<br><br>見えるもの <span class="hl">5つ</span> / 聞こえるもの <span class="hl">4つ</span> / 触れるもの <span class="hl">3つ</span> / 匂い <span class="hl">2つ</span> / 味 <span class="hl">1つ</span><br><br>頭の中のリプレイが止まって、目の前の世界に戻ってこれます。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>反芻の「害」を自分で検証する</strong><br>これは行動実験です。<br>条件A：場面の後に30分ぐるぐる考える → 条件B：反芻をすぐ止める → 翌日の気分を比較<br><br><span class="hl-green">ほぼ例外なく、反芻しない日の方が気分がいい</span>。自分で体験すると、もう反芻を「有益な振り返り」とは思えなくなります。</div>'
+    },
+    { heading: 'あなたのペースで', content:
+      '<div class="tech-step"><strong>Week 1〜</strong> — まず反芻に「気づく」練習から。「あ、今ぐるぐるしてる」と認識できるだけで第一歩です。</div>' +
+      '<div class="tech-step"><strong>Week 3〜</strong> — 技法1〜3を実践。気づいたらすぐ使います。</div>' +
+      '<div class="tech-step"><strong>Week 7〜</strong> — 技法4で反芻の害を自分自身で検証。もう「やめられない」とは思わなくなるはず。</div>'
+    }
   ]
 },
 common_mistakes: {
-  title: 'セルフ治療の8つの落とし穴',
-  when: '常に / 月1回セルフチェック推奨',
-  time: '10分（チェックリスト確認）',
-  difficulty: '低（読むだけ）',
+  title: 'よくあるつまずきポイント — がんばってるのに効かないのはなぜ？',
+  when: '月1回のセルフチェックに',
+  time: '10分で読めます',
+  difficulty: '読むだけ',
   evidence: '臨床研究の知見を統合',
   sections: [
-    { heading: 'チェックリスト', content:
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>安全行動を維持したままエクスポージャー</strong><br>カフェに行くがスマホを見続ける → 学習が起きない。<br>対策: 安全行動リストを作り、外してからエクスポージャー。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>思考記録だけで行動が変わらない</strong><br>「合理的な考え」を書けても感情が変わらない。<br>対策: 行動実験で「体験」する。感情は体験でしか変わらない。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span><strong>エクスポージャーが「耐える」</strong><br>不安が下がるのを待つ（white-knuckle approach）は効果が低い。<br>対策: 仮説検証型に切り替え。「予測が外れたか」が基準。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">4</span><strong>事後反芻を放置</strong><br>放置すると回復を完全に阻害。<br>対策: 「これは反芻であり分析ではない」と認識する。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">5</span><strong>微細な回避を認識しない</strong><br>「早く帰る」「端に座る」「飲酒して参加」も回避。<br>対策: 安全行動チェックリストで網羅的に確認。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">6</span><strong>段階的すぎて進まない</strong><br>「完璧に準備してから」は永遠に来ない。<br>対策: 70%の準備で実行。不安はあって当然。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">7</span><strong>自己批判をモチベーションにしている</strong><br>「こんなこともできないなんて」→恥→回避→悪化。<br>対策: CFTで勇気を認める。挑戦したこと自体が価値。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">8</span><strong>般化の失敗</strong><br>1つの場面でうまくいっても他に広がらない。<br>対策: 異なる場所・相手・状況で繰り返す（深い消去）。</div>'
+    { heading: 'がんばっているのに変わらない…その原因、ここにあるかも', content:
+      '<p>セルフケアを続けているのに、なかなか効果を感じられない。そんなとき、実は<span class="hl">多くの人が同じ落とし穴にハマっています</span>。月に1回、このリストで自分をチェックしてみてください。</p>' +
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>お守りを握ったまま挑戦している</strong><br>カフェに行ったけどスマホを見続けていた…。<span class="hl">安全行動を残したままでは、脳は「安全行動のおかげで助かった」と学んでしまいます</span>。外してから挑むのがセット。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>頭の中だけで完結している</strong><br>思考記録に「合理的な考え」を書けるようになった。でも感情が変わらない。それ、<span class="hl-green">行動実験が足りていないサイン</span>です。感情は体験でしか本当には変わりません。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>「耐えるエクスポージャー」をやっている</strong><br>歯を食いしばって不安が下がるのを待つ…これは効果が低いやり方です。目標は「不安が下がること」じゃなく<span class="hl-green">「予測が外れること」</span>。仮説検証型に切り替えましょう。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">4</span><strong>帰宅後のぐるぐる思考を放置している</strong><br>反芻は回復を大幅に遅らせます。「これは分析じゃなくて反芻だ」と気づくだけで、止められるようになります。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">5</span><strong>「小さな回避」を見逃している</strong><br>行かないのは分かりやすい回避。でも「早めに帰る」「端に座る」「お酒の力を借りる」も立派な回避。<span class="hl">安全行動チェックリストで棚卸し</span>してみてください。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">6</span><strong>準備しすぎて動けない</strong><br>「完璧に準備してから次のステップ」は、永遠に来ません。<span class="hl-green">70%の準備で実行</span>。不安は残ってていい。それでも予測は外れます。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">7</span><strong>自分を叩いてモチベーションにしている</strong><br>「こんなこともできないなんて…」→ 恥 → 回避 → さらに悪化。<span class="hl">挑戦しようとした自分を認めること</span>。それだけで回復は早くなります。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">8</span><strong>1つの場面でしか試していない</strong><br>「あのカフェでは大丈夫になった」でも他の場所では怖い。<span class="hl-green">異なる場所・相手・状況で繰り返す</span>ことで、学びが「この世界は大丈夫」に広がります。</div>'
     },
-    { heading: '使い方', content: '<p>月に1回、このリストを見直して自分が落とし穴にハマっていないか確認する。日記のパターン分析と組み合わせるとさらに効果的。Claudeの「間違いチェック」ボタンでも確認できる。</p>' }
+    { heading: 'このリストの使い方', content:
+      '<p>月に1回、ここに戻ってきてチェック。日記のパターン分析と合わせるとさらに効果的です。Claudeの「間違いチェック」ボタンでも確認できます。</p>' +
+      '<div class="tech-quote">がんばっている自分を責めないでください。落とし穴にハマったのは、あなたが「挑戦している」証拠です。気づいた今日から、やり方を少し変えるだけで大丈夫。</div>'
+    }
   ]
 },
 usage_guide: {
-  title: 'この日記の使い方ガイド',
-  when: '初回 / 迷った時',
-  time: '5分（読むだけ）',
-  difficulty: '低',
+  title: 'はじめてガイド — 12週間で変わるロードマップ',
+  when: '最初に読んでほしい',
+  time: '5分で読めます',
+  difficulty: '読むだけ',
   evidence: 'Clark & Wells モデルに基づく段階的プログラム',
   sections: [
-    { heading: 'Week 1-2: まずは気軽に書いてみる', content:
-      '<p>全部埋めなくて大丈夫。<strong>「こんな場面があった」「こう思った」だけでもOK</strong>。書くことで「あ、こんなこと考えてたんだ」と気づけるようになります。それだけで立派な第一歩。</p>' +
-      '<div class="tech-example">「今日のランチ、一人で食べた。誘えなかった」— こんな一行からでも始められます。</div>' },
-    { heading: 'Week 3-4: 行動実験を始める', content:
-      '<p>思考記録に留まらず、Step8「行動実験」を使って予測を検証する。安全行動を1つずつ外す実験も。ビデオフィードバックも試す。</p>' },
-    { heading: 'Week 5-8: 技法を広げる', content:
-      '<p>ACTの脱フュージョン、CFTのセルフコンパッション、ATTの注意訓練を日常に組み込む。ヘッダーの「セルフケア技法」から各技法の詳細を確認し、Claudeに相談できる。</p>' },
-    { heading: 'Week 9-12: 般化と再発予防', content:
-      '<p>異なる場面・相手・状況で行動実験を繰り返す（深い消去）。日記のパターン分析でコアビリーフを特定し、柔軟なルールに書き換えていく。</p>' },
-    { heading: 'Claudeの活用', content:
-      '<p>「日記を分析」で歪みの見落としチェック。「行動実験を設計」で次の実験を一緒に考える。「間違いチェック」で落とし穴にハマっていないか確認。ただし最終判断は常に自分。</p>' }
+    { heading: 'Week 1-2 — まずは書いてみる。それだけでいい', content:
+      '<p>最初から全部のステップを埋めなくて大丈夫。<span class="hl-green">「こんな場面があった」「こう思った」だけでもOK</span>。</p>' +
+      '<p>書くことの目的は、正しい答えを出すことじゃありません。<strong>「あ、自分ってこんなこと考えてたんだ」</strong>と気づくこと。それだけで脳の使い方が変わり始めます。</p>' +
+      '<div class="tech-example">「今日のランチ、一人で食べた。本当は誘いたかったけど、断られるのが怖かった」<br>— こんな一行から始めてみてください。安全行動のリスト作りも並行して。</div>'
+    },
+    { heading: 'Week 3-4 — 「やってみる」フェーズ', content:
+      '<p>ここからがいちばん大事なターニングポイント。</p>' +
+      '<p>ノートに書くだけの段階を卒業して、<span class="hl">行動実験</span>を始めます。Step 8を使って「不安な予測 → 実際にやってみる → 結果を比較」のサイクルを回していきましょう。</p>' +
+      '<p>安全行動を1つずつ外す実験にも挑戦。ビデオフィードバックも、この時期に始めると効果的です。</p>'
+    },
+    { heading: 'Week 5-8 — テクニックの引き出しを増やす', content:
+      '<p>ここまで来たら、行動実験のベースはできています。ここからは引き出しを増やすフェーズ。</p>' +
+      '<div class="tech-step"><strong>ACTの脱フュージョン</strong> — 不安な考えとの「距離感」を変える</div>' +
+      '<div class="tech-step"><strong>セルフコンパッション</strong> — 自分への厳しい声をやわらげる</div>' +
+      '<div class="tech-step"><strong>注意トレーニング</strong> — 「自分の見え方」への囚われを外す</div>' +
+      '<p>ヘッダーの「セルフケア技法」から各技法の詳しい解説を読んで、気になるものからClaudeに相談してみてください。</p>'
+    },
+    { heading: 'Week 9-12 — 広げて、定着させる', content:
+      '<p>ここまで来たあなたは、もう相当変わっているはず。</p>' +
+      '<p>このフェーズでは、<span class="hl-green">同じことを異なる場面・相手・状況で繰り返します</span>。1つのカフェで大丈夫になっても、別の場所で試さないと「あのカフェ限定」の学びになってしまうからです。</p>' +
+      '<p>日記を振り返って、自分のパターン（コアビリーフ）を見つけていきましょう。「自分はいつも〇〇と考えるクセがある」に気づけたら、それを柔軟なルールに書き換えていきます。</p>'
+    },
+    { heading: 'Claudeの使い方', content:
+      '<p>右側のパネルから、Claudeにいつでも相談できます。</p>' +
+      '<div class="tech-step"><strong>「日記を分析」</strong> — 自分では気づかなかった認知の歪みを指摘してもらう</div>' +
+      '<div class="tech-step"><strong>「行動実験を設計」</strong> — 次にどんな実験をすればいいか、一緒に考える</div>' +
+      '<div class="tech-step"><strong>「間違いチェック」</strong> — 8つの落とし穴にハマっていないか確認する</div>' +
+      '<div class="tech-quote">Claudeはあくまで壁打ち相手です。最終判断は常にあなた自身。でも「一人で考えてるとぐるぐるしちゃう…」というとき、とても頼りになります。</div>'
+    }
   ]
 },
 evidence_books: {
-  title: 'エビデンス・書籍・体験談・公的資料',
-  when: '必要な時に参照',
+  title: 'おすすめ本・論文・体験談 — もっと深く知りたい方へ',
+  when: '気になった時に',
   time: '-',
   difficulty: '-',
-  evidence: '学術論文・臨床ガイドライン・実体験',
+  evidence: '学術論文・書籍・体験記・公的ガイドライン',
   sections: [
-    { heading: 'そもそもどのくらい効くの？', content:
-      '<p>「本当にセルフケアで良くなるの？」と思いますよね。最新の研究結果をまとめました。</p>' +
-      '<div class="tech-step"><span class="tech-step-num">1</span><strong>CBTは社交不安にいちばん効く治療法</strong><br>2024年のメタ分析でSAD治療の第一選択として推奨。効果量「大」。<br><a href="https://www.tandfonline.com/doi/full/10.1080/00050067.2024.2356804" target="_blank" style="color:var(--accent2)">2024年メタ分析 →</a></div>' +
-      '<div class="tech-step"><span class="tech-step-num">2</span><strong>ガイド付きセルフヘルプの効果量 g=0.825</strong><br>対面療法に近い効果！この日記はClaudeのフィードバック付きなので、このカテゴリに該当します。</div>' +
-      '<div class="tech-step"><span class="tech-step-num">3</span><strong>ネットCBTの効果量 g=0.95</strong><br>対面とほぼ同等。「通わなきゃ治らない」は思い込みです。<br><a href="https://www.sciencedirect.com/science/article/abs/pii/S0887618523001251" target="_blank" style="color:var(--accent2)">2023年メタ分析 →</a></div>' +
-      '<div class="tech-step"><span class="tech-step-num">4</span><strong>薬物＋心理療法で約80%が治癒</strong><br>約1年の治療で。決して「治らない病気」ではありません。<br><a href="https://fukuoka-mental-clinic.jp/column/sad/social-anxiety-disorder-cure-method/" target="_blank" style="color:var(--accent2)">福岡天神メンタルクリニック →</a></div>' },
-    { heading: '実際に克服した人の話', content:
-      '<div class="tech-example" style="line-height:1.8;">' +
-      '<strong>30代・営業職の方の体験記</strong>（厚生労働省「こころの耳」より）<br><br>' +
-      '中学時代から自意識が強く、授業で指されるとどもり、字を書くところを見られると手が止まった。30代で営業の責任が増し、プレゼンで赤面したまま固まってしまった。<br><br>' +
-      '薬物療法とカウンセリングを併用。カウンセラーと一緒に「考え方のクセ」に気づき、結婚式への出席をシミュレーション訓練。思い切って出席すると、不安なく楽しめた。この成功体験が仕事復帰のきっかけに。<br><br>' +
-      '<em>「まず専門家の門を叩くこと。そして少しずつ行動すること。」</em><br><br>' +
-      '<a href="https://kokoro.mhlw.go.jp/over/875/" target="_blank" style="color:var(--accent2)">体験記の全文を読む（厚労省こころの耳）→</a>' +
-      '</div>' },
-    { heading: 'おすすめ書籍', content:
-      '<div class="tech-step"><strong>自分で治す「社交不安症」</strong><br>清水栄司 著 / 法研<br>千葉大SADチーム監修。先生と患者のやりとり形式で実際の治療ステップを再現。独力でCBTを進めたい人にとって最も実践的。<br><span style="font-size:0.75rem;color:var(--muted);">¥737〜 / Kindle版あり / ★4.1（96件）</span><br><a href="https://www.amazon.co.jp/dp/4865130802" target="_blank" style="color:var(--accent2)">Amazonで見る →</a></div>' +
-      '<div class="tech-step"><strong>はじめての認知療法</strong><br>大野裕 著 / 講談社現代新書<br>日本のCBT第一人者。コラム法を平易に解説。この日記のStep3〜6はこの本がベースです。<br><span style="font-size:0.75rem;color:var(--muted);">¥1,056 / Kindle ¥385 / ★3.9（132件）</span><br><a href="https://www.amazon.co.jp/dp/4062881055" target="_blank" style="color:var(--accent2)">Amazonで見る →</a></div>' +
-      '<div class="tech-step"><strong>こころが晴れるノート</strong><br>大野裕 著 / 創元社<br>書き込み式CBTワークブック。この日記のデジタル版元ネタ。<br><span style="font-size:0.75rem;color:var(--muted);">¥1,320</span><br><a href="https://www.amazon.co.jp/dp/442211283X" target="_blank" style="color:var(--accent2)">Amazonで見る →</a></div>' +
-      '<div class="tech-step"><strong>Overcoming Social Anxiety and Shyness</strong><br>Gillian Butler 著<br>英国NHS推薦のSADセルフヘルプ定番。Clark & Wellsモデルに基づく実践ワーク満載。<br><span style="font-size:0.75rem;color:var(--muted);">★4.6（295件）</span><br><a href="https://www.amazon.co.jp/dp/0465005454" target="_blank" style="color:var(--accent2)">Amazonで見る →</a></div>' +
-      '<div class="tech-step"><strong>The Happiness Trap</strong><br>Russ Harris 著<br>ACT入門の決定版。脱フュージョン・価値の明確化を平易に解説。SAD以外にも使えます。<br><a href="https://www.amazon.co.jp/s?k=The+Happiness+Trap+Russ+Harris" target="_blank" style="color:var(--accent2)">Amazonで検索 →</a></div>' },
+    { heading: 'セルフケアって、本当に効くの？', content:
+      '<p>「自分でやって良くなるの？」— 当然の疑問です。でも最新のエビデンスは、<span class="hl-green">かなり心強い</span>結果を示しています。</p>' +
+      '<div class="tech-step"><span class="tech-step-num">1</span><strong>CBTはSAD治療でいちばん効く</strong><br>2024年のメタ分析で、社交不安の第一選択治療として推奨。効果量は「大」。<br><a href="https://www.tandfonline.com/doi/full/10.1080/00050067.2024.2356804" target="_blank" style="color:var(--accent2)">2024年メタ分析を読む →</a></div>' +
+      '<div class="tech-insight"><strong>ガイド付きセルフヘルプの効果量 g = 0.825</strong><br><br>これは対面療法に近い数字です。この日記はClaudeによるフィードバック付きなので、まさにこのカテゴリ。<span class="hl-green">「通わなきゃ治らない」は、もう過去の話</span>です。</div>' +
+      '<div class="tech-step"><span class="tech-step-num">2</span><strong>ネットCBTの効果量 g = 0.95</strong><br>対面とほぼ同等！ オンラインだからといって効果が落ちるわけではありません。<br><a href="https://www.sciencedirect.com/science/article/abs/pii/S0887618523001251" target="_blank" style="color:var(--accent2)">2023年メタ分析を読む →</a></div>' +
+      '<div class="tech-step"><span class="tech-step-num">3</span><strong>薬物＋心理療法で約80%が治癒</strong><br>約1年間の治療で。社交不安は<span class="hl">「治らない性格」ではなく「治療できる状態」</span>です。<br><a href="https://fukuoka-mental-clinic.jp/column/sad/social-anxiety-disorder-cure-method/" target="_blank" style="color:var(--accent2)">福岡天神メンタルクリニック →</a></div>'
+    },
+    { heading: '実際に克服した人の声', content:
+      '<div class="tech-quote" style="line-height:1.9;">' +
+      '<strong>30代・営業職の方の体験記</strong><span style="font-size:0.75rem;color:var(--muted);"> — 厚生労働省「こころの耳」より</span><br><br>' +
+      '中学時代から自意識が強く、授業で指されるとどもり、字を書くところを見られると手が止まった。社会人になっても「人前で話す」ことへの恐怖は消えなかった。<br><br>' +
+      '30代で営業の責任が増え、プレゼンで赤面したまま固まってしまった。もう限界だと思った。<br><br>' +
+      '薬物療法とカウンセリングを併用。カウンセラーと一緒に「考え方のクセ」に気づき、結婚式への出席をシミュレーション訓練。思い切って出席すると、<span class="hl-green">不安なく楽しめた</span>。この成功体験が仕事復帰のきっかけになった。</div>' +
+      '<div class="tech-insight">「まず専門家の門を叩くこと。そして少しずつ行動すること。」— 本人の言葉<br><br><a href="https://kokoro.mhlw.go.jp/over/875/" target="_blank" style="color:var(--accent2)">体験記の全文を読む（厚労省こころの耳）→</a></div>'
+    },
+    { heading: 'おすすめ書籍 — 日本語', content:
+      '<div class="tech-book"><div class="tech-book-title">自分で治す「社交不安症」</div><div class="tech-book-author">清水栄司 著 / 法研</div><div class="tech-book-desc">千葉大学SADチーム監修。先生と患者のやりとり形式で、実際の治療ステップをそのまま再現。<span class="hl-green">独力でCBTを進めたい人にいちばんおすすめ</span>の一冊です。</div><div class="tech-book-meta">¥737〜 / Kindle版あり / ★4.1（96件）</div><a href="https://www.amazon.co.jp/dp/4865130802" target="_blank">Amazonで見る →</a></div>' +
+      '<div class="tech-book"><div class="tech-book-title">はじめての認知療法</div><div class="tech-book-author">大野裕 著 / 講談社現代新書</div><div class="tech-book-desc">日本のCBT第一人者。7つのコラム法を平易に解説。この日記のStep 3〜6はこの本がベースになっています。</div><div class="tech-book-meta">¥1,056 / Kindle ¥385 / ★3.9（132件）</div><a href="https://www.amazon.co.jp/dp/4062881055" target="_blank">Amazonで見る →</a></div>' +
+      '<div class="tech-book"><div class="tech-book-title">こころが晴れるノート</div><div class="tech-book-author">大野裕 著 / 創元社</div><div class="tech-book-desc">書き込み式のCBTワークブック。この日記の「アナログ版元ネタ」ともいえる一冊。紙に書く派にもおすすめ。</div><div class="tech-book-meta">¥1,320</div><a href="https://www.amazon.co.jp/dp/442211283X" target="_blank">Amazonで見る →</a></div>'
+    },
+    { heading: 'おすすめ書籍 — 英語（世界的定番）', content:
+      '<div class="tech-book"><div class="tech-book-title">Overcoming Social Anxiety and Shyness</div><div class="tech-book-author">Gillian Butler 著</div><div class="tech-book-desc">英国NHSが公式に推薦しているSADセルフヘルプの定番。Clark & Wellsモデルに基づく実践ワークが豊富。英語が読める方にはこれが一択。</div><div class="tech-book-meta">★4.6（295件）</div><a href="https://www.amazon.co.jp/dp/0465005454" target="_blank">Amazonで見る →</a></div>' +
+      '<div class="tech-book"><div class="tech-book-title">The Happiness Trap</div><div class="tech-book-author">Russ Harris 著</div><div class="tech-book-desc">ACT入門の決定版。脱フュージョン・価値の明確化・コミットされた行動を平易に解説。SAD以外にも広く応用できます。</div><a href="https://www.amazon.co.jp/s?k=The+Happiness+Trap+Russ+Harris" target="_blank">Amazonで検索 →</a></div>'
+    },
     { heading: '公的資料・ガイドライン', content:
-      '<div class="tech-step"><strong>社交不安障害の認知行動療法マニュアル（治療者用）</strong><br>吉永尚紀・清水栄司 / 厚生労働省<br>Clark & Wellsモデルに基づく14回セッションの全プロトコル。治療者が何を考えているか分かります。<br><a href="https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000113841.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' +
-      '<div class="tech-step"><strong>Self-Study Assisted CT for SAD（Oxford CAADAT）</strong><br>Oxford Centre for Anxiety Disorders and Trauma<br>セルフで治療する人のために作られた公式ガイド。英語ですが非常に実践的。<br><a href="https://oxcadatresources.com/wp-content/uploads/2021/01/Self-StudyAssistedCTGuide30_9_2020.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' +
-      '<div class="tech-step"><strong>社交不安症の診療ガイドライン</strong><br>日本不安症学会 / 日本神経精神薬理学会（2021年）<br><a href="https://www.jsnp-org.jp/csrinfo/img/sad_guideline.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' }
+      '<p>さらに深く知りたい方、治療者がどう考えているか知りたい方向けの資料です。</p>' +
+      '<div class="tech-step"><strong>社交不安障害の認知行動療法マニュアル</strong><br><span style="color:var(--muted);">吉永尚紀・清水栄司 / 厚生労働省</span><br>Clark & Wellsモデルに基づく14回セッションの全プロトコル。治療者が何を意図しているか、その裏側が分かります。<br><a href="https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000113841.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' +
+      '<div class="tech-step"><strong>Self-Study Assisted CT Guide（Oxford CAADAT）</strong><br><span style="color:var(--muted);">Oxford Centre for Anxiety Disorders and Trauma</span><br>セルフで治療する人のために設計された公式ガイド。英語ですが、まさに「この日記をやっている人」のために書かれた内容。<br><a href="https://oxcadatresources.com/wp-content/uploads/2021/01/Self-StudyAssistedCTGuide30_9_2020.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>' +
+      '<div class="tech-step"><strong>社交不安症の診療ガイドライン</strong><br><span style="color:var(--muted);">日本不安症学会 / 日本神経精神薬理学会（2021年）</span><br>薬物療法・心理療法の両面からSADの標準治療を定義。<br><a href="https://www.jsnp-org.jp/csrinfo/img/sad_guideline.pdf" target="_blank" style="color:var(--accent2)">PDFを開く →</a></div>'
+    }
   ]
 }
 };
